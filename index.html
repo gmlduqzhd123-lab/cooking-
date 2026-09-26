@@ -2,17 +2,20 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="자취생·혼밥러를 위한 초간단 레시피 100선. 재료, 조리 순서, 유튜브 영상까지 한 번에.">
+    <meta name="theme-color" content="#E11D48">
     <title>엽쌤의 혼밥 스쿨</title>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <style>
         :root {
-            --primary: #FF5E62;
-            --primary-gradient: linear-gradient(135deg, #FF5E62 0%, #FF9966 100%);
+            --primary: #E11D48;
+            --primary-dark: #BE123C;
+            --primary-gradient: linear-gradient(135deg, #E11D48 0%, #C2410C 100%);
             --bg-color: #F8FAFC; 
             --card-bg: #FFFFFF;
             --text-dark: #0F172A;
-            --text-gray: #64748B;
+            --text-gray: #475569;
             --tag-bg: #F1F5F9;
         }
 
@@ -90,6 +93,10 @@
         }
 
         .random-banner {
+            width: calc(100% - 40px);
+            border: none;
+            font: inherit;
+            text-align: left;
             margin: 10px 20px 20px 20px;
             background: var(--primary-gradient);
             border-radius: 20px;
@@ -99,12 +106,12 @@
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            box-shadow: 0 10px 20px rgba(255, 94, 98, 0.2);
+            box-shadow: 0 10px 20px rgba(225, 29, 72, 0.2);
             transition: transform 0.2s;
         }
         .random-banner:active { transform: scale(0.97); }
-        .random-info h3 { margin: 0; font-size: 1.1rem; font-weight: 800; }
-        .random-info p { margin: 4px 0 0 0; font-size: 0.85rem; opacity: 0.9; font-weight: 500;}
+        .random-title { display: block; font-size: 1.1rem; font-weight: 800; }
+        .random-desc { display: block; margin-top: 4px; font-size: 0.85rem; font-weight: 500; }
         .random-icon { font-size: 2rem; }
 
         #recipe-container {
@@ -135,7 +142,7 @@
         .category-badge {
             align-self: flex-start;
             background: #FFF1F2;
-            color: var(--primary);
+            color: var(--primary-dark);
             padding: 4px 10px;
             border-radius: 12px;
             font-size: 0.75rem;
@@ -150,6 +157,9 @@
         }
 
         .ingredients-tags {
+            list-style: none;
+            margin: 0;
+            padding: 0;
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
@@ -183,7 +193,7 @@
 
         .tip-box {
             font-size: 0.85rem;
-            color: #D97706;
+            color: #92400E;
             background: #FEF3C7;
             padding: 10px 14px;
             border-radius: 12px;
@@ -282,19 +292,85 @@
             border: none;
         }
 
-        .empty-state {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #94a3b8;
-            text-align: center;
-            padding: 20px;
+        /* 카드 상단 영상 썸네일 */
+        .thumb-btn {
+            position: relative;
+            display: block;
+            width: calc(100% + 40px);
+            margin: -20px -20px 0 -20px;
+            padding: 0;
+            border: none;
+            border-radius: 24px 24px 0 0;
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+            background: #E2E8F0;
+            cursor: pointer;
         }
-        .empty-icon { font-size: 3rem; margin-bottom: 10px; }
-        .empty-text { font-size: 1rem; font-weight: 600; line-height: 1.5; color: #cbd5e1; }
+        .thumb-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+        .thumb-btn:hover img { transform: scale(1.04); }
+        .thumb-play {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 64px; height: 44px;
+            transform: translate(-50%, -50%);
+            background: #FF0000;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+        }
+        .thumb-play::after {
+            content: '';
+            border-style: solid;
+            border-width: 9px 0 9px 15px;
+            border-color: transparent transparent transparent #FFFFFF;
+            margin-left: 3px;
+        }
+
+        .play-btn.search { background: #FFFFFF; color: var(--text-dark); border: 2px solid #CBD5E1; }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            padding: 10px 16px;
+            background: #1A1A1A;
+        }
+        .yt-link {
+            color: #F1F5F9;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px; height: 1px;
+            margin: -1px; padding: 0;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* 키보드 사용자를 위한 포커스 표시 */
+        button:focus-visible, a:focus-visible {
+            outline: 3px solid #2563EB;
+            outline-offset: 3px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                transition: none !important;
+                animation: none !important;
+                scroll-behavior: auto !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -303,40 +379,41 @@
         <h1>🍳 엽쌤의 혼밥 스쿨</h1>
     </header>
 
-    <nav class="category-nav" id="category-nav">
-        <button class="category-btn active" data-category="전체" onclick="filterRecipes('전체')">전체보기</button>
-        <button class="category-btn" data-category="한식" onclick="filterRecipes('한식')">🇰🇷 한식</button>
-        <button class="category-btn" data-category="중식" onclick="filterRecipes('중식')">🇨🇳 중식</button>
-        <button class="category-btn" data-category="일식" onclick="filterRecipes('일식')">🇯🇵 일식</button>
-        <button class="category-btn" data-category="분식" onclick="filterRecipes('분식')">🥘 분식</button>
-        <button class="category-btn" data-category="기타" onclick="filterRecipes('기타')">🍝 양식·기타</button>
+    <nav class="category-nav" id="category-nav" aria-label="요리 종류">
+        <button class="category-btn active" data-category="전체" aria-pressed="true">전체보기</button>
+        <button class="category-btn" data-category="한식" aria-pressed="false"><span aria-hidden="true">🇰🇷 </span>한식</button>
+        <button class="category-btn" data-category="중식" aria-pressed="false"><span aria-hidden="true">🇨🇳 </span>중식</button>
+        <button class="category-btn" data-category="일식" aria-pressed="false"><span aria-hidden="true">🇯🇵 </span>일식</button>
+        <button class="category-btn" data-category="분식" aria-pressed="false"><span aria-hidden="true">🥘 </span>분식</button>
+        <button class="category-btn" data-category="기타" aria-pressed="false"><span aria-hidden="true">🍝 </span>양식·기타</button>
     </nav>
 
-    <div class="random-banner" onclick="pickRandomRecipe()">
-        <div class="random-info">
-            <h3>오늘 뭐 먹을지 고민이라면?</h3>
-            <p>버튼을 눌러 메뉴를 추천받아보세요!</p>
-        </div>
-        <div class="random-icon">🎲</div>
-    </div>
+    <button type="button" class="random-banner" id="random-banner">
+        <span class="random-info">
+            <span class="random-title">오늘 뭐 먹을지 고민이라면?</span>
+            <span class="random-desc">버튼을 눌러 메뉴를 추천받아보세요!</span>
+        </span>
+        <span class="random-icon" aria-hidden="true">🎲</span>
+    </button>
 
-    <main id="recipe-container">
+    <main id="recipe-container" aria-live="polite">
         <!-- 레시피 카드가 삽입됩니다. -->
     </main>
 
     <!-- 인앱 모달 플레이어 -->
-    <div id="videoModal" class="modal-overlay">
+    <div id="videoModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="modalTitle">레시피 영상 송출중</h3>
-                <button class="close-btn" onclick="closeModal()">✕</button>
+                <h3 class="modal-title" id="modalTitle">레시피 영상</h3>
+                <button type="button" class="close-btn" id="closeBtn" aria-label="영상 닫기">✕</button>
             </div>
             <div class="video-wrapper">
-                <iframe id="ytPlayer" src="" allow="autoplay; fullscreen" loading="lazy"></iframe>
-                <div id="emptyState" class="empty-state" style="display: none;">
-                    <div class="empty-icon">👨‍🍳</div>
-                    <div class="empty-text">엽쌤이 가장 맛있는 영상을<br>고르는 중입니다!</div>
-                </div>
+                <iframe id="ytPlayer" title="레시피 영상" src=""
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+            <div class="modal-footer">
+                <a id="ytLink" class="yt-link" href="#" target="_blank" rel="noopener">영상이 재생되지 않나요? 유튜브에서 보기 ↗</a>
             </div>
         </div>
     </div>
@@ -344,220 +421,240 @@
     <script>
         const recipes = [
             // ==================== [ 한식 20선 ] ====================
-            { category: "한식", title: "참치 김치찌개", videoUrl: "", ingredients: ["참치 1캔", "신김치 1컵", "양파 1/2개", "대파 1/3대", "다진마늘 1스푼"], instructions: ["냄비에 참치기름을 두르고 신김치를 볶습니다.", "김치가 투명해지면 양파를 넣고 볶다가 물을 붓습니다.", "끓어오르면 참치 살과 대파, 마늘을 넣고 5분 더 끓입니다."], tip: "참치기름으로 김치를 볶아야 국물 맛이 훨씬 깊어집니다." },
-            { category: "한식", title: "전자레인지 폭탄 계란찜", videoUrl: "", ingredients: ["계란 3개", "물 1/2컵", "소금 1/3스푼", "참기름 약간", "대파 약간"], instructions: ["전자레인지용 그릇에 계란을 풀고 물과 소금을 섞습니다.", "랩을 씌우고 포크로 구멍을 3~4개 뚫어줍니다.", "전자레인지에 3~4분 돌린 후 참기름과 대파를 올립니다."], tip: "물을 멸치육수나 우유로 바꾸면 훨씬 부드럽고 감칠맛이 납니다." },
-            { category: "한식", title: "대패삼겹살 숙주볶음", videoUrl: "", ingredients: ["대패삼겹살 200g", "숙주 1줌", "굴소스 1스푼", "간장 1스푼", "다진마늘 1스푼"], instructions: ["마른 팬에 대패삼겹살과 다진마늘을 넣고 노릇하게 굽습니다.", "고기 기름이 나오면 간장과 굴소스를 넣고 섞습니다.", "불을 끄기 직전 숙주를 넣고 30초만 빠르게 볶아냅니다."], tip: "숙주는 숨이 너무 죽지 않게 마지막에 센 불로 휘리릭 볶는 것이 생명입니다." },
-            { category: "한식", title: "고추장 참치 비빔밥", videoUrl: "", ingredients: ["밥 1공기", "참치 1/2캔", "상추 3장", "계란 1개", "고추장 1스푼", "참기름"], instructions: ["상추를 먹기 좋은 크기로 찢어 밥 위에 올립니다.", "기름을 뺀 참치와 반숙 계란프라이를 얹습니다.", "고추장과 참기름을 통깨와 함께 넣고 비벼줍니다."], tip: "조미김을 부숴 넣으면 맛이 2배로 업그레이드됩니다." },
-            { category: "한식", title: "단짠 두부조림", videoUrl: "", ingredients: ["두부 1모", "양파 1/2개", "간장 3스푼", "고춧가루 1스푼", "설탕 1스푼", "물 1/2컵"], instructions: ["두부를 두툼하게 썰어 팬에 기름을 두르고 앞뒤로 노릇하게 부칩니다.", "간장, 고춧가루, 설탕, 물을 섞어 양념장을 만듭니다.", "구워진 두부 위에 양파를 올리고 양념장을 부어 자작하게 졸입니다."], tip: "두부를 구울 때 소금을 약간 뿌려두면 단단해져서 부서지지 않습니다." },
-            { category: "한식", title: "콩나물 불고기 (콩불)", videoUrl: "", ingredients: ["대패삼겹살 200g", "콩나물 2줌", "고추장 2스푼", "간장 2스푼", "설탕 1.5스푼"], instructions: ["팬 바닥에 씻은 콩나물을 넉넉히 깔아줍니다.", "그 위에 대패삼겹살과 양념(고추장, 간장, 설탕)을 올립니다.", "물을 넣지 않고 중불로 끓이면 콩나물에서 채수가 나와 자작해집니다."], tip: "남은 양념에 김가루와 참기름을 넣고 밥을 볶아 드세요." },
-            { category: "한식", title: "초간단 차돌된장찌개", videoUrl: "", ingredients: ["차돌박이(또는 우삼겹) 100g", "된장 2스푼", "두부 1/2모", "애호박 1/4개", "청양고추 1개"], instructions: ["냄비에 차돌박이를 먼저 볶아 기름을 냅니다.", "고기 기름에 된장을 가볍게 볶다가 물을 2컵 붓습니다.", "끓어오르면 깍둑썰기한 두부, 애호박, 고추를 넣고 5분간 끓입니다."], tip: "고기 기름에 된장을 살짝 볶으면 찌개 국물이 훨씬 진해집니다." },
-            { category: "한식", title: "어묵볶음 (오뎅볶음)", videoUrl: "", ingredients: ["사각어묵 3장", "양파 1/2개", "간장 2스푼", "물엿(또는 올리고당) 1스푼", "참기름"], instructions: ["어묵과 양파를 먹기 좋은 크기로 채 썹니다.", "팬에 기름을 두르고 어묵과 양파를 볶습니다.", "양파가 투명해지면 간장과 물엿을 넣고 빠르게 볶은 후 참기름으로 마무리합니다."], tip: "어묵을 뜨거운 물에 한 번 헹구면 불순물과 기름기가 제거되어 깔끔합니다." },
-            { category: "한식", title: "백종원 스타일 김치볶음밥", videoUrl: "", ingredients: ["밥 1공기", "신김치 1컵", "대파 1대", "설탕 1/2스푼", "간장 1스푼", "계란 1개"], instructions: ["대파를 송송 썰어 기름에 볶아 파기름을 냅니다.", "잘게 썬 김치와 설탕을 넣고 충분히 볶아줍니다.", "빈 공간에 간장을 끓이듯 눌린 후 김치와 섞고, 밥을 넣어 마저 볶습니다."], tip: "간장을 팬에 직접 닿게 해 '치익' 소리가 나게 눌려주면 불맛이 살아납니다." },
-            { category: "한식", title: "초스피드 멸치국수", videoUrl: "", ingredients: ["소면 1인분", "시판 쯔유(또는 국수장국) 3스푼", "물 2.5컵", "계란 1개", "김가루"], instructions: ["끓는 물에 소면을 3분간 삶은 뒤 찬물에 바락바락 씻어 그릇에 담습니다.", "냄비에 물과 쯔유를 넣고 끓여 육수를 만듭니다.", "육수가 끓으면 계란을 대충 풀어 넣고, 면 위에 육수와 김가루를 붓습니다."], tip: "소면을 삶을 때 끓어오르면 찬물을 반 컵씩 부어주면 면발이 쫄깃해집니다." },
-            { category: "한식", title: "참치미역국", videoUrl: "", ingredients: ["건미역 1줌", "참치 1캔", "참기름 1스푼", "국간장 2스푼", "다진마늘 1/2스푼"], instructions: ["미역을 물에 10분간 불려 헹군 뒤 물기를 짭니다.", "냄비에 참기름을 두르고 미역과 국간장, 다진마늘을 넣어 볶습니다.", "미역이 부드러워지면 물을 붓고 끓이다가 마지막에 기름을 뺀 참치를 넣습니다."], tip: "소고기 대신 참치를 넣으면 끓이는 시간이 절반으로 줄어들고 국물이 담백합니다." },
-            { category: "한식", title: "전자레인지 깻잎 찜", videoUrl: "", ingredients: ["깻잎 2묶음", "간장 2스푼", "고춧가루 1스푼", "다진마늘 1/2스푼", "설탕 1/2스푼", "참기름"], instructions: ["깻잎을 씻어 물기를 털어냅니다.", "간장, 고춧가루, 다진마늘, 설탕, 참기름을 섞어 양념장을 만듭니다.", "전자레인지 용기에 깻잎을 2~3장씩 겹치며 양념을 바른 후 랩을 씌워 1분 30초 돌립니다."], tip: "오래 돌리면 깻잎이 질겨지므로 딱 숨이 죽을 정도로만 돌려주세요." },
-            { category: "한식", title: "들기름 막국수", videoUrl: "", ingredients: ["메밀면 1인분", "들기름 2스푼", "간장 1스푼", "쯔유(또는 맛술) 1/2스푼", "김가루 듬뿍"], instructions: ["메밀면을 삶아 찬물에 헹군 뒤 물기를 완벽히 제거합니다.", "볼에 간장, 쯔유를 넣고 면을 버무립니다.", "그릇에 담아 들기름을 넉넉히 두르고 김가루를 수북이 쌓아 올립니다."], tip: "들기름의 향이 핵심이므로, 볶음참깨를 으깨서 솔솔 뿌리면 풍미가 폭발합니다." },
-            { category: "한식", title: "간장계란버터밥", videoUrl: "", ingredients: ["뜨거운 밥 1공기", "버터 1조각(10g)", "계란 1개", "간장 1~1.5스푼"], instructions: ["계란을 반숙 프라이로 굽습니다.", "뜨거운 밥 한가운데에 버터를 숨겨 열기로 녹입니다.", "그 위에 계란을 얹고 간장을 두른 후 노른자를 톡 터뜨려 비벼 먹습니다."], tip: "마가린을 사용하면 옛날 추억의 맛이 더 강해집니다." },
-            { category: "한식", title: "애호박 명란 볶음", videoUrl: "", ingredients: ["애호박 1/2개", "명란젓 1개", "참기름 1스푼", "통깨"], instructions: ["애호박은 반달 썰고, 명란은 껍질을 벗겨 알만 분리합니다.", "팬에 식용유를 두르고 애호박을 볶아 숨을 죽입니다.", "명란을 넣고 함께 볶다가 명란이 하얗게 익으면 참기름과 통깨로 마무리합니다."], tip: "명란 자체가 짜기 때문에 소금 간은 절대 하지 마세요." },
-            { category: "한식", title: "부추 계란 볶음", videoUrl: "", ingredients: ["부추 1줌", "계란 2개", "굴소스 1/2스푼", "소금 1꼬집"], instructions: ["계란을 풀어 소금 간을 한 뒤 스크램블을 만들어 빼둡니다.", "부추를 5cm 길이로 썰어 기름을 두른 팬에 가볍게 볶습니다.", "부추 숨이 살짝 죽으면 빼둔 계란과 굴소스를 넣고 휘리릭 섞어냅니다."], tip: "부추는 너무 오래 볶으면 질겨지고 수분이 나오니 센 불에 1분 내로 끝냅니다." },
-            { category: "한식", title: "김치볶음밥 (참치 추가)", videoUrl: "", ingredients: ["밥 1공기", "신김치 1컵", "참치 1/2캔", "설탕 1/2스푼", "간장 1스푼"], instructions: ["팬에 기름을 두르고 잘게 썬 신김치와 설탕을 볶습니다.", "기름을 뺀 참치를 넣고 함께 볶아줍니다.", "간장을 한쪽 구석에 끓여 불맛을 낸 뒤 섞고, 밥을 넣어 주걱을 세워 볶습니다."], tip: "김치 국물을 1스푼 넣으면 색감이 훨씬 먹음직스러워집니다." },
-            { category: "한식", title: "마약 계란장", videoUrl: "", ingredients: ["계란 5개", "간장 1/2컵", "물 1/2컵", "설탕 3스푼", "양파 1/2개", "청양고추 1개"], instructions: ["계란을 끓는 물에 딱 6분 삶아 반숙으로 만든 뒤 찬물에 식혀 껍질을 깝니다.", "간장, 물, 설탕을 섞고 잘게 다진 양파와 고추를 넣습니다.", "밀폐용기에 까둔 계란과 간장 소스를 넣고 반나절 이상 냉장 숙성시킵니다."], tip: "끓이지 않는 간장이므로 오래 보관하지 말고 3~4일 내에 소비하세요." },
-            { category: "한식", title: "어묵 김치찌개", videoUrl: "", ingredients: ["사각어묵 2장", "신김치 1컵", "대파 1/3대", "국간장 1스푼", "다진마늘 1스푼"], instructions: ["냄비에 기름을 살짝 두르고 신김치를 볶습니다.", "물을 붓고 끓으면 먹기 좋게 썬 어묵과 다진마늘을 넣습니다.", "어묵이 부풀어 오르면 대파를 넣고 국간장으로 간을 맞춥니다."], tip: "고기 없이 어묵만 들어가도 어묵에서 육수가 우러나와 깊은 맛이 납니다." },
-            { category: "한식", title: "초간단 멸치볶음", videoUrl: "", ingredients: ["잔멸치 1컵", "간장 1스푼", "설탕 1스푼", "물엿 2스푼", "참기름"], instructions: ["마른 팬에 멸치를 볶아 비린내를 날린 뒤 접시에 빼둡니다.", "팬에 식용유 약간과 간장, 설탕, 물엿을 넣고 바글바글 끓입니다.", "양념이 끓으면 불을 끄고 멸치를 넣어 재빨리 버무린 후 참기름을 두릅니다."], tip: "불을 끄고 버무려야 멸치가 딱딱해지거나 덩어리지는 것을 방지할 수 있습니다." },
+            { category: "한식", title: "참치 김치찌개", videoId: "WGcE7vWmxPY", ingredients: ["참치 1캔", "신김치 1컵", "양파 1/2개", "대파 1/3대", "다진마늘 1스푼"], instructions: ["냄비에 참치기름을 두르고 신김치를 볶습니다.", "김치가 투명해지면 양파를 넣고 볶다가 물을 붓습니다.", "끓어오르면 참치 살과 대파, 마늘을 넣고 5분 더 끓입니다."], tip: "참치기름으로 김치를 볶아야 국물 맛이 훨씬 깊어집니다." },
+            { category: "한식", title: "전자레인지 폭탄 계란찜", videoId: "q6hGmqne2ow", ingredients: ["계란 3개", "물 1/2컵", "소금 1/3스푼", "참기름 약간", "대파 약간"], instructions: ["전자레인지용 그릇에 계란을 풀고 물과 소금을 섞습니다.", "랩을 씌우고 포크로 구멍을 3~4개 뚫어줍니다.", "전자레인지에 3~4분 돌린 후 참기름과 대파를 올립니다."], tip: "물을 멸치육수나 우유로 바꾸면 훨씬 부드럽고 감칠맛이 납니다." },
+            { category: "한식", title: "대패삼겹살 숙주볶음", videoId: "i8mr2FBpDWM", ingredients: ["대패삼겹살 200g", "숙주 1줌", "굴소스 1스푼", "간장 1스푼", "다진마늘 1스푼"], instructions: ["마른 팬에 대패삼겹살과 다진마늘을 넣고 노릇하게 굽습니다.", "고기 기름이 나오면 간장과 굴소스를 넣고 섞습니다.", "불을 끄기 직전 숙주를 넣고 30초만 빠르게 볶아냅니다."], tip: "숙주는 숨이 너무 죽지 않게 마지막에 센 불로 휘리릭 볶는 것이 생명입니다." },
+            { category: "한식", title: "고추장 참치 비빔밥", videoId: "zYsj2CKsgrM", ingredients: ["밥 1공기", "참치 1/2캔", "상추 3장", "계란 1개", "고추장 1스푼", "참기름"], instructions: ["상추를 먹기 좋은 크기로 찢어 밥 위에 올립니다.", "기름을 뺀 참치와 반숙 계란프라이를 얹습니다.", "고추장과 참기름을 통깨와 함께 넣고 비벼줍니다."], tip: "조미김을 부숴 넣으면 맛이 2배로 업그레이드됩니다." },
+            { category: "한식", title: "단짠 두부조림", videoId: "JMdFLHzv4o0", ingredients: ["두부 1모", "양파 1/2개", "간장 3스푼", "고춧가루 1스푼", "설탕 1스푼", "물 1/2컵"], instructions: ["두부를 두툼하게 썰어 팬에 기름을 두르고 앞뒤로 노릇하게 부칩니다.", "간장, 고춧가루, 설탕, 물을 섞어 양념장을 만듭니다.", "구워진 두부 위에 양파를 올리고 양념장을 부어 자작하게 졸입니다."], tip: "두부를 구울 때 소금을 약간 뿌려두면 단단해져서 부서지지 않습니다." },
+            { category: "한식", title: "콩나물 불고기 (콩불)", videoId: "wo3qyNyY5So", ingredients: ["대패삼겹살 200g", "콩나물 2줌", "고추장 2스푼", "간장 2스푼", "설탕 1.5스푼"], instructions: ["팬 바닥에 씻은 콩나물을 넉넉히 깔아줍니다.", "그 위에 대패삼겹살과 양념(고추장, 간장, 설탕)을 올립니다.", "물을 넣지 않고 중불로 끓이면 콩나물에서 채수가 나와 자작해집니다."], tip: "남은 양념에 김가루와 참기름을 넣고 밥을 볶아 드세요." },
+            { category: "한식", title: "초간단 차돌된장찌개", videoId: "XIkt-NlHOYc", ingredients: ["차돌박이(또는 우삼겹) 100g", "된장 2스푼", "두부 1/2모", "애호박 1/4개", "청양고추 1개"], instructions: ["냄비에 차돌박이를 먼저 볶아 기름을 냅니다.", "고기 기름에 된장을 가볍게 볶다가 물을 2컵 붓습니다.", "끓어오르면 깍둑썰기한 두부, 애호박, 고추를 넣고 5분간 끓입니다."], tip: "고기 기름에 된장을 살짝 볶으면 찌개 국물이 훨씬 진해집니다." },
+            { category: "한식", title: "어묵볶음 (오뎅볶음)", videoId: "OGpC0j9B1fA", ingredients: ["사각어묵 3장", "양파 1/2개", "간장 2스푼", "물엿(또는 올리고당) 1스푼", "참기름"], instructions: ["어묵과 양파를 먹기 좋은 크기로 채 썹니다.", "팬에 기름을 두르고 어묵과 양파를 볶습니다.", "양파가 투명해지면 간장과 물엿을 넣고 빠르게 볶은 후 참기름으로 마무리합니다."], tip: "어묵을 뜨거운 물에 한 번 헹구면 불순물과 기름기가 제거되어 깔끔합니다." },
+            { category: "한식", title: "백종원 스타일 김치볶음밥", videoId: "Aq1yn20wRK4", ingredients: ["밥 1공기", "신김치 1컵", "대파 1대", "설탕 1/2스푼", "간장 1스푼", "계란 1개"], instructions: ["대파를 송송 썰어 기름에 볶아 파기름을 냅니다.", "잘게 썬 김치와 설탕을 넣고 충분히 볶아줍니다.", "빈 공간에 간장을 끓이듯 눌린 후 김치와 섞고, 밥을 넣어 마저 볶습니다."], tip: "간장을 팬에 직접 닿게 해 '치익' 소리가 나게 눌려주면 불맛이 살아납니다." },
+            { category: "한식", title: "초스피드 멸치국수", videoId: "ZAFaqJFEiC8", ingredients: ["소면 1인분", "시판 쯔유(또는 국수장국) 3스푼", "물 2.5컵", "계란 1개", "김가루"], instructions: ["끓는 물에 소면을 3분간 삶은 뒤 찬물에 바락바락 씻어 그릇에 담습니다.", "냄비에 물과 쯔유를 넣고 끓여 육수를 만듭니다.", "육수가 끓으면 계란을 대충 풀어 넣고, 면 위에 육수와 김가루를 붓습니다."], tip: "소면을 삶을 때 끓어오르면 찬물을 반 컵씩 부어주면 면발이 쫄깃해집니다." },
+            { category: "한식", title: "참치미역국", videoId: "ai7VUAo7mhE", ingredients: ["건미역 1줌", "참치 1캔", "참기름 1스푼", "국간장 2스푼", "다진마늘 1/2스푼"], instructions: ["미역을 물에 10분간 불려 헹군 뒤 물기를 짭니다.", "냄비에 참기름을 두르고 미역과 국간장, 다진마늘을 넣어 볶습니다.", "미역이 부드러워지면 물을 붓고 끓이다가 마지막에 기름을 뺀 참치를 넣습니다."], tip: "소고기 대신 참치를 넣으면 끓이는 시간이 절반으로 줄어들고 국물이 담백합니다." },
+            { category: "한식", title: "전자레인지 깻잎 찜", videoId: "rMY_WrsVBnY", ingredients: ["깻잎 2묶음", "간장 2스푼", "고춧가루 1스푼", "다진마늘 1/2스푼", "설탕 1/2스푼", "참기름"], instructions: ["깻잎을 씻어 물기를 털어냅니다.", "간장, 고춧가루, 다진마늘, 설탕, 참기름을 섞어 양념장을 만듭니다.", "전자레인지 용기에 깻잎을 2~3장씩 겹치며 양념을 바른 후 랩을 씌워 1분 30초 돌립니다."], tip: "오래 돌리면 깻잎이 질겨지므로 딱 숨이 죽을 정도로만 돌려주세요." },
+            { category: "한식", title: "들기름 막국수", videoId: "pXZ--1a99Ew", ingredients: ["메밀면 1인분", "들기름 2스푼", "간장 1스푼", "쯔유(또는 맛술) 1/2스푼", "김가루 듬뿍"], instructions: ["메밀면을 삶아 찬물에 헹군 뒤 물기를 완벽히 제거합니다.", "볼에 간장, 쯔유를 넣고 면을 버무립니다.", "그릇에 담아 들기름을 넉넉히 두르고 김가루를 수북이 쌓아 올립니다."], tip: "들기름의 향이 핵심이므로, 볶음참깨를 으깨서 솔솔 뿌리면 풍미가 폭발합니다." },
+            { category: "한식", title: "간장계란버터밥", videoId: "pYhZymMOM2s", ingredients: ["뜨거운 밥 1공기", "버터 1조각(10g)", "계란 1개", "간장 1~1.5스푼"], instructions: ["계란을 반숙 프라이로 굽습니다.", "뜨거운 밥 한가운데에 버터를 숨겨 열기로 녹입니다.", "그 위에 계란을 얹고 간장을 두른 후 노른자를 톡 터뜨려 비벼 먹습니다."], tip: "마가린을 사용하면 옛날 추억의 맛이 더 강해집니다." },
+            { category: "한식", title: "애호박 명란 볶음", videoId: "CFyFzvqFRcU", ingredients: ["애호박 1/2개", "명란젓 1개", "참기름 1스푼", "통깨"], instructions: ["애호박은 반달 썰고, 명란은 껍질을 벗겨 알만 분리합니다.", "팬에 식용유를 두르고 애호박을 볶아 숨을 죽입니다.", "명란을 넣고 함께 볶다가 명란이 하얗게 익으면 참기름과 통깨로 마무리합니다."], tip: "명란 자체가 짜기 때문에 소금 간은 절대 하지 마세요." },
+            { category: "한식", title: "부추 계란 볶음", videoId: "JtKmGi1DoZs", ingredients: ["부추 1줌", "계란 2개", "굴소스 1/2스푼", "소금 1꼬집"], instructions: ["계란을 풀어 소금 간을 한 뒤 스크램블을 만들어 빼둡니다.", "부추를 5cm 길이로 썰어 기름을 두른 팬에 가볍게 볶습니다.", "부추 숨이 살짝 죽으면 빼둔 계란과 굴소스를 넣고 휘리릭 섞어냅니다."], tip: "부추는 너무 오래 볶으면 질겨지고 수분이 나오니 센 불에 1분 내로 끝냅니다." },
+            { category: "한식", title: "김치볶음밥 (참치 추가)", videoId: "uQzHk4jWjm4", ingredients: ["밥 1공기", "신김치 1컵", "참치 1/2캔", "설탕 1/2스푼", "간장 1스푼"], instructions: ["팬에 기름을 두르고 잘게 썬 신김치와 설탕을 볶습니다.", "기름을 뺀 참치를 넣고 함께 볶아줍니다.", "간장을 한쪽 구석에 끓여 불맛을 낸 뒤 섞고, 밥을 넣어 주걱을 세워 볶습니다."], tip: "김치 국물을 1스푼 넣으면 색감이 훨씬 먹음직스러워집니다." },
+            { category: "한식", title: "마약 계란장", videoId: "0CUTUrzsP2M", ingredients: ["계란 5개", "간장 1/2컵", "물 1/2컵", "설탕 3스푼", "양파 1/2개", "청양고추 1개"], instructions: ["계란을 끓는 물에 딱 6분 삶아 반숙으로 만든 뒤 찬물에 식혀 껍질을 깝니다.", "간장, 물, 설탕을 섞고 잘게 다진 양파와 고추를 넣습니다.", "밀폐용기에 까둔 계란과 간장 소스를 넣고 반나절 이상 냉장 숙성시킵니다."], tip: "끓이지 않는 간장이므로 오래 보관하지 말고 3~4일 내에 소비하세요." },
+            { category: "한식", title: "어묵 김치찌개", videoId: "XpFZIIm6CYs", ingredients: ["사각어묵 2장", "신김치 1컵", "대파 1/3대", "국간장 1스푼", "다진마늘 1스푼"], instructions: ["냄비에 기름을 살짝 두르고 신김치를 볶습니다.", "물을 붓고 끓으면 먹기 좋게 썬 어묵과 다진마늘을 넣습니다.", "어묵이 부풀어 오르면 대파를 넣고 국간장으로 간을 맞춥니다."], tip: "고기 없이 어묵만 들어가도 어묵에서 육수가 우러나와 깊은 맛이 납니다." },
+            { category: "한식", title: "초간단 멸치볶음", videoId: "AmUI36SYvc4", ingredients: ["잔멸치 1컵", "간장 1스푼", "설탕 1스푼", "물엿 2스푼", "참기름"], instructions: ["마른 팬에 멸치를 볶아 비린내를 날린 뒤 접시에 빼둡니다.", "팬에 식용유 약간과 간장, 설탕, 물엿을 넣고 바글바글 끓입니다.", "양념이 끓으면 불을 끄고 멸치를 넣어 재빨리 버무린 후 참기름을 두릅니다."], tip: "불을 끄고 버무려야 멸치가 딱딱해지거나 덩어리지는 것을 방지할 수 있습니다." },
 
             // ==================== [ 중식 20선 ] ====================
-            { category: "중식", title: "토마토 계란 볶음", videoUrl: "", ingredients: ["토마토 1개", "계란 2개", "대파 1/2대", "굴소스 1/2스푼", "소금", "후추"], instructions: ["계란에 소금을 약간 넣고 풀어 스크램블을 만든 뒤 그릇에 빼둡니다.", "파기름을 내다가 썰어둔 토마토를 넣고 볶습니다.", "토마토 즙이 나오면 빼둔 계란과 굴소스를 넣고 가볍게 섞습니다."], tip: "토마토를 충분히 볶아 즙이 나와야 계란과 엉겨 붙어 맛있습니다." },
-            { category: "중식", title: "연두부 마파두부", videoUrl: "", ingredients: ["연두부 1팩", "다진 돼지고기 100g", "대파 1/2대", "두반장 1스푼", "굴소스 1스푼"], instructions: ["기름을 두르고 대파와 다진 고기를 볶습니다.", "고기가 익으면 두반장과 굴소스, 물 반 컵을 넣고 끓입니다.", "연두부를 숟가락으로 큼직하게 떠 넣고 전분물로 농도를 맞춥니다."], tip: "일반 두부보다 연두부를 사용하면 식감이 훨씬 부드러워 전문점 느낌이 납니다." },
-            { category: "중식", title: "짜파구리", videoUrl: "", ingredients: ["짜파게티 1봉", "너구리 1봉", "물 4컵"], instructions: ["물이 끓으면 면 두 개와 너구리 건더기스프를 넣고 끓입니다.", "면이 80% 익으면 물을 1국자만 남기고 버립니다.", "짜파게티 스프 1개, 너구리 스프 1/2개를 넣고 약불에서 졸이듯 비벼줍니다."], tip: "너구리 스프를 다 넣으면 너무 짜므로 꼭 절반만 넣어주세요." },
-            { category: "중식", title: "어묵 고추잡채", videoUrl: "", ingredients: ["사각어묵 2장", "피망 1개", "양파 1/2개", "굴소스 1.5스푼", "고추기름 2스푼"], instructions: ["어묵과 피망, 양파를 모두 길쭉하고 얇게 채 썹니다.", "팬에 고추기름을 두르고 양파와 피망을 볶습니다.", "채소가 숨이 죽으면 어묵과 굴소스를 넣고 센 불에서 빠르게 볶아냅니다."], tip: "꽃빵을 곁들이거나 밥 위에 얹어 덮밥으로 먹으면 훌륭한 한 끼가 됩니다." },
-            { category: "중식", title: "야매 류산슬", videoUrl: "", ingredients: ["게맛살 2줄", "팽이버섯 1봉", "대파 1/3대", "굴소스 1스푼", "간장 1스푼", "전분물"], instructions: ["게맛살은 결대로 찢고 팽이버섯은 밑동을 잘라 준비합니다.", "팬에 기름을 두르고 파를 볶다가 버섯과 게맛살을 넣습니다.", "물 반 컵, 굴소스, 간장을 넣고 끓이다가 전분물로 걸쭉하게 만듭니다."], tip: "해산물이 없어도 맛살과 버섯만으로 류산슬 특유의 식감과 맛을 낼 수 있습니다." },
-            { category: "중식", title: "굴소스 채소볶음밥", videoUrl: "", ingredients: ["밥 1공기", "냉장고 속 채소", "굴소스 1스푼", "계란 1개"], instructions: ["채소들을 모두 잘게 다져 준비합니다.", "기름을 두른 팬에 채소를 볶다가 한쪽으로 밀고 계란을 스크램블 합니다.", "밥과 굴소스를 넣고 주걱을 세워 자르듯이 볶아줍니다."], tip: "주걱을 눕히지 않고 세워서 자르듯 볶아야 밥알이 떡지지 않습니다." },
-            { category: "중식", title: "깐풍 냉동만두", videoUrl: "", ingredients: ["냉동만두 10개", "청양고추 1개", "간장 1스푼", "설탕 1스푼", "식초 1스푼"], instructions: ["냉동만두를 팬에 기름을 넉넉히 두르고 바삭하게 튀기듯 굽습니다.", "간장, 설탕, 식초, 물을 섞어 깐풍 소스를 만듭니다.", "구워진 만두 위에 소스와 썰어둔 청양고추를 넣고 소스가 졸아들 때까지 버무립니다."], tip: "소스를 넣을 때 불을 세게 해야 수분이 날아가며 바삭함이 유지됩니다." },
-            { category: "중식", title: "순두부 진짬뽕", videoUrl: "", ingredients: ["진짬뽕 1봉", "순두부 1/2튜브", "대파", "다진마늘 1/2스푼"], instructions: ["라면 물을 평소보다 50ml 적게 잡고 끓입니다.", "물이 끓으면 면, 스프, 다진마늘을 넣습니다.", "면이 반쯤 익었을 때 순두부를 통으로 넣고 듬성듬성 깨트린 후 대파를 올립니다."], tip: "순두부에서 수분이 나오므로 애초에 라면 물을 적게 잡는 것이 포인트입니다." },
-            { category: "중식", title: "마늘쫑 돼지고기 볶음", videoUrl: "", ingredients: ["마늘쫑 1줌", "다진 돼지고기 100g", "간장 2스푼", "설탕 1스푼", "굴소스 1/2스푼"], instructions: ["마늘쫑을 4cm 길이로 썰어 준비합니다.", "팬에 돼지고기를 먼저 볶아 고기 기름을 냅니다.", "마늘쫑을 넣고 볶다가 양념을 넣고 윤기 나게 졸입니다."], tip: "밥도둑 반찬으로 좋고, 다진 고기를 사용하면 식감이 훨씬 좋습니다." },
-            { category: "중식", title: "중식 계란국", videoUrl: "", ingredients: ["계란 2개", "대파 1/3대", "치킨스톡 1/2스푼", "전분물 2스푼", "참기름"], instructions: ["냄비에 물 2컵을 끓이고 치킨스톡으로 간을 맞춥니다.", "전분물을 풀어 국물을 살짝 걸쭉하게 만듭니다.", "풀어둔 계란을 원을 그리듯 붓고 휘젓지 않은 채로 불을 끄고 참기름을 떨굽니다."], tip: "계란을 넣고 바로 저으면 국물이 탁해지니 그대로 몽글몽글 익게 두세요." },
-            { category: "중식", title: "파기름 계란 볶음밥", videoUrl: "", ingredients: ["밥 1공기", "대파 1대", "계란 2개", "간장 1스푼", "소금 약간"], instructions: ["대파를 송송 썰어 기름을 넉넉히 두른 팬에서 파기름을 냅니다.", "파를 한쪽으로 밀고 계란을 스크램블 합니다.", "간장을 빈 공간에 태우듯 끓이고 밥을 넣어 주걱으로 가르며 고슬고슬하게 볶습니다."], tip: "찬밥을 써야 중국집 볶음밥처럼 밥알이 날아다닙니다." },
-            { category: "중식", title: "고추참치 마파두부", videoUrl: "", ingredients: ["두부 1/2모", "고추참치 1캔", "대파 1/2대", "물 1/2컵", "전분물 1스푼"], instructions: ["팬에 파기름을 내다가 깍둑썰기 한 두부와 고추참치를 기름째 모두 넣습니다.", "물 반 컵을 붓고 두부에 간이 배도록 3분간 끓입니다.", "마지막에 전분물을 풀어 농도를 걸쭉하게 맞춰줍니다."], tip: "두반장이나 다진 고기 없이 고추참치 하나로 마파두부 맛의 80%를 낼 수 있습니다." },
-            { category: "중식", title: "크래미 게살스프", videoUrl: "", ingredients: ["크래미 3개", "계란 1개", "치킨스톡 1스푼", "물 2.5컵", "전분물 2스푼"], instructions: ["물에 치킨스톡을 풀고 끓어오르면 잘게 찢은 크래미를 넣습니다.", "전분물을 먼저 풀어 국물을 걸쭉하게 만듭니다.", "마지막에 풀어둔 계란을 원을 그리며 붓고 휘젓지 않은 채 불을 끕니다."], tip: "전분물을 계란보다 먼저 넣어야 계란이 국물에 풀어지지 않고 몽글몽글 예쁘게 뜹니다." },
-            { category: "중식", title: "간짜장 라면", videoUrl: "", ingredients: ["짜장라면 1봉", "양파 1/2개", "삼겹살 약간", "계란 1개"], instructions: ["양파는 큼직하게 깍둑썰고, 면은 끓는 물에 삶아 건져둡니다.", "팬에 고기와 양파를 볶다가 짜장스프와 면수 3스푼을 넣고 볶습니다.", "삶아둔 면을 넣고 소스에 빠르게 비빈 뒤 계란프라이를 얹습니다."], tip: "양파의 아삭한 식감이 살아있게 센 불에서 빠르게 볶는 것이 핵심입니다." },
-            { category: "중식", title: "중식 냉우동", videoUrl: "", ingredients: ["우동면 1개", "땅콩버터 2스푼", "간장 1.5스푼", "식초 1스푼", "물 3스푼"], instructions: ["땅콩버터, 간장, 식초, 설탕, 물을 섞어 부드러운 소스를 만듭니다.", "우동면을 삶아 얼음물에 헹궈 탱글하게 만듭니다.", "물기를 뺀 면에 소스를 붓고 오이채나 크래미를 고명으로 올립니다."], tip: "땅콩버터가 뻑뻑하면 따뜻한 물 1스푼을 먼저 넣어 부드럽게 푼 뒤 나머지 재료를 섞으세요." },
-            { category: "중식", title: "깐쇼 만두", videoUrl: "", ingredients: ["냉동 물만두 15개", "케첩 2스푼", "고추장 1/2스푼", "설탕 1스푼", "물 3스푼"], instructions: ["냉동 물만두를 기름을 넉넉히 두른 팬에 바삭하게 튀기듯 굽습니다.", "케첩, 고추장, 설탕, 물, 마늘을 섞어 칠리소스를 만듭니다.", "구워진 만두에 소스를 붓고 소스가 코팅될 때까지 바짝 졸입니다."], tip: "일반 교자보다 한 입 크기의 물만두를 튀기는 것이 소스도 잘 묻고 먹기 편합니다." },
-            { category: "중식", title: "청경채 굴소스 볶음", videoUrl: "", ingredients: ["청경채 3송이", "다진마늘 1스푼", "굴소스 1스푼", "참기름 약간"], instructions: ["청경채는 밑동을 잘라 잎을 분리해 씻습니다.", "팬에 기름을 두르고 다진마늘을 볶아 마늘 향을 냅니다.", "청경채를 넣고 숨이 죽기 시작하면 굴소스를 넣고 센 불에 30초 볶아냅니다."], tip: "청경채에서 물이 나오기 전에 센 불로 아주 짧게 볶아야 아삭함이 삽니다." },
-            { category: "중식", title: "마라탕면", videoUrl: "", ingredients: ["일반 라면 1봉", "시판 마라소스 1스푼", "알배기 배추 2장", "숙주 1줌", "우삼겹 약간"], instructions: ["라면 물을 평소보다 50ml 적게 끓입니다.", "물이 끓으면 라면스프 반 개, 마라소스, 배추, 고기를 넣습니다.", "면을 넣고 끓이다가 불 끄기 1분 전 숙주를 넣습니다."], tip: "마라소스는 제품마다 염도가 다르니 라면 스프 양을 조절하며 간을 맞추세요." },
-            { category: "중식", title: "사천식 짜파게티", videoUrl: "", ingredients: ["짜파게티 1봉", "청양고추 2개", "고춧가루 1스푼", "식용유 2스푼"], instructions: ["짜파게티 면을 삶아 물을 약간 남기고 버립니다.", "팬에 식용유를 두르고 송송 썬 청양고추와 고춧가루를 약불에 볶아 매운 기름을 만듭니다.", "이 고추기름에 삶은 면과 짜장스프를 넣고 볶아 완성합니다."], tip: "고추기름을 낼 때 강불이면 고춧가루가 타서 쓴맛이 나니 반드시 약불을 쓰세요." },
-            { category: "중식", title: "옥수수 빠스", videoUrl: "", ingredients: ["옥수수 통조림 1/2캔", "부침가루 3스푼", "설탕 3스푼", "식용유"], instructions: ["물기를 뺀 옥수수에 부침가루를 넣고 섞어 끈적한 반죽을 만듭니다.", "기름을 넉넉히 두른 팬에 한 스푼씩 떠서 노릇하게 튀기듯 굽습니다.", "다른 팬에 식용유 1스푼과 설탕을 녹여 시럽을 만든 뒤 튀긴 옥수수를 버무립니다."], tip: "설탕 시럽을 만들 때 절대 젓지 말고 약불에서 스스로 녹게 두어야 딱딱해지지 않습니다." },
+            { category: "중식", title: "토마토 계란 볶음", videoId: "e8rPgeVUP68", ingredients: ["토마토 1개", "계란 2개", "대파 1/2대", "굴소스 1/2스푼", "소금", "후추"], instructions: ["계란에 소금을 약간 넣고 풀어 스크램블을 만든 뒤 그릇에 빼둡니다.", "파기름을 내다가 썰어둔 토마토를 넣고 볶습니다.", "토마토 즙이 나오면 빼둔 계란과 굴소스를 넣고 가볍게 섞습니다."], tip: "토마토를 충분히 볶아 즙이 나와야 계란과 엉겨 붙어 맛있습니다." },
+            { category: "중식", title: "연두부 마파두부", videoId: "KIxXVXa7rSA", ingredients: ["연두부 1팩", "다진 돼지고기 100g", "대파 1/2대", "두반장 1스푼", "굴소스 1스푼"], instructions: ["기름을 두르고 대파와 다진 고기를 볶습니다.", "고기가 익으면 두반장과 굴소스, 물 반 컵을 넣고 끓입니다.", "연두부를 숟가락으로 큼직하게 떠 넣고 전분물로 농도를 맞춥니다."], tip: "일반 두부보다 연두부를 사용하면 식감이 훨씬 부드러워 전문점 느낌이 납니다." },
+            { category: "중식", title: "짜파구리", videoId: "UZ8kNP0T55s", ingredients: ["짜파게티 1봉", "너구리 1봉", "물 4컵"], instructions: ["물이 끓으면 면 두 개와 너구리 건더기스프를 넣고 끓입니다.", "면이 80% 익으면 물을 1국자만 남기고 버립니다.", "짜파게티 스프 1개, 너구리 스프 1/2개를 넣고 약불에서 졸이듯 비벼줍니다."], tip: "너구리 스프를 다 넣으면 너무 짜므로 꼭 절반만 넣어주세요." },
+            { category: "중식", title: "어묵 고추잡채", videoId: "t_cVTSD92aI", ingredients: ["사각어묵 2장", "피망 1개", "양파 1/2개", "굴소스 1.5스푼", "고추기름 2스푼"], instructions: ["어묵과 피망, 양파를 모두 길쭉하고 얇게 채 썹니다.", "팬에 고추기름을 두르고 양파와 피망을 볶습니다.", "채소가 숨이 죽으면 어묵과 굴소스를 넣고 센 불에서 빠르게 볶아냅니다."], tip: "꽃빵을 곁들이거나 밥 위에 얹어 덮밥으로 먹으면 훌륭한 한 끼가 됩니다." },
+            { category: "중식", title: "야매 류산슬", videoId: "IAS80E09-dw", ingredients: ["게맛살 2줄", "팽이버섯 1봉", "대파 1/3대", "굴소스 1스푼", "간장 1스푼", "전분물"], instructions: ["게맛살은 결대로 찢고 팽이버섯은 밑동을 잘라 준비합니다.", "팬에 기름을 두르고 파를 볶다가 버섯과 게맛살을 넣습니다.", "물 반 컵, 굴소스, 간장을 넣고 끓이다가 전분물로 걸쭉하게 만듭니다."], tip: "해산물이 없어도 맛살과 버섯만으로 류산슬 특유의 식감과 맛을 낼 수 있습니다." },
+            { category: "중식", title: "굴소스 채소볶음밥", videoId: "kCcHAeOiaRI", ingredients: ["밥 1공기", "냉장고 속 채소", "굴소스 1스푼", "계란 1개"], instructions: ["채소들을 모두 잘게 다져 준비합니다.", "기름을 두른 팬에 채소를 볶다가 한쪽으로 밀고 계란을 스크램블 합니다.", "밥과 굴소스를 넣고 주걱을 세워 자르듯이 볶아줍니다."], tip: "주걱을 눕히지 않고 세워서 자르듯 볶아야 밥알이 떡지지 않습니다." },
+            { category: "중식", title: "깐풍 냉동만두", videoId: "rw1TMA9zerQ", ingredients: ["냉동만두 10개", "청양고추 1개", "간장 1스푼", "설탕 1스푼", "식초 1스푼"], instructions: ["냉동만두를 팬에 기름을 넉넉히 두르고 바삭하게 튀기듯 굽습니다.", "간장, 설탕, 식초, 물을 섞어 깐풍 소스를 만듭니다.", "구워진 만두 위에 소스와 썰어둔 청양고추를 넣고 소스가 졸아들 때까지 버무립니다."], tip: "소스를 넣을 때 불을 세게 해야 수분이 날아가며 바삭함이 유지됩니다." },
+            { category: "중식", title: "순두부 진짬뽕", videoId: "OyYnzSnp7tE", ingredients: ["진짬뽕 1봉", "순두부 1/2튜브", "대파", "다진마늘 1/2스푼"], instructions: ["라면 물을 평소보다 50ml 적게 잡고 끓입니다.", "물이 끓으면 면, 스프, 다진마늘을 넣습니다.", "면이 반쯤 익었을 때 순두부를 통으로 넣고 듬성듬성 깨트린 후 대파를 올립니다."], tip: "순두부에서 수분이 나오므로 애초에 라면 물을 적게 잡는 것이 포인트입니다." },
+            { category: "중식", title: "마늘쫑 돼지고기 볶음", videoId: "A9I_xSbEgiU", ingredients: ["마늘쫑 1줌", "다진 돼지고기 100g", "간장 2스푼", "설탕 1스푼", "굴소스 1/2스푼"], instructions: ["마늘쫑을 4cm 길이로 썰어 준비합니다.", "팬에 돼지고기를 먼저 볶아 고기 기름을 냅니다.", "마늘쫑을 넣고 볶다가 양념을 넣고 윤기 나게 졸입니다."], tip: "밥도둑 반찬으로 좋고, 다진 고기를 사용하면 식감이 훨씬 좋습니다." },
+            { category: "중식", title: "중식 계란국", videoId: "PfIknNELguQ", ingredients: ["계란 2개", "대파 1/3대", "치킨스톡 1/2스푼", "전분물 2스푼", "참기름"], instructions: ["냄비에 물 2컵을 끓이고 치킨스톡으로 간을 맞춥니다.", "전분물을 풀어 국물을 살짝 걸쭉하게 만듭니다.", "풀어둔 계란을 원을 그리듯 붓고 휘젓지 않은 채로 불을 끄고 참기름을 떨굽니다."], tip: "계란을 넣고 바로 저으면 국물이 탁해지니 그대로 몽글몽글 익게 두세요." },
+            { category: "중식", title: "파기름 계란 볶음밥", videoId: "XP0UFc96OYU", ingredients: ["밥 1공기", "대파 1대", "계란 2개", "간장 1스푼", "소금 약간"], instructions: ["대파를 송송 썰어 기름을 넉넉히 두른 팬에서 파기름을 냅니다.", "파를 한쪽으로 밀고 계란을 스크램블 합니다.", "간장을 빈 공간에 태우듯 끓이고 밥을 넣어 주걱으로 가르며 고슬고슬하게 볶습니다."], tip: "찬밥을 써야 중국집 볶음밥처럼 밥알이 날아다닙니다." },
+            { category: "중식", title: "고추참치 마파두부", videoId: "whqSKyQHlgw", ingredients: ["두부 1/2모", "고추참치 1캔", "대파 1/2대", "물 1/2컵", "전분물 1스푼"], instructions: ["팬에 파기름을 내다가 깍둑썰기 한 두부와 고추참치를 기름째 모두 넣습니다.", "물 반 컵을 붓고 두부에 간이 배도록 3분간 끓입니다.", "마지막에 전분물을 풀어 농도를 걸쭉하게 맞춰줍니다."], tip: "두반장이나 다진 고기 없이 고추참치 하나로 마파두부 맛의 80%를 낼 수 있습니다." },
+            { category: "중식", title: "크래미 게살스프", videoId: "lDUJIdzYDQU", ingredients: ["크래미 3개", "계란 1개", "치킨스톡 1스푼", "물 2.5컵", "전분물 2스푼"], instructions: ["물에 치킨스톡을 풀고 끓어오르면 잘게 찢은 크래미를 넣습니다.", "전분물을 먼저 풀어 국물을 걸쭉하게 만듭니다.", "마지막에 풀어둔 계란을 원을 그리며 붓고 휘젓지 않은 채 불을 끕니다."], tip: "전분물을 계란보다 먼저 넣어야 계란이 국물에 풀어지지 않고 몽글몽글 예쁘게 뜹니다." },
+            { category: "중식", title: "간짜장 라면", videoId: "RfpiLunLVfw", ingredients: ["짜장라면 1봉", "양파 1/2개", "삼겹살 약간", "계란 1개"], instructions: ["양파는 큼직하게 깍둑썰고, 면은 끓는 물에 삶아 건져둡니다.", "팬에 고기와 양파를 볶다가 짜장스프와 면수 3스푼을 넣고 볶습니다.", "삶아둔 면을 넣고 소스에 빠르게 비빈 뒤 계란프라이를 얹습니다."], tip: "양파의 아삭한 식감이 살아있게 센 불에서 빠르게 볶는 것이 핵심입니다." },
+            { category: "중식", title: "중식 냉우동", videoId: "DpSPfS8bOBs", ingredients: ["우동면 1개", "땅콩버터 2스푼", "간장 1.5스푼", "식초 1스푼", "물 3스푼"], instructions: ["땅콩버터, 간장, 식초, 설탕, 물을 섞어 부드러운 소스를 만듭니다.", "우동면을 삶아 얼음물에 헹궈 탱글하게 만듭니다.", "물기를 뺀 면에 소스를 붓고 오이채나 크래미를 고명으로 올립니다."], tip: "땅콩버터가 뻑뻑하면 따뜻한 물 1스푼을 먼저 넣어 부드럽게 푼 뒤 나머지 재료를 섞으세요." },
+            { category: "중식", title: "깐쇼 만두", videoId: "RFLMkStkCTg", ingredients: ["냉동 물만두 15개", "케첩 2스푼", "고추장 1/2스푼", "설탕 1스푼", "물 3스푼"], instructions: ["냉동 물만두를 기름을 넉넉히 두른 팬에 바삭하게 튀기듯 굽습니다.", "케첩, 고추장, 설탕, 물, 마늘을 섞어 칠리소스를 만듭니다.", "구워진 만두에 소스를 붓고 소스가 코팅될 때까지 바짝 졸입니다."], tip: "일반 교자보다 한 입 크기의 물만두를 튀기는 것이 소스도 잘 묻고 먹기 편합니다." },
+            { category: "중식", title: "청경채 굴소스 볶음", videoId: "ub5OMRzd3j4", ingredients: ["청경채 3송이", "다진마늘 1스푼", "굴소스 1스푼", "참기름 약간"], instructions: ["청경채는 밑동을 잘라 잎을 분리해 씻습니다.", "팬에 기름을 두르고 다진마늘을 볶아 마늘 향을 냅니다.", "청경채를 넣고 숨이 죽기 시작하면 굴소스를 넣고 센 불에 30초 볶아냅니다."], tip: "청경채에서 물이 나오기 전에 센 불로 아주 짧게 볶아야 아삭함이 삽니다." },
+            { category: "중식", title: "마라탕면", videoId: "stku9BaqLdk", ingredients: ["일반 라면 1봉", "시판 마라소스 1스푼", "알배기 배추 2장", "숙주 1줌", "우삼겹 약간"], instructions: ["라면 물을 평소보다 50ml 적게 끓입니다.", "물이 끓으면 라면스프 반 개, 마라소스, 배추, 고기를 넣습니다.", "면을 넣고 끓이다가 불 끄기 1분 전 숙주를 넣습니다."], tip: "마라소스는 제품마다 염도가 다르니 라면 스프 양을 조절하며 간을 맞추세요." },
+            { category: "중식", title: "사천식 짜파게티", videoId: "XoM8o5v6Kbk", ingredients: ["짜파게티 1봉", "청양고추 2개", "고춧가루 1스푼", "식용유 2스푼"], instructions: ["짜파게티 면을 삶아 물을 약간 남기고 버립니다.", "팬에 식용유를 두르고 송송 썬 청양고추와 고춧가루를 약불에 볶아 매운 기름을 만듭니다.", "이 고추기름에 삶은 면과 짜장스프를 넣고 볶아 완성합니다."], tip: "고추기름을 낼 때 강불이면 고춧가루가 타서 쓴맛이 나니 반드시 약불을 쓰세요." },
+            { category: "중식", title: "옥수수 빠스", videoId: "z_Cq5bqwFMo", ingredients: ["옥수수 통조림 1/2캔", "부침가루 3스푼", "설탕 3스푼", "식용유"], instructions: ["물기를 뺀 옥수수에 부침가루를 넣고 섞어 끈적한 반죽을 만듭니다.", "기름을 넉넉히 두른 팬에 한 스푼씩 떠서 노릇하게 튀기듯 굽습니다.", "다른 팬에 식용유 1스푼과 설탕을 녹여 시럽을 만든 뒤 튀긴 옥수수를 버무립니다."], tip: "설탕 시럽을 만들 때 절대 젓지 말고 약불에서 스스로 녹게 두어야 딱딱해지지 않습니다." },
 
             // ==================== [ 일식 20선 ] ====================
-            { category: "일식", title: "가츠동 (돈까스 덮밥)", videoUrl: "", ingredients: ["냉동돈까스 1장", "양파 1/2개", "계란 2개", "간장 2스푼", "설탕 1스푼", "물 1/2컵"], instructions: ["돈까스를 에어프라이어나 팬에 바삭하게 구워 자릅니다.", "팬에 물, 간장, 설탕, 썰어둔 양파를 넣고 끓입니다.", "양파가 익으면 구워둔 돈까스를 얹고 그 위에 푼 계란을 둘러 반숙으로 익혀 밥 위에 올립니다."], tip: "계란이 80% 정도 익었을 때 불을 꺼야 촉촉한 가츠동이 완성됩니다." },
-            { category: "일식", title: "간편 규동 (우삼겹 덮밥)", videoUrl: "", ingredients: ["우삼겹 150g", "양파 1/2개", "간장 2스푼", "설탕 1스푼", "맛술 1스푼", "계란 노른자"], instructions: ["양파는 채 썰고, 간장, 설탕, 맛술을 섞어 소스를 만듭니다.", "마른 팬에 고기와 양파를 볶습니다.", "고기가 익으면 소스를 붓고 졸인 뒤 밥 위에 얹고 가운데에 노른자를 올립니다."], tip: "고기 기름을 살짝 닦아낸 후 소스를 부으면 더 담백합니다." },
-            { category: "일식", title: "명란버터 우동", videoUrl: "", ingredients: ["우동면 1개", "명란젓 1개", "버터 1조각", "계란 노른자 1개", "김가루"], instructions: ["우동면을 끓는 물에 2분간 삶아 건져냅니다.", "그릇에 뜨거운 우동면을 담고 껍질을 제거한 명란, 버터, 노른자, 김가루를 올립니다.", "면의 열기로 버터를 녹이며 젓가락으로 슥슥 비벼 먹습니다."], tip: "뜨거울 때 바로 비벼야 버터가 면에 부드럽게 코팅됩니다." },
-            { category: "일식", title: "야매 연어장 덮밥", videoUrl: "", ingredients: ["생연어 150g", "양파 1/4개", "간장 3스푼", "물 3스푼", "설탕 1스푼", "와사비"], instructions: ["간장, 물, 설탕을 섞고 전자레인지에 30초 돌려 설탕을 녹인 뒤 식힙니다.", "연어를 도톰하게 썰어 밀폐용기에 담고 식힌 간장 소스를 붓습니다.", "냉장고에서 2~3시간 숙성 후 밥 위에 양파채와 함께 올려 와사비를 곁들입니다."], tip: "숙성 시간이 없다면 연어를 간장에 10분만 담가두어도 훌륭합니다." },
-            { category: "일식", title: "식빵 오코노미야키", videoUrl: "", ingredients: ["식빵 1장", "양배추 1줌", "계란 1개", "돈까스소스", "마요네즈"], instructions: ["식빵을 깍둑썰기하고, 양배추는 잘게 채 썹니다.", "그릇에 식빵, 양배추, 계란을 넣고 골고루 버무립니다.", "기름을 두른 팬에 반죽을 넓게 펴서 앞뒤로 굽고 소스와 마요네즈를 뿌립니다."], tip: "마요네즈를 뿌릴 때 위생봉투 모서리에 구멍을 작게 뚫어 짜면 얇고 예쁘게 뿌려집니다." },
-            { category: "일식", title: "달달한 일본식 계란말이", videoUrl: "", ingredients: ["계란 3개", "설탕 1스푼", "소금 1꼬집", "우유 2스푼", "식용유"], instructions: ["계란에 설탕, 소금, 우유를 넣고 거품이 나지 않게 살살 풉니다.", "약불로 달군 팬에 기름을 얇게 코팅하고 계란물을 얇게 붓습니다.", "끝에서부터 돌돌 말아주고, 다시 계란물을 붓는 과정을 3~4회 반복합니다."], tip: "가장자리가 익기 시작할 때 말아야 계란이 서로 잘 달라붙습니다." },
-            { category: "일식", title: "버터 간장 계란밥", videoUrl: "", ingredients: ["뜨거운 밥 1공기", "계란 1개", "버터 1조각", "진간장 1스푼", "참깨"], instructions: ["뜨거운 밥 한가운데에 버터를 숨겨 살짝 녹게 둡니다.", "계란 프라이를 반숙으로 구워 밥 위에 올립니다.", "간장 1스푼을 뿌리고 톡 터진 노른자와 함께 슥슥 비벼줍니다."], tip: "마가린을 사용하면 옛날 추억의 맛이 살아납니다." },
-            { category: "일식", title: "야끼소바", videoUrl: "", ingredients: ["라면사리 1개", "양배추 1줌", "베이컨 2줄", "굴소스 1스푼", "돈까스소스 1스푼", "마요네즈"], instructions: ["라면사리를 끓는 물에 70% 정도만 익혀 건져냅니다.", "팬에 베이컨과 채 썬 양배추를 볶습니다.", "면과 소스를 넣고 센 불에 볶은 후 마요네즈를 뿌려 마무리합니다."], tip: "면을 덜 삶아야 볶을 때 퍼지지 않고 쫄깃함을 유지합니다." },
-            { category: "일식", title: "간단 밀푀유나베", videoUrl: "", ingredients: ["알배기 배추 1/4통", "깻잎 10장", "샤브샤브용 소고기 150g", "시판 쯔유 3스푼"], instructions: ["배추 - 깻잎 - 고기 순서로 3번 정도 층층이 쌓아올립니다.", "냄비 높이에 맞춰 4등분으로 자른 뒤 단면이 위로 오게 냄비에 빼곡히 채웁니다.", "물 3컵에 쯔유를 섞어 붓고 고기가 익을 때까지 끓입니다."], tip: "손님 초대용으로 좋으며, 다 먹은 국물에 칼국수 사리를 넣으면 완벽합니다." },
-            { category: "일식", title: "타마고 샌드위치", videoUrl: "", ingredients: ["식빵 2장", "계란 3개", "마요네즈 2스푼", "소금 2꼬집", "설탕 1/2스푼"], instructions: ["계란을 완숙으로 삶아 껍질을 벗깁니다.", "볼에 계란을 넣고 포크나 매셔로 아주 잘게 으깹니다.", "마요네즈, 소금, 설탕을 넣고 꾸덕하게 섞은 뒤 식빵 사이에 두껍게 발라줍니다."], tip: "식빵 테두리를 자르면 빵집에서 파는 것처럼 훨씬 부드럽습니다." },
-            { category: "일식", title: "명란 마요 덮밥", videoUrl: "", ingredients: ["밥 1공기", "명란젓 1개", "마요네즈 2스푼", "계란 1개", "김가루"], instructions: ["명란젓은 껍질을 갈라 알만 긁어모은 뒤 마요네즈와 섞어 명란마요를 만듭니다.", "계란은 부드럽게 스크램블하여 준비합니다.", "밥 위에 스크램블 에그를 깔고 명란마요와 김가루 올려 비벼 먹습니다."], tip: "아보카도를 얇게 썰어 추가하면 훌륭한 카페 메뉴가 됩니다." },
-            { category: "일식", title: "시로다시 계란찜", videoUrl: "", ingredients: ["계란 2개", "물 1.5컵", "시로다시 1.5스푼", "맛술 1스푼"], instructions: ["계란, 물, 시로다시, 맛술을 섞은 뒤 고운 체에 걸러 알끈을 제거합니다.", "내열 용기에 붓고 랩을 씌워 구멍을 뚫습니다.", "끓는 물이 담긴 냄비에 찜기를 올리고 약불에서 12분간 쪄냅니다."], tip: "체에 거르는 과정이 일본식 푸딩 계란찜의 식감을 좌우합니다." },
-            { category: "일식", title: "참치 간장 버터우동", videoUrl: "", ingredients: ["우동면 1개", "참치 1/2캔", "버터 1조각", "진간장 1.5스푼", "계란 노른자"], instructions: ["우동면을 끓는 물에 2분 삶아 건져 그릇에 담습니다.", "뜨거운 면 위에 기름을 뺀 참치, 버터, 간장을 넣습니다.", "계란 노른자를 톡 떨어뜨리고 면의 열기로 버터를 녹이며 비빕니다."], tip: "쪽파나 대파를 얇게 송송 썰어 올리면 색감과 풍미가 좋아집니다." },
-            { category: "일식", title: "돼지고기 생강구이", videoUrl: "", ingredients: ["얇은 돼지고기 200g", "양파 1/2개", "간장 2스푼", "다진 생강 1/2스푼", "설탕 1스푼", "맛술 1스푼"], instructions: ["간장, 생강, 설탕, 맛술을 섞어 양념장을 만듭니다.", "팬에 돼지고기와 채 썬 양파를 볶습니다.", "고기가 80% 익었을 때 양념장을 붓고 국물이 없어질 때까지 바싹 졸입니다."], tip: "생강 향이 돼지고기 잡내를 완벽히 잡아주어 밥 반찬으로 훌륭합니다." },
-            { category: "일식", title: "돈페이야키", videoUrl: "", ingredients: ["대패삼겹살 100g", "양배추 1줌", "계란 2개", "돈까스소스", "마요네즈"], instructions: ["팬에 삼겹살과 채 썬 양배추를 소금, 후추 간을 하여 볶아 접시에 덜어둡니다.", "계란을 풀어 팬에 얇게 지단을 부칩니다.", "지단 위에 볶아둔 고기와 양배추를 올리고 반으로 접은 뒤, 소스와 마요네즈를 뿌립니다."], tip: "이자카야 인기 안주이며, 오코노미야키보다 만들기 훨씬 쉽습니다." },
-            { category: "일식", title: "유부초밥 볶음밥", videoUrl: "", ingredients: ["시판 유부초밥 세트", "밥 1공기", "계란 1개", "양파 1/4개"], instructions: ["양파와 시판 조미 유부를 잘게 다집니다.", "기름을 두른 팬에 양파를 볶다가 계란을 넣어 스크램블 합니다.", "밥과 다진 유부, 동봉된 조미 볶음 패키지와 단촛물을 모두 넣고 볶습니다."], tip: "유부초밥을 하나하나 쌀 필요 없이 볶기만 하면 훌륭한 단짠 볶음밥이 됩니다." },
-            { category: "일식", title: "일본식 감자샐러드", videoUrl: "", ingredients: ["감자 2개", "계란 1개", "오이 1/4개", "마요네즈 3스푼", "소금", "후추"], instructions: ["감자와 계란을 삶은 뒤, 감자는 뜨거울 때 으깨고 계란은 잘게 다집니다.", "오이는 얇게 채 썰어 소금에 살짝 절인 뒤 물기를 꽉 짭니다.", "으깬 감자에 계란, 오이, 마요네즈, 후추를 넣고 버무립니다."], tip: "베이컨이나 햄을 구워서 다져 넣으면 이자카야 퀄리티가 됩니다." },
-            { category: "일식", title: "낫토 비빔밥", videoUrl: "", ingredients: ["밥 1공기", "시판 낫토 1팩", "김치 2스푼", "참기름 1스푼", "계란 노른자"], instructions: ["낫토에 동봉된 간장과 겨자를 넣고 점성이 끈적해질 때까지 수십 번 젓습니다.", "신김치는 잘게 썰어 준비합니다.", "밥 위에 낫토, 김치, 계란 노른자를 올리고 참기름을 두릅니다."], tip: "낫토 초보자라면 김치를 기름에 살짝 볶아서 넣으면 냄새 없이 먹을 수 있습니다." },
-            { category: "일식", title: "가라아게 덮밥", videoUrl: "", ingredients: ["냉동 순살치킨 4조각", "양파 1/2개", "마요네즈 2스푼", "간장 2스푼", "설탕 1스푼", "물 2스푼"], instructions: ["냉동 치킨을 에어프라이어에 데워 한입 크기로 자릅니다.", "팬에 간장, 설탕, 물, 얇게 채 썬 양파를 넣고 끓여 양파장을 만듭니다.", "밥 위에 양파장을 붓고 치킨을 얹은 뒤 마요네즈를 뿌려줍니다."], tip: "치킨마요와 비슷하지만 양파를 간장 소스에 조려서 올리는 것이 일본식 텐동 스타일입니다." },
-            { category: "일식", title: "냉쯔유 소면", videoUrl: "", ingredients: ["소면 1인분", "시판 쯔유", "물(얼음물)", "와사비", "김가루"], instructions: ["소면을 끓는 물에 삶아 찬물에 바락바락 씻어 얼음을 띄운 접시에 담습니다.", "시판 쯔유와 생수를 제품 뒷면의 '자루소바' 황금비율에 맞춰 희석합니다.", "희석한 쯔유에 와사비를 살짝 풀고 소면을 적셔(찍어) 먹습니다."], tip: "메밀면 대신 소면을 사용해도 훌륭하며 쯔유만 있으면 불 안 쓰고 시원하게 한 끼가 해결됩니다." },
+            { category: "일식", title: "가츠동 (돈까스 덮밥)", videoId: "SIrLorBvhZ0", ingredients: ["냉동돈까스 1장", "양파 1/2개", "계란 2개", "간장 2스푼", "설탕 1스푼", "물 1/2컵"], instructions: ["돈까스를 에어프라이어나 팬에 바삭하게 구워 자릅니다.", "팬에 물, 간장, 설탕, 썰어둔 양파를 넣고 끓입니다.", "양파가 익으면 구워둔 돈까스를 얹고 그 위에 푼 계란을 둘러 반숙으로 익혀 밥 위에 올립니다."], tip: "계란이 80% 정도 익었을 때 불을 꺼야 촉촉한 가츠동이 완성됩니다." },
+            { category: "일식", title: "간편 규동 (우삼겹 덮밥)", videoId: "EtwdnNlaNRM", ingredients: ["우삼겹 150g", "양파 1/2개", "간장 2스푼", "설탕 1스푼", "맛술 1스푼", "계란 노른자"], instructions: ["양파는 채 썰고, 간장, 설탕, 맛술을 섞어 소스를 만듭니다.", "마른 팬에 고기와 양파를 볶습니다.", "고기가 익으면 소스를 붓고 졸인 뒤 밥 위에 얹고 가운데에 노른자를 올립니다."], tip: "고기 기름을 살짝 닦아낸 후 소스를 부으면 더 담백합니다." },
+            { category: "일식", title: "명란버터 우동", videoId: "HeY52u0iaPo", ingredients: ["우동면 1개", "명란젓 1개", "버터 1조각", "계란 노른자 1개", "김가루"], instructions: ["우동면을 끓는 물에 2분간 삶아 건져냅니다.", "그릇에 뜨거운 우동면을 담고 껍질을 제거한 명란, 버터, 노른자, 김가루를 올립니다.", "면의 열기로 버터를 녹이며 젓가락으로 슥슥 비벼 먹습니다."], tip: "뜨거울 때 바로 비벼야 버터가 면에 부드럽게 코팅됩니다." },
+            { category: "일식", title: "야매 연어장 덮밥", videoId: "yrLZepCETKM", ingredients: ["생연어 150g", "양파 1/4개", "간장 3스푼", "물 3스푼", "설탕 1스푼", "와사비"], instructions: ["간장, 물, 설탕을 섞고 전자레인지에 30초 돌려 설탕을 녹인 뒤 식힙니다.", "연어를 도톰하게 썰어 밀폐용기에 담고 식힌 간장 소스를 붓습니다.", "냉장고에서 2~3시간 숙성 후 밥 위에 양파채와 함께 올려 와사비를 곁들입니다."], tip: "숙성 시간이 없다면 연어를 간장에 10분만 담가두어도 훌륭합니다." },
+            { category: "일식", title: "식빵 오코노미야키", videoId: "9hjbPcz0atg", ingredients: ["식빵 1장", "양배추 1줌", "계란 1개", "돈까스소스", "마요네즈"], instructions: ["식빵을 깍둑썰기하고, 양배추는 잘게 채 썹니다.", "그릇에 식빵, 양배추, 계란을 넣고 골고루 버무립니다.", "기름을 두른 팬에 반죽을 넓게 펴서 앞뒤로 굽고 소스와 마요네즈를 뿌립니다."], tip: "마요네즈를 뿌릴 때 위생봉투 모서리에 구멍을 작게 뚫어 짜면 얇고 예쁘게 뿌려집니다." },
+            { category: "일식", title: "달달한 일본식 계란말이", videoId: "3hiZgyVkzuM", ingredients: ["계란 3개", "설탕 1스푼", "소금 1꼬집", "우유 2스푼", "식용유"], instructions: ["계란에 설탕, 소금, 우유를 넣고 거품이 나지 않게 살살 풉니다.", "약불로 달군 팬에 기름을 얇게 코팅하고 계란물을 얇게 붓습니다.", "끝에서부터 돌돌 말아주고, 다시 계란물을 붓는 과정을 3~4회 반복합니다."], tip: "가장자리가 익기 시작할 때 말아야 계란이 서로 잘 달라붙습니다." },
+            { category: "일식", title: "버터 간장 계란밥", videoId: "lMr2ncnKfdY", ingredients: ["뜨거운 밥 1공기", "계란 1개", "버터 1조각", "진간장 1스푼", "참깨"], instructions: ["뜨거운 밥 한가운데에 버터를 숨겨 살짝 녹게 둡니다.", "계란 프라이를 반숙으로 구워 밥 위에 올립니다.", "간장 1스푼을 뿌리고 톡 터진 노른자와 함께 슥슥 비벼줍니다."], tip: "마가린을 사용하면 옛날 추억의 맛이 살아납니다." },
+            { category: "일식", title: "야끼소바", videoId: "wk2AFvg7gDw", ingredients: ["라면사리 1개", "양배추 1줌", "베이컨 2줄", "굴소스 1스푼", "돈까스소스 1스푼", "마요네즈"], instructions: ["라면사리를 끓는 물에 70% 정도만 익혀 건져냅니다.", "팬에 베이컨과 채 썬 양배추를 볶습니다.", "면과 소스를 넣고 센 불에 볶은 후 마요네즈를 뿌려 마무리합니다."], tip: "면을 덜 삶아야 볶을 때 퍼지지 않고 쫄깃함을 유지합니다." },
+            { category: "일식", title: "간단 밀푀유나베", videoId: "j9K-F-tDX8E", ingredients: ["알배기 배추 1/4통", "깻잎 10장", "샤브샤브용 소고기 150g", "시판 쯔유 3스푼"], instructions: ["배추 - 깻잎 - 고기 순서로 3번 정도 층층이 쌓아올립니다.", "냄비 높이에 맞춰 4등분으로 자른 뒤 단면이 위로 오게 냄비에 빼곡히 채웁니다.", "물 3컵에 쯔유를 섞어 붓고 고기가 익을 때까지 끓입니다."], tip: "손님 초대용으로 좋으며, 다 먹은 국물에 칼국수 사리를 넣으면 완벽합니다." },
+            { category: "일식", title: "타마고 샌드위치", videoId: "WGYLDeFjEqE", ingredients: ["식빵 2장", "계란 3개", "마요네즈 2스푼", "소금 2꼬집", "설탕 1/2스푼"], instructions: ["계란을 완숙으로 삶아 껍질을 벗깁니다.", "볼에 계란을 넣고 포크나 매셔로 아주 잘게 으깹니다.", "마요네즈, 소금, 설탕을 넣고 꾸덕하게 섞은 뒤 식빵 사이에 두껍게 발라줍니다."], tip: "식빵 테두리를 자르면 빵집에서 파는 것처럼 훨씬 부드럽습니다." },
+            { category: "일식", title: "명란 마요 덮밥", videoId: "NMynRjugYE0", ingredients: ["밥 1공기", "명란젓 1개", "마요네즈 2스푼", "계란 1개", "김가루"], instructions: ["명란젓은 껍질을 갈라 알만 긁어모은 뒤 마요네즈와 섞어 명란마요를 만듭니다.", "계란은 부드럽게 스크램블하여 준비합니다.", "밥 위에 스크램블 에그를 깔고 명란마요와 김가루 올려 비벼 먹습니다."], tip: "아보카도를 얇게 썰어 추가하면 훌륭한 카페 메뉴가 됩니다." },
+            { category: "일식", title: "시로다시 계란찜", videoId: "BpULF9fQtY4", ingredients: ["계란 2개", "물 1.5컵", "시로다시 1.5스푼", "맛술 1스푼"], instructions: ["계란, 물, 시로다시, 맛술을 섞은 뒤 고운 체에 걸러 알끈을 제거합니다.", "내열 용기에 붓고 랩을 씌워 구멍을 뚫습니다.", "끓는 물이 담긴 냄비에 찜기를 올리고 약불에서 12분간 쪄냅니다."], tip: "체에 거르는 과정이 일본식 푸딩 계란찜의 식감을 좌우합니다." },
+            { category: "일식", title: "참치 간장 버터우동", videoId: "Zt2Se7Dj_lE", ingredients: ["우동면 1개", "참치 1/2캔", "버터 1조각", "진간장 1.5스푼", "계란 노른자"], instructions: ["우동면을 끓는 물에 2분 삶아 건져 그릇에 담습니다.", "뜨거운 면 위에 기름을 뺀 참치, 버터, 간장을 넣습니다.", "계란 노른자를 톡 떨어뜨리고 면의 열기로 버터를 녹이며 비빕니다."], tip: "쪽파나 대파를 얇게 송송 썰어 올리면 색감과 풍미가 좋아집니다." },
+            { category: "일식", title: "돼지고기 생강구이", videoId: "gSJNQCRqguw", ingredients: ["얇은 돼지고기 200g", "양파 1/2개", "간장 2스푼", "다진 생강 1/2스푼", "설탕 1스푼", "맛술 1스푼"], instructions: ["간장, 생강, 설탕, 맛술을 섞어 양념장을 만듭니다.", "팬에 돼지고기와 채 썬 양파를 볶습니다.", "고기가 80% 익었을 때 양념장을 붓고 국물이 없어질 때까지 바싹 졸입니다."], tip: "생강 향이 돼지고기 잡내를 완벽히 잡아주어 밥 반찬으로 훌륭합니다." },
+            { category: "일식", title: "돈페이야키", videoId: "ATNzGBEnUFQ", ingredients: ["대패삼겹살 100g", "양배추 1줌", "계란 2개", "돈까스소스", "마요네즈"], instructions: ["팬에 삼겹살과 채 썬 양배추를 소금, 후추 간을 하여 볶아 접시에 덜어둡니다.", "계란을 풀어 팬에 얇게 지단을 부칩니다.", "지단 위에 볶아둔 고기와 양배추를 올리고 반으로 접은 뒤, 소스와 마요네즈를 뿌립니다."], tip: "이자카야 인기 안주이며, 오코노미야키보다 만들기 훨씬 쉽습니다." },
+            { category: "일식", title: "유부초밥 볶음밥", videoId: "AzgsWmmQJ7M", ingredients: ["시판 유부초밥 세트", "밥 1공기", "계란 1개", "양파 1/4개"], instructions: ["양파와 시판 조미 유부를 잘게 다집니다.", "기름을 두른 팬에 양파를 볶다가 계란을 넣어 스크램블 합니다.", "밥과 다진 유부, 동봉된 조미 볶음 패키지와 단촛물을 모두 넣고 볶습니다."], tip: "유부초밥을 하나하나 쌀 필요 없이 볶기만 하면 훌륭한 단짠 볶음밥이 됩니다." },
+            { category: "일식", title: "일본식 감자샐러드", videoId: "gReTfnBChSY", ingredients: ["감자 2개", "계란 1개", "오이 1/4개", "마요네즈 3스푼", "소금", "후추"], instructions: ["감자와 계란을 삶은 뒤, 감자는 뜨거울 때 으깨고 계란은 잘게 다집니다.", "오이는 얇게 채 썰어 소금에 살짝 절인 뒤 물기를 꽉 짭니다.", "으깬 감자에 계란, 오이, 마요네즈, 후추를 넣고 버무립니다."], tip: "베이컨이나 햄을 구워서 다져 넣으면 이자카야 퀄리티가 됩니다." },
+            { category: "일식", title: "낫토 비빔밥", videoId: "OHrXZXQcMYY", ingredients: ["밥 1공기", "시판 낫토 1팩", "김치 2스푼", "참기름 1스푼", "계란 노른자"], instructions: ["낫토에 동봉된 간장과 겨자를 넣고 점성이 끈적해질 때까지 수십 번 젓습니다.", "신김치는 잘게 썰어 준비합니다.", "밥 위에 낫토, 김치, 계란 노른자를 올리고 참기름을 두릅니다."], tip: "낫토 초보자라면 김치를 기름에 살짝 볶아서 넣으면 냄새 없이 먹을 수 있습니다." },
+            { category: "일식", title: "가라아게 덮밥", videoId: "G_A5sJ00ERc", ingredients: ["냉동 순살치킨 4조각", "양파 1/2개", "마요네즈 2스푼", "간장 2스푼", "설탕 1스푼", "물 2스푼"], instructions: ["냉동 치킨을 에어프라이어에 데워 한입 크기로 자릅니다.", "팬에 간장, 설탕, 물, 얇게 채 썬 양파를 넣고 끓여 양파장을 만듭니다.", "밥 위에 양파장을 붓고 치킨을 얹은 뒤 마요네즈를 뿌려줍니다."], tip: "치킨마요와 비슷하지만 양파를 간장 소스에 조려서 올리는 것이 일본식 텐동 스타일입니다." },
+            { category: "일식", title: "냉쯔유 소면", videoId: "K2kNs96ZEzY", ingredients: ["소면 1인분", "시판 쯔유", "물(얼음물)", "와사비", "김가루"], instructions: ["소면을 끓는 물에 삶아 찬물에 바락바락 씻어 얼음을 띄운 접시에 담습니다.", "시판 쯔유와 생수를 제품 뒷면의 '자루소바' 황금비율에 맞춰 희석합니다.", "희석한 쯔유에 와사비를 살짝 풀고 소면을 적셔(찍어) 먹습니다."], tip: "메밀면 대신 소면을 사용해도 훌륭하며 쯔유만 있으면 불 안 쓰고 시원하게 한 끼가 해결됩니다." },
 
             // ==================== [ 분식 20선 ] ====================
-            { category: "분식", title: "국물 떡볶이", videoUrl: "", ingredients: ["밀떡 2줌", "사각어묵 2장", "대파 1대", "고추장 1스푼", "고춧가루 1.5스푼", "설탕 2스푼", "간장 1스푼"], instructions: ["냄비에 물 3컵과 양념(고추장, 고춧가루, 설탕, 간장)을 모두 넣고 끓입니다.", "물이 끓으면 씻어둔 떡과 썰어둔 어묵을 넣습니다.", "떡이 부풀어 오르면 큼직하게 썬 대파를 듬뿍 넣고 5분 더 졸입니다."], tip: "카레가루를 1/3 스푼 넣으면 프랜차이즈 떡볶이 맛이 납니다." },
-            { category: "분식", title: "로제 떡볶이", videoUrl: "", ingredients: ["떡볶이 떡 2줌", "베이컨 2줄", "우유 200ml", "고추장 1스푼", "카레가루 1/2스푼"], instructions: ["팬에 베이컨을 볶아 기름을 냅니다.", "우유를 붓고 고추장과 카레가루를 잘 풀어줍니다.", "떡을 넣고 약불에서 우유가 걸쭉해질 때까지 저어가며 졸입니다."], tip: "체다 슬라이스 치즈 1장을 마지막에 넣으면 풍미가 2배로 깊어집니다." },
-            { category: "분식", title: "참치마요 주먹밥", videoUrl: "", ingredients: ["밥 1.5공기", "참치 1캔", "마요네즈 3스푼", "김가루 1줌", "참기름 1스푼"], instructions: ["참치캔의 기름을 꽉 짜서 제거합니다.", "볼에 밥, 참치, 마요네즈, 김가루, 참기름을 모두 넣습니다.", "비닐장갑을 끼고 골고루 버무린 후 한입 크기로 동글동글하게 뭉쳐줍니다."], tip: "단무지를 잘게 다져 넣으면 오독오독 씹히는 맛이 추가되어 느끼하지 않습니다." },
-            { category: "분식", title: "비빔 만두", videoUrl: "", ingredients: ["냉동 군만두 5개", "양배추 1줌", "고추장 1스푼", "설탕 1스푼", "식초 1스푼", "참기름"], instructions: ["양배추를 아주 얇게 채 썰어 물에 담갔다가 물기를 뺍니다.", "고추장, 설탕, 식초를 1:1:1 비율로 섞어 초고추장을 만듭니다.", "만두를 바삭하게 굽고, 양배추 채에 소스를 버무려 곁들여 먹습니다."], tip: "만두를 구울 때 기름을 두르고 물 2스푼을 넣은 뒤 뚜껑을 덮으면 겉바속촉이 됩니다." },
-            { category: "분식", title: "백순대 볶음", videoUrl: "", ingredients: ["진공포장 순대 1/2팩", "양배추 1줌", "대파 1대", "들깨가루 2스푼", "다진마늘 1스푼", "소금", "식용유"], instructions: ["순대는 전자레인지에 살짝 데워 썰고, 양배추와 대파는 큼직하게 썹니다.", "팬에 기름을 넉넉히 두르고 다진마늘과 채소를 볶습니다.", "채소 숨이 죽으면 순대를 넣고 소금으로 간한 뒤 마지막에 들깨가루를 듬뿍 뿌립니다."], tip: "초고추장에 들깨가루를 섞어 소스를 만들어 찍어 먹으면 신림동 스타일이 됩니다." },
-            { category: "분식", title: "라볶이", videoUrl: "", ingredients: ["라면 1봉지", "떡 1줌", "어묵 1장", "고추장 1스푼", "설탕 1.5스푼"], instructions: ["물 400ml에 라면스프 1/2개, 고추장, 설탕을 풀고 끓입니다.", "물이 끓으면 떡과 어묵을 먼저 넣습니다.", "떡이 말랑해지면 라면 사리를 넣고 면이 익을 때까지 졸여줍니다."], tip: "라면 스프가 감칠맛을 잡아주어 별도의 육수나 조미료가 필요 없습니다." },
-            { category: "분식", title: "바삭 김치전", videoUrl: "", ingredients: ["신김치 1컵", "부침가루 1컵", "물 2/3컵", "고춧가루 1/2스푼", "얼음 2~3알"], instructions: ["볼에 잘게 썬 김치, 부침가루, 고춧가루를 넣습니다.", "물을 붓고 대충 섞은 뒤 얼음을 넣습니다 (반죽을 차갑게 하는 용도).", "기름을 넉넉히 두른 팬에 반죽을 얇게 펴서 강불로 튀기듯 부칩니다."], tip: "반죽을 너무 많이 저으면 글루텐이 생겨 바삭하지 않으니 날가루가 안 보일 정도만 섞으세요." },
-            { category: "분식", title: "믹서기 없는 감자전", videoUrl: "", ingredients: ["감자 2개", "소금 1꼬집", "식용유", "전분가루(선택)"], instructions: ["감자 껍질을 벗기고 강판(또는 채칼)에 얇게 채를 썹니다.", "채 썬 감자에 소금을 뿌려 5분 정도 두어 숨을 죽입니다.", "팬에 기름을 넉넉히 두르고 감자채를 넓게 펴서 앞뒤로 바삭하게 굽습니다."], tip: "감자채를 씻지 않고 그대로 부쳐야 감자 전분 때문에 서로 잘 엉겨 붙습니다." },
-            { category: "분식", title: "매콤 새콤 쫄면", videoUrl: "", ingredients: ["쫄면 1인분", "콩나물 1줌", "고추장 2스푼", "식초 2스푼", "설탕 1.5스푼", "참기름"], instructions: ["쫄면을 손으로 비벼 가닥가닥 떼어냅니다.", "끓는 물에 쫄면과 콩나물을 함께 넣고 3분간 삶은 뒤 찬물에 바락바락 씻습니다.", "고추장, 식초, 설탕으로 만든 양념장에 면과 콩나물을 넣고 비빕니다."], tip: "시판 쌈무나 채 썬 양배추를 추가하면 아삭한 식감이 배가 됩니다." },
-            { category: "분식", title: "전자레인지 계란빵", videoUrl: "", ingredients: ["핫케이크 가루 1컵", "우유 1/2컵", "계란 2개(반죽용1, 토핑용1)", "소금", "종이컵 2개"], instructions: ["핫케이크 가루, 우유, 계란 1개를 섞어 반죽을 만듭니다.", "종이컵 안쪽에 기름을 살짝 바르고 반죽을 1/3만 채웁니다.", "그 위에 계란 1개를 깨 넣고 노른자를 포크로 찌른 뒤 전자레인지에 2분 돌립니다."], tip: "노른자를 터트리지 않고 돌리면 전자레인지 안에서 펑 터질 수 있으니 꼭 찔러주세요." },
-            { category: "분식", title: "기름 떡볶이", videoUrl: "", ingredients: ["밀떡 2줌", "고춧가루 1스푼", "설탕 1스푼", "간장 1스푼", "참기름 1스푼", "식용유 2스푼"], instructions: ["딱딱한 떡은 물에 한 번 데쳐 말랑하게 준비합니다.", "볼에 떡과 고춧가루, 설탕, 간장, 참기름을 넣고 버무려 10분간 둡니다.", "식용유를 넉넉히 두른 팬에 양념된 떡을 넣고 약불에서 겉이 바삭해지도록 굽습니다."], tip: "고춧가루 양념은 쉽게 타므로 반드시 약불에서 서서히 굴려가며 구워야 합니다." },
-            { category: "분식", title: "신라면 투움바", videoUrl: "", ingredients: ["신라면 1봉", "우유 200ml", "체다치즈 1장", "양파 1/4개", "버터 1조각"], instructions: ["팬에 버터를 녹이고 채 썬 양파를 볶습니다.", "우유 200ml와 신라면 스프 반 개를 넣고 끓입니다.", "삶아둔 면과 치즈를 넣고 소스가 꾸덕해질 때까지 졸입니다."], tip: "면을 끓는 물에 미리 70% 정도만 삶아서 넣어야 소스가 겉돌지 않습니다." },
-            { category: "분식", title: "어묵채 튀김", videoUrl: "", ingredients: ["사각어묵 2장", "설탕 1/2스푼", "파슬리가루(선택)"], instructions: ["사각어묵을 우동 면발처럼 길고 아주 얇게 채 썹니다.", "에어프라이어에 얇게 펴 넣고 180도에서 7~8분간 굽습니다 (중간에 한 번 뒤적여줍니다).", "바삭해진 어묵을 꺼내 비닐봉지에 넣고 설탕을 뿌려 흔들어줍니다."], tip: "어묵 자체의 짠맛과 설탕의 단맛, 바삭한 식감이 맥주 안주로 최고입니다." },
-            { category: "분식", title: "마요네즈 참치 카나페", videoUrl: "", ingredients: ["참치 1/2캔", "마요네즈 2스푼", "양파 1/4개", "참크래커 1통"], instructions: ["참치는 기름을 꽉 짜내고, 양파는 아주 잘게 다집니다.", "참치, 다진 양파, 마요네즈, 후추 약간을 섞어 샐러드를 만듭니다.", "크래커 위에 참치 샐러드를 1스푼씩 예쁘게 올려냅니다."], tip: "오이나 방울토마토를 작게 썰어 함께 올리면 홈파티용 핑거푸드가 됩니다." },
-            { category: "분식", title: "계란 김밥", videoUrl: "", ingredients: ["김밥용 김 1장", "밥 1/2공기", "계란 2개", "스팸 1조각", "슬라이스 치즈 1장"], instructions: ["김밥 김을 가위로 1/2 지점까지만 자릅니다.", "계란은 두툼하게 부치고, 스팸도 구워 준비합니다.", "김의 4등분 된 면에 각각 밥, 계란, 스팸, 치즈를 올리고 시계방향으로 차곡차곡 접습니다."], tip: "밥은 얇게 펴 발라야 마지막에 접을 때 터지지 않습니다." },
-            { category: "분식", title: "비엔나 소시지 맛탕", videoUrl: "", ingredients: ["비엔나 소시지 200g", "물엿 2스푼", "설탕 1스푼", "식용유", "통깨"], instructions: ["비엔나 소시지에 칼집을 냅니다.", "기름을 넉넉히 두른 팬에 소시지를 바삭하게 튀기듯 굽습니다.", "소시지가 익으면 불을 줄이고 물엿과 설탕을 넣어 코팅한 뒤 통깨를 뿌립니다."], tip: "고추장이나 케첩 없이 물엿만으로 코팅하면 학교 앞 분식집 꼬치 맛이 납니다." },
-            { category: "분식", title: "밥통 구운 계란", videoUrl: "", ingredients: ["계란 6개", "물 1컵", "소금 1스푼", "식초 1스푼"], instructions: ["계란을 냉장고에서 미리 꺼내 찬기를 뺍니다.", "전기밥솥에 계란을 담고 물 1컵에 소금, 식초를 풀어 붓습니다.", "취사 버튼을 누릅니다. (진한 갈색을 원하면 취사를 2~3회 반복하세요)"], tip: "식초가 계란 껍질이 깨지는 것을 막아주고 까기 쉽게 만들어 줍니다." },
-            { category: "분식", title: "당면 없는 만두", videoUrl: "", ingredients: ["라이스페이퍼 5장", "다진 돼지고기 100g", "부추 약간", "굴소스 1스푼", "다진마늘 1스푼"], instructions: ["다진 고기에 부추, 굴소스, 마늘을 넣고 치대어 만두소를 만듭니다.", "따뜻한 물에 적신 라이스페이퍼에 만두소를 한 숟가락 넣고 네모나게 감쌉니다.", "기름을 넉넉히 두른 팬에 서로 달라붙지 않게 간격을 띄워 바삭하게 굽습니다."], tip: "라이스페이퍼는 서로 닿으면 찢어지므로 구울 때 간격 유지가 생명입니다." },
-            { category: "분식", title: "순대 꼬치 튀김", videoUrl: "", ingredients: ["시판 진공 순대", "고추장 1스푼", "케첩 2스푼", "물엿 2스푼", "다진마늘 1/2스푼"], instructions: ["순대를 자르지 않고 통째로 꼬치에 꽂습니다.", "기름을 넉넉히 두른 팬에 순대 겉면이 바삭해질 때까지 튀기듯 굽습니다.", "고추장, 케첩, 물엿, 마늘을 끓여 소스를 만든 뒤 튀긴 순대에 바릅니다."], tip: "순대를 전자레인지에 데우지 않고 딱딱한 상태로 구워야 겉이 튀김처럼 바삭해집니다." },
-            { category: "분식", title: "간장 비빔국수", videoUrl: "", ingredients: ["소면 1인분", "간장 2스푼", "설탕 1스푼", "참기름 1.5스푼", "통깨"], instructions: ["소면을 삶아 찬물에 헹궈 물기를 꽉 짭니다.", "볼에 간장, 설탕, 참기름을 넣고 섞어 양념장을 만듭니다.", "물기를 뺀 소면을 넣고 비빈 후 통깨를 듬뿍 뿌려줍니다."], tip: "설탕 대신 매실액을 쓰면 은은한 단맛과 산미가 돌아 훨씬 고급스럽습니다." },
+            { category: "분식", title: "국물 떡볶이", videoId: "CtvvdfJOdzQ", ingredients: ["밀떡 2줌", "사각어묵 2장", "대파 1대", "고추장 1스푼", "고춧가루 1.5스푼", "설탕 2스푼", "간장 1스푼"], instructions: ["냄비에 물 3컵과 양념(고추장, 고춧가루, 설탕, 간장)을 모두 넣고 끓입니다.", "물이 끓으면 씻어둔 떡과 썰어둔 어묵을 넣습니다.", "떡이 부풀어 오르면 큼직하게 썬 대파를 듬뿍 넣고 5분 더 졸입니다."], tip: "카레가루를 1/3 스푼 넣으면 프랜차이즈 떡볶이 맛이 납니다." },
+            { category: "분식", title: "로제 떡볶이", videoId: "FPPqKB0bobE", ingredients: ["떡볶이 떡 2줌", "베이컨 2줄", "우유 200ml", "고추장 1스푼", "카레가루 1/2스푼"], instructions: ["팬에 베이컨을 볶아 기름을 냅니다.", "우유를 붓고 고추장과 카레가루를 잘 풀어줍니다.", "떡을 넣고 약불에서 우유가 걸쭉해질 때까지 저어가며 졸입니다."], tip: "체다 슬라이스 치즈 1장을 마지막에 넣으면 풍미가 2배로 깊어집니다." },
+            { category: "분식", title: "참치마요 주먹밥", videoId: "hXbIXiw10g0", ingredients: ["밥 1.5공기", "참치 1캔", "마요네즈 3스푼", "김가루 1줌", "참기름 1스푼"], instructions: ["참치캔의 기름을 꽉 짜서 제거합니다.", "볼에 밥, 참치, 마요네즈, 김가루, 참기름을 모두 넣습니다.", "비닐장갑을 끼고 골고루 버무린 후 한입 크기로 동글동글하게 뭉쳐줍니다."], tip: "단무지를 잘게 다져 넣으면 오독오독 씹히는 맛이 추가되어 느끼하지 않습니다." },
+            { category: "분식", title: "비빔 만두", videoId: "hiOQmNwHMWo", ingredients: ["냉동 군만두 5개", "양배추 1줌", "고추장 1스푼", "설탕 1스푼", "식초 1스푼", "참기름"], instructions: ["양배추를 아주 얇게 채 썰어 물에 담갔다가 물기를 뺍니다.", "고추장, 설탕, 식초를 1:1:1 비율로 섞어 초고추장을 만듭니다.", "만두를 바삭하게 굽고, 양배추 채에 소스를 버무려 곁들여 먹습니다."], tip: "만두를 구울 때 기름을 두르고 물 2스푼을 넣은 뒤 뚜껑을 덮으면 겉바속촉이 됩니다." },
+            { category: "분식", title: "백순대 볶음", videoId: "gaJGk3fKyFU", ingredients: ["진공포장 순대 1/2팩", "양배추 1줌", "대파 1대", "들깨가루 2스푼", "다진마늘 1스푼", "소금", "식용유"], instructions: ["순대는 전자레인지에 살짝 데워 썰고, 양배추와 대파는 큼직하게 썹니다.", "팬에 기름을 넉넉히 두르고 다진마늘과 채소를 볶습니다.", "채소 숨이 죽으면 순대를 넣고 소금으로 간한 뒤 마지막에 들깨가루를 듬뿍 뿌립니다."], tip: "초고추장에 들깨가루를 섞어 소스를 만들어 찍어 먹으면 신림동 스타일이 됩니다." },
+            { category: "분식", title: "라볶이", videoId: "Gtk0e5WqiO0", ingredients: ["라면 1봉지", "떡 1줌", "어묵 1장", "고추장 1스푼", "설탕 1.5스푼"], instructions: ["물 400ml에 라면스프 1/2개, 고추장, 설탕을 풀고 끓입니다.", "물이 끓으면 떡과 어묵을 먼저 넣습니다.", "떡이 말랑해지면 라면 사리를 넣고 면이 익을 때까지 졸여줍니다."], tip: "라면 스프가 감칠맛을 잡아주어 별도의 육수나 조미료가 필요 없습니다." },
+            { category: "분식", title: "바삭 김치전", videoId: "QNRCFRN6HxM", ingredients: ["신김치 1컵", "부침가루 1컵", "물 2/3컵", "고춧가루 1/2스푼", "얼음 2~3알"], instructions: ["볼에 잘게 썬 김치, 부침가루, 고춧가루를 넣습니다.", "물을 붓고 대충 섞은 뒤 얼음을 넣습니다 (반죽을 차갑게 하는 용도).", "기름을 넉넉히 두른 팬에 반죽을 얇게 펴서 강불로 튀기듯 부칩니다."], tip: "반죽을 너무 많이 저으면 글루텐이 생겨 바삭하지 않으니 날가루가 안 보일 정도만 섞으세요." },
+            { category: "분식", title: "믹서기 없는 감자전", videoId: "-twTgH-Lm4c", ingredients: ["감자 2개", "소금 1꼬집", "식용유", "전분가루(선택)"], instructions: ["감자 껍질을 벗기고 강판(또는 채칼)에 얇게 채를 썹니다.", "채 썬 감자에 소금을 뿌려 5분 정도 두어 숨을 죽입니다.", "팬에 기름을 넉넉히 두르고 감자채를 넓게 펴서 앞뒤로 바삭하게 굽습니다."], tip: "감자채를 씻지 않고 그대로 부쳐야 감자 전분 때문에 서로 잘 엉겨 붙습니다." },
+            { category: "분식", title: "매콤 새콤 쫄면", videoId: "2_RCd4Ffwic", ingredients: ["쫄면 1인분", "콩나물 1줌", "고추장 2스푼", "식초 2스푼", "설탕 1.5스푼", "참기름"], instructions: ["쫄면을 손으로 비벼 가닥가닥 떼어냅니다.", "끓는 물에 쫄면과 콩나물을 함께 넣고 3분간 삶은 뒤 찬물에 바락바락 씻습니다.", "고추장, 식초, 설탕으로 만든 양념장에 면과 콩나물을 넣고 비빕니다."], tip: "시판 쌈무나 채 썬 양배추를 추가하면 아삭한 식감이 배가 됩니다." },
+            { category: "분식", title: "전자레인지 계란빵", videoId: "iUs63cIah1U", ingredients: ["핫케이크 가루 1컵", "우유 1/2컵", "계란 2개(반죽용1, 토핑용1)", "소금", "종이컵 2개"], instructions: ["핫케이크 가루, 우유, 계란 1개를 섞어 반죽을 만듭니다.", "종이컵 안쪽에 기름을 살짝 바르고 반죽을 1/3만 채웁니다.", "그 위에 계란 1개를 깨 넣고 노른자를 포크로 찌른 뒤 전자레인지에 2분 돌립니다."], tip: "노른자를 터트리지 않고 돌리면 전자레인지 안에서 펑 터질 수 있으니 꼭 찔러주세요." },
+            { category: "분식", title: "기름 떡볶이", videoId: "COvcU0zOMWo", ingredients: ["밀떡 2줌", "고춧가루 1스푼", "설탕 1스푼", "간장 1스푼", "참기름 1스푼", "식용유 2스푼"], instructions: ["딱딱한 떡은 물에 한 번 데쳐 말랑하게 준비합니다.", "볼에 떡과 고춧가루, 설탕, 간장, 참기름을 넣고 버무려 10분간 둡니다.", "식용유를 넉넉히 두른 팬에 양념된 떡을 넣고 약불에서 겉이 바삭해지도록 굽습니다."], tip: "고춧가루 양념은 쉽게 타므로 반드시 약불에서 서서히 굴려가며 구워야 합니다." },
+            { category: "분식", title: "신라면 투움바", videoId: "EjrRplKIDkw", ingredients: ["신라면 1봉", "우유 200ml", "체다치즈 1장", "양파 1/4개", "버터 1조각"], instructions: ["팬에 버터를 녹이고 채 썬 양파를 볶습니다.", "우유 200ml와 신라면 스프 반 개를 넣고 끓입니다.", "삶아둔 면과 치즈를 넣고 소스가 꾸덕해질 때까지 졸입니다."], tip: "면을 끓는 물에 미리 70% 정도만 삶아서 넣어야 소스가 겉돌지 않습니다." },
+            { category: "분식", title: "어묵채 튀김", videoId: "OyjIGthe0Nw", ingredients: ["사각어묵 2장", "설탕 1/2스푼", "파슬리가루(선택)"], instructions: ["사각어묵을 우동 면발처럼 길고 아주 얇게 채 썹니다.", "에어프라이어에 얇게 펴 넣고 180도에서 7~8분간 굽습니다 (중간에 한 번 뒤적여줍니다).", "바삭해진 어묵을 꺼내 비닐봉지에 넣고 설탕을 뿌려 흔들어줍니다."], tip: "어묵 자체의 짠맛과 설탕의 단맛, 바삭한 식감이 맥주 안주로 최고입니다." },
+            { category: "분식", title: "마요네즈 참치 카나페", videoId: "5HkEVKS97_8", ingredients: ["참치 1/2캔", "마요네즈 2스푼", "양파 1/4개", "참크래커 1통"], instructions: ["참치는 기름을 꽉 짜내고, 양파는 아주 잘게 다집니다.", "참치, 다진 양파, 마요네즈, 후추 약간을 섞어 샐러드를 만듭니다.", "크래커 위에 참치 샐러드를 1스푼씩 예쁘게 올려냅니다."], tip: "오이나 방울토마토를 작게 썰어 함께 올리면 홈파티용 핑거푸드가 됩니다." },
+            { category: "분식", title: "계란 김밥", videoId: "a_2uUHcwuew", ingredients: ["김밥용 김 1장", "밥 1/2공기", "계란 2개", "스팸 1조각", "슬라이스 치즈 1장"], instructions: ["김밥 김을 가위로 1/2 지점까지만 자릅니다.", "계란은 두툼하게 부치고, 스팸도 구워 준비합니다.", "김의 4등분 된 면에 각각 밥, 계란, 스팸, 치즈를 올리고 시계방향으로 차곡차곡 접습니다."], tip: "밥은 얇게 펴 발라야 마지막에 접을 때 터지지 않습니다." },
+            { category: "분식", title: "비엔나 소시지 맛탕", videoId: "xOC-k0P48iE", ingredients: ["비엔나 소시지 200g", "물엿 2스푼", "설탕 1스푼", "식용유", "통깨"], instructions: ["비엔나 소시지에 칼집을 냅니다.", "기름을 넉넉히 두른 팬에 소시지를 바삭하게 튀기듯 굽습니다.", "소시지가 익으면 불을 줄이고 물엿과 설탕을 넣어 코팅한 뒤 통깨를 뿌립니다."], tip: "고추장이나 케첩 없이 물엿만으로 코팅하면 학교 앞 분식집 꼬치 맛이 납니다." },
+            { category: "분식", title: "밥통 구운 계란", videoId: "5bBsVbUilJc", ingredients: ["계란 6개", "물 1컵", "소금 1스푼", "식초 1스푼"], instructions: ["계란을 냉장고에서 미리 꺼내 찬기를 뺍니다.", "전기밥솥에 계란을 담고 물 1컵에 소금, 식초를 풀어 붓습니다.", "취사 버튼을 누릅니다. (진한 갈색을 원하면 취사를 2~3회 반복하세요)"], tip: "식초가 계란 껍질이 깨지는 것을 막아주고 까기 쉽게 만들어 줍니다." },
+            { category: "분식", title: "당면 없는 만두", videoId: "WoF7D9Vu72w", ingredients: ["라이스페이퍼 5장", "다진 돼지고기 100g", "부추 약간", "굴소스 1스푼", "다진마늘 1스푼"], instructions: ["다진 고기에 부추, 굴소스, 마늘을 넣고 치대어 만두소를 만듭니다.", "따뜻한 물에 적신 라이스페이퍼에 만두소를 한 숟가락 넣고 네모나게 감쌉니다.", "기름을 넉넉히 두른 팬에 서로 달라붙지 않게 간격을 띄워 바삭하게 굽습니다."], tip: "라이스페이퍼는 서로 닿으면 찢어지므로 구울 때 간격 유지가 생명입니다." },
+            { category: "분식", title: "순대 꼬치 튀김", videoId: "WqxgqEUODbY", ingredients: ["시판 진공 순대", "고추장 1스푼", "케첩 2스푼", "물엿 2스푼", "다진마늘 1/2스푼"], instructions: ["순대를 자르지 않고 통째로 꼬치에 꽂습니다.", "기름을 넉넉히 두른 팬에 순대 겉면이 바삭해질 때까지 튀기듯 굽습니다.", "고추장, 케첩, 물엿, 마늘을 끓여 소스를 만든 뒤 튀긴 순대에 바릅니다."], tip: "순대를 전자레인지에 데우지 않고 딱딱한 상태로 구워야 겉이 튀김처럼 바삭해집니다." },
+            { category: "분식", title: "간장 비빔국수", videoId: "KR5qPbmiE-Y", ingredients: ["소면 1인분", "간장 2스푼", "설탕 1스푼", "참기름 1.5스푼", "통깨"], instructions: ["소면을 삶아 찬물에 헹궈 물기를 꽉 짭니다.", "볼에 간장, 설탕, 참기름을 넣고 섞어 양념장을 만듭니다.", "물기를 뺀 소면을 넣고 비빈 후 통깨를 듬뿍 뿌려줍니다."], tip: "설탕 대신 매실액을 쓰면 은은한 단맛과 산미가 돌아 훨씬 고급스럽습니다." },
 
             // ==================== [ 기타 20선 ] ====================
-            { category: "기타", title: "원팬 토마토 파스타", videoUrl: "", ingredients: ["파스타면 1인분", "시판 토마토소스 1/2병", "양파 1/4개", "물 2컵", "소금 1꼬집"], instructions: ["팬에 면(반으로 부러뜨려도 좋음), 채 썬 양파, 물, 소금을 모두 넣고 강불로 끓입니다.", "물이 끓기 시작하면 9~10분간 면이 익을 때까지 끓입니다.", "물이 2~3스푼 남았을 때 토마토 소스를 붓고 1분간 볶아줍니다."], tip: "면을 따로 삶지 않아 설거지도 줄고, 면수에 전분이 우러나와 소스가 더 잘 배어듭니다." },
-            { category: "기타", title: "에그 인 헬 (샥슈카)", videoUrl: "", ingredients: ["시판 토마토소스 1컵", "계란 2개", "소시지", "양파 1/2개", "식빵"], instructions: ["팬에 썰어둔 소시지와 양파를 볶습니다.", "토마토 소스와 물 1/4컵을 넣고 바글바글 끓입니다.", "소스 위에 계란 2개를 깨 올리고 뚜껑을 덮어 계란을 반숙으로 익힌 뒤 구운 식빵을 찍어 먹습니다."], tip: "모짜렐라 치즈를 계란 주변에 뿌려주면 맛과 비주얼이 완벽해집니다." },
-            { category: "기타", title: "식빵 피자", videoUrl: "", ingredients: ["식빵 2장", "케첩 2스푼", "모짜렐라 치즈 1컵", "옥수수 통조림 2스푼", "양파 약간"], instructions: ["식빵 한 면에 케첩을 꼼꼼히 바릅니다.", "다진 양파와 물기를 뺀 옥수수 콘을 올립니다.", "피자치즈를 듬뿍 덮고 전자레인지에 2분 또는 에어프라이어 180도 5분 돌려줍니다."], tip: "케첩 대신 시판 스파게티 소스를 바르면 풍미가 훨씬 고급스러워집니다." },
-            { category: "기타", title: "감바스 알 아히요", videoUrl: "", ingredients: ["냉동 칵테일 새우 10마리", "통마늘 10알", "올리브유 1/2컵", "페페론치노 3개", "소금"], instructions: ["새우는 물에 담가 해동 후 물기를 완벽히 닦아냅니다.", "마늘은 편 썰어 올리브유와 페페론치노와 함께 약불에서 끓이듯 튀깁니다.", "마늘이 노릇해지면 새우와 소금을 넣고 새우가 붉어질 때까지 익힙니다."], tip: "남은 오일에 파스타 면을 삶아 넣으면 훌륭한 알리오 올리오가 됩니다." },
-            { category: "기타", title: "프렌치 토스트", videoUrl: "", ingredients: ["식빵 2장", "계란 2개", "우유 4스푼", "설탕 1스푼", "버터(또는 식용유)"], instructions: ["넓은 그릇에 계란, 우유, 설탕을 섞어 계란물을 만듭니다.", "식빵을 계란물에 푹 적셔 1분간 둡니다.", "버터를 두른 팬에 약불로 앞뒤를 노릇하게 구워냅니다."], tip: "다 구운 뒤 메이플 시럽이나 연유를 뿌려 먹으면 홈카페 완성이 됩니다." },
-            { category: "기타", title: "초간단 콘치즈", videoUrl: "", ingredients: ["옥수수 통조림 1/2캔", "마요네즈 2스푼", "설탕 1/2스푼", "모짜렐라 치즈 1줌"], instructions: ["옥수수의 물기를 채에 밭쳐 완벽하게 뺍니다.", "옥수수에 마요네즈와 설탕을 넣고 버무립니다.", "전자레인지용 그릇이나 팬에 옥수수를 깔고 치즈를 덮어 치즈가 녹을 때까지 가열합니다."], tip: "횟집 철판 콘치즈 맛을 내려면 프라이팬에서 옥수수 수분이 날아갈 때까지 볶은 후 치즈를 올리세요." },
-            { category: "기타", title: "쏘야 볶음", videoUrl: "", ingredients: ["비엔나 소시지 150g", "양파 1/2개", "케첩 2스푼", "굴소스 1스푼", "설탕 1스푼"], instructions: ["소시지에 문어 모양으로 칼집을 내고 양파는 네모나게 썹니다.", "케첩, 굴소스, 설탕을 섞어 소스를 만듭니다.", "기름을 두른 팬에 소시지와 양파를 볶다가 소시지가 입을 벌리면 소스를 넣고 볶습니다."], tip: "소시지를 끓는 물에 한 번 데치면 기름기와 불순물이 빠져 더 담백합니다." },
-            { category: "기타", title: "우유 크림 파스타", videoUrl: "", ingredients: ["파스타면 1인분", "우유 200ml", "슬라이스 치즈 2장", "베이컨 2줄", "양파 1/4개", "소금"], instructions: ["파스타 면을 끓는 물에 7분간 삶아 건집니다.", "팬에 베이컨과 양파를 볶다가 우유를 붓고 끓어오르면 치즈를 녹입니다.", "삶아둔 면을 넣고 소스가 걸쭉해질 때까지 끓이며 소금으로 간을 맞춥니다."], tip: "생크림 없이 우유와 슬라이스 치즈만으로도 꾸덕한 크림 맛을 낼 수 있습니다." },
-            { category: "기타", title: "다이어트 양배추 롤", videoUrl: "", ingredients: ["양배추 큰 잎 4장", "두부 1/2모", "닭가슴살 1팩", "스리라차 소스"], instructions: ["양배추 잎을 끓는 물이나 전자레인지에 부드럽게 쪄냅니다.", "두부는 물기를 꽉 짜서 으깨고, 닭가슴살은 잘게 찢어 섞습니다.", "찐 양배추에 두부 닭가슴살 소를 넣고 돌돌 만 뒤 스리라차 소스를 곁들입니다."], tip: "포만감이 엄청나서 저녁 다이어트 식단으로 최고입니다." },
-            { category: "기타", title: "카레라이스", videoUrl: "", ingredients: ["카레가루 4스푼", "양파 1.5개", "감자 1개", "식용유", "버터 1조각"], instructions: ["양파는 채 썰고 감자는 깍둑썰기 합니다.", "냄비에 식용유를 넉넉히 두르고 양파가 갈색이 될 때까지 약불로 오래 볶습니다.", "감자와 물을 넣고 익힌 뒤, 불을 끄고 카레가루를 풉니다. 마지막에 버터를 넣고 끓여 마무리합니다."], tip: "양파를 갈색이 될 때까지 볶으면 고기가 없어도 특유의 단맛과 감칠맛이 폭발합니다." },
-            { category: "기타", title: "명란 오일 파스타", videoUrl: "", ingredients: ["파스타면 1인분", "명란젓 1개", "마늘 5알", "올리브오일", "페페론치노 약간"], instructions: ["끓는 물에 소금을 넣고 면을 삶습니다.", "팬에 올리브유를 두르고 편 마늘과 페페론치노를 볶아 향을 냅니다.", "삶은 면과 면수 반 국자를 넣고 볶다가 불을 끄고 껍질을 제거한 명란을 버무립니다."], tip: "명란은 불이 켜진 상태에서 볶으면 퍽퍽해지므로 반드시 불을 끄고 잔열로 비벼주세요." },
-            { category: "기타", title: "떠먹는 고구마 피자", videoUrl: "", ingredients: ["고구마 1개", "우유 3스푼", "모짜렐라 치즈 1컵", "시판 토마토소스 2스푼"], instructions: ["고구마를 찌거나 전자레인지에 익힌 뒤 우유를 넣고 부드럽게 으깹니다.", "오븐 용기나 내열 그릇 바닥에 으깬 고구마를 넓게 폅니다.", "그 위에 토마토소스를 바르고 치즈를 듬뿍 덮어 전자레인지에 2분 돌립니다."], tip: "으깬 고구마 베이스가 도우 역할을 해서 밀가루 없이 즐기는 피자가 됩니다." },
-            { category: "기타", title: "베이컨 치즈 볶음밥", videoUrl: "", ingredients: ["밥 1공기", "베이컨 2줄", "모짜렐라 치즈 1/2컵", "간장 1스푼", "버터 1조각"], instructions: ["베이컨을 잘게 썰어 마른 팬에 바싹 볶습니다.", "밥과 버터, 간장을 넣고 볶습니다.", "밥을 넓게 펴고 치즈를 올린 뒤 뚜껑을 덮어 치즈를 녹입니다."], tip: "베이컨 기름에 밥을 볶는 것이 풍미의 핵심이므로 기름을 닦아내지 마세요." },
-            { category: "기타", title: "바나나 토스트", videoUrl: "", ingredients: ["식빵 1장", "바나나 1개", "땅콩버터 1스푼", "시나몬 가루(선택)"], instructions: ["식빵을 토스터기나 마른 팬에 바삭하게 굽습니다.", "구운 빵 한쪽 면에 땅콩버터나 초코 잼을 듬뿍 바릅니다.", "바나나를 동그랗고 얇게 썰어 빵 위에 빼곡히 올립니다."], tip: "시나몬 가루를 살짝 뿌리면 브런치 카페 메뉴로 변신합니다." },
-            { category: "기타", title: "마늘빵 (식빵 활용)", videoUrl: "", ingredients: ["식빵 2장", "버터 2스푼", "다진마늘 1스푼", "설탕 1스푼", "파슬리 가루"], instructions: ["식빵을 스틱 모양으로 3등분하여 자릅니다.", "전자레인지에 살짝 녹인 버터에 다진마늘, 설탕, 파슬리를 섞어 마늘버터를 만듭니다.", "식빵 윗면에 마늘버터를 바르고 에어프라이어 170도에서 5~6분 바삭하게 굽습니다."], tip: "에어프라이어가 없다면 프라이팬 약불에서 뚜껑을 덮고 은근하게 구워도 됩니다." },
-            { category: "기타", title: "닭가슴살 양배추 볶음", videoUrl: "", ingredients: ["시판 훈제 닭가슴살 1팩", "양배추 2줌", "굴소스 1스푼", "후추 약간"], instructions: ["닭가슴살을 한입 크기로 깍둑썰기하고, 양배추도 큼직하게 썹니다.", "기름을 살짝 두른 팬에 양배추를 먼저 볶아 단맛을 냅니다.", "양배추 숨이 살짝 죽으면 닭가슴살과 굴소스를 넣고 빠르게 볶아냅니다."], tip: "포만감이 크고 칼로리는 낮아 다이어트 한 끼로 완벽합니다." },
-            { category: "기타", title: "참치 카레", videoUrl: "", ingredients: ["카레가루 4스푼", "참치 1캔", "양파 1개", "물 2.5컵"], instructions: ["냄비에 참치 기름을 붓고 채 썬 양파를 갈색이 될 때까지 볶습니다.", "물을 붓고 끓으면 기름 뺀 참치 살을 넣습니다.", "불을 끄고 카레가루를 뭉치지 않게 풀어준 뒤 다시 약불로 걸쭉해질 때까지 끓입니다."], tip: "고기가 끓는 시간을 기다릴 필요 없이 10분 만에 완성되는 초스피드 카레입니다." },
-            { category: "기타", title: "콘치즈 토스트", videoUrl: "", ingredients: ["식빵 1장", "옥수수 통조림 2스푼", "마요네즈 1스푼", "설탕 1/2스푼", "모짜렐라 치즈"], instructions: ["물기를 뺀 옥수수 콘에 마요네즈와 설탕을 버무립니다.", "식빵 위에 옥수수를 넓게 펴 바르고 그 위를 치즈로 덮습니다.", "에어프라이어 180도에 5분 또는 전자레인지에 2분 돌립니다."], tip: "가장자리가 바삭한 에어프라이어 조리 방식을 추천합니다." },
-            { category: "기타", title: "크래미 오이 샌드위치", videoUrl: "", ingredients: ["식빵 2장", "크래미 3개", "오이 1/4개", "마요네즈 2스푼", "허니머스타드 1스푼"], instructions: ["오이를 얇게 채 썰어 소금에 10분 절인 뒤 물기를 꽉 짭니다.", "크래미를 결대로 찢어 절인 오이, 마요네즈, 머스타드와 버무립니다.", "부드러운 식빵 사이에 크래미 샐러드를 듬뿍 넣고 반으로 자릅니다."], tip: "오이의 수분을 완벽하게 짜내야 시간이 지나도 샌드위치가 눅눅해지지 않습니다." },
-            { category: "기타", title: "자취생 스키야키", videoUrl: "", ingredients: ["대패삼겹살 150g", "알배기 배추 3장", "두부 1/4모", "간장 3스푼", "설탕 2스푼", "계란 1개"], instructions: ["팬에 간장, 설탕, 물 3스푼을 끓여 스키야키 소스를 만듭니다.", "자작한 소스에 고기, 썰어둔 배추, 두부를 넣고 끓이며 졸입니다.", "고기와 채소가 익으면 생계란을 푼 종지에 푹 찍어 먹습니다."], tip: "전골처럼 국물을 떠먹는 것이 아니라, 짭조름하게 졸인 재료를 날계란에 찍어 중화시켜 먹는 요리입니다." }
+            { category: "기타", title: "원팬 토마토 파스타", videoId: "zcK8kEQsKFw", ingredients: ["파스타면 1인분", "시판 토마토소스 1/2병", "양파 1/4개", "물 2컵", "소금 1꼬집"], instructions: ["팬에 면(반으로 부러뜨려도 좋음), 채 썬 양파, 물, 소금을 모두 넣고 강불로 끓입니다.", "물이 끓기 시작하면 9~10분간 면이 익을 때까지 끓입니다.", "물이 2~3스푼 남았을 때 토마토 소스를 붓고 1분간 볶아줍니다."], tip: "면을 따로 삶지 않아 설거지도 줄고, 면수에 전분이 우러나와 소스가 더 잘 배어듭니다." },
+            { category: "기타", title: "에그 인 헬 (샥슈카)", videoId: "kyk7DGYD7cs", ingredients: ["시판 토마토소스 1컵", "계란 2개", "소시지", "양파 1/2개", "식빵"], instructions: ["팬에 썰어둔 소시지와 양파를 볶습니다.", "토마토 소스와 물 1/4컵을 넣고 바글바글 끓입니다.", "소스 위에 계란 2개를 깨 올리고 뚜껑을 덮어 계란을 반숙으로 익힌 뒤 구운 식빵을 찍어 먹습니다."], tip: "모짜렐라 치즈를 계란 주변에 뿌려주면 맛과 비주얼이 완벽해집니다." },
+            { category: "기타", title: "식빵 피자", videoId: "VCLXlIGo-ec", ingredients: ["식빵 2장", "케첩 2스푼", "모짜렐라 치즈 1컵", "옥수수 통조림 2스푼", "양파 약간"], instructions: ["식빵 한 면에 케첩을 꼼꼼히 바릅니다.", "다진 양파와 물기를 뺀 옥수수 콘을 올립니다.", "피자치즈를 듬뿍 덮고 전자레인지에 2분 또는 에어프라이어 180도 5분 돌려줍니다."], tip: "케첩 대신 시판 스파게티 소스를 바르면 풍미가 훨씬 고급스러워집니다." },
+            { category: "기타", title: "감바스 알 아히요", videoId: "VvM59BXz6Bw", ingredients: ["냉동 칵테일 새우 10마리", "통마늘 10알", "올리브유 1/2컵", "페페론치노 3개", "소금"], instructions: ["새우는 물에 담가 해동 후 물기를 완벽히 닦아냅니다.", "마늘은 편 썰어 올리브유와 페페론치노와 함께 약불에서 끓이듯 튀깁니다.", "마늘이 노릇해지면 새우와 소금을 넣고 새우가 붉어질 때까지 익힙니다."], tip: "남은 오일에 파스타 면을 삶아 넣으면 훌륭한 알리오 올리오가 됩니다." },
+            { category: "기타", title: "프렌치 토스트", videoId: "dBkoNglNjww", ingredients: ["식빵 2장", "계란 2개", "우유 4스푼", "설탕 1스푼", "버터(또는 식용유)"], instructions: ["넓은 그릇에 계란, 우유, 설탕을 섞어 계란물을 만듭니다.", "식빵을 계란물에 푹 적셔 1분간 둡니다.", "버터를 두른 팬에 약불로 앞뒤를 노릇하게 구워냅니다."], tip: "다 구운 뒤 메이플 시럽이나 연유를 뿌려 먹으면 홈카페 완성이 됩니다." },
+            { category: "기타", title: "초간단 콘치즈", videoId: "wopiPwjIy8g", ingredients: ["옥수수 통조림 1/2캔", "마요네즈 2스푼", "설탕 1/2스푼", "모짜렐라 치즈 1줌"], instructions: ["옥수수의 물기를 채에 밭쳐 완벽하게 뺍니다.", "옥수수에 마요네즈와 설탕을 넣고 버무립니다.", "전자레인지용 그릇이나 팬에 옥수수를 깔고 치즈를 덮어 치즈가 녹을 때까지 가열합니다."], tip: "횟집 철판 콘치즈 맛을 내려면 프라이팬에서 옥수수 수분이 날아갈 때까지 볶은 후 치즈를 올리세요." },
+            { category: "기타", title: "쏘야 볶음", videoId: "MGlZ7YeQklk", ingredients: ["비엔나 소시지 150g", "양파 1/2개", "케첩 2스푼", "굴소스 1스푼", "설탕 1스푼"], instructions: ["소시지에 문어 모양으로 칼집을 내고 양파는 네모나게 썹니다.", "케첩, 굴소스, 설탕을 섞어 소스를 만듭니다.", "기름을 두른 팬에 소시지와 양파를 볶다가 소시지가 입을 벌리면 소스를 넣고 볶습니다."], tip: "소시지를 끓는 물에 한 번 데치면 기름기와 불순물이 빠져 더 담백합니다." },
+            { category: "기타", title: "우유 크림 파스타", videoId: "z5rQJFGDLj8", ingredients: ["파스타면 1인분", "우유 200ml", "슬라이스 치즈 2장", "베이컨 2줄", "양파 1/4개", "소금"], instructions: ["파스타 면을 끓는 물에 7분간 삶아 건집니다.", "팬에 베이컨과 양파를 볶다가 우유를 붓고 끓어오르면 치즈를 녹입니다.", "삶아둔 면을 넣고 소스가 걸쭉해질 때까지 끓이며 소금으로 간을 맞춥니다."], tip: "생크림 없이 우유와 슬라이스 치즈만으로도 꾸덕한 크림 맛을 낼 수 있습니다." },
+            { category: "기타", title: "다이어트 양배추 롤", videoId: "vSR4DGS-_so", ingredients: ["양배추 큰 잎 4장", "두부 1/2모", "닭가슴살 1팩", "스리라차 소스"], instructions: ["양배추 잎을 끓는 물이나 전자레인지에 부드럽게 쪄냅니다.", "두부는 물기를 꽉 짜서 으깨고, 닭가슴살은 잘게 찢어 섞습니다.", "찐 양배추에 두부 닭가슴살 소를 넣고 돌돌 만 뒤 스리라차 소스를 곁들입니다."], tip: "포만감이 엄청나서 저녁 다이어트 식단으로 최고입니다." },
+            { category: "기타", title: "카레라이스", videoId: "aMZj_4s0igU", ingredients: ["카레가루 4스푼", "양파 1.5개", "감자 1개", "식용유", "버터 1조각"], instructions: ["양파는 채 썰고 감자는 깍둑썰기 합니다.", "냄비에 식용유를 넉넉히 두르고 양파가 갈색이 될 때까지 약불로 오래 볶습니다.", "감자와 물을 넣고 익힌 뒤, 불을 끄고 카레가루를 풉니다. 마지막에 버터를 넣고 끓여 마무리합니다."], tip: "양파를 갈색이 될 때까지 볶으면 고기가 없어도 특유의 단맛과 감칠맛이 폭발합니다." },
+            { category: "기타", title: "명란 오일 파스타", videoId: "z3wzHYKlYJ8", ingredients: ["파스타면 1인분", "명란젓 1개", "마늘 5알", "올리브오일", "페페론치노 약간"], instructions: ["끓는 물에 소금을 넣고 면을 삶습니다.", "팬에 올리브유를 두르고 편 마늘과 페페론치노를 볶아 향을 냅니다.", "삶은 면과 면수 반 국자를 넣고 볶다가 불을 끄고 껍질을 제거한 명란을 버무립니다."], tip: "명란은 불이 켜진 상태에서 볶으면 퍽퍽해지므로 반드시 불을 끄고 잔열로 비벼주세요." },
+            { category: "기타", title: "떠먹는 고구마 피자", videoId: "EQJYKDRBanI", ingredients: ["고구마 1개", "우유 3스푼", "모짜렐라 치즈 1컵", "시판 토마토소스 2스푼"], instructions: ["고구마를 찌거나 전자레인지에 익힌 뒤 우유를 넣고 부드럽게 으깹니다.", "오븐 용기나 내열 그릇 바닥에 으깬 고구마를 넓게 폅니다.", "그 위에 토마토소스를 바르고 치즈를 듬뿍 덮어 전자레인지에 2분 돌립니다."], tip: "으깬 고구마 베이스가 도우 역할을 해서 밀가루 없이 즐기는 피자가 됩니다." },
+            { category: "기타", title: "베이컨 치즈 볶음밥", videoId: "FQm84WwF5Q8", ingredients: ["밥 1공기", "베이컨 2줄", "모짜렐라 치즈 1/2컵", "간장 1스푼", "버터 1조각"], instructions: ["베이컨을 잘게 썰어 마른 팬에 바싹 볶습니다.", "밥과 버터, 간장을 넣고 볶습니다.", "밥을 넓게 펴고 치즈를 올린 뒤 뚜껑을 덮어 치즈를 녹입니다."], tip: "베이컨 기름에 밥을 볶는 것이 풍미의 핵심이므로 기름을 닦아내지 마세요." },
+            { category: "기타", title: "바나나 토스트", videoId: "lHmzjREHaYk", ingredients: ["식빵 1장", "바나나 1개", "땅콩버터 1스푼", "시나몬 가루(선택)"], instructions: ["식빵을 토스터기나 마른 팬에 바삭하게 굽습니다.", "구운 빵 한쪽 면에 땅콩버터나 초코 잼을 듬뿍 바릅니다.", "바나나를 동그랗고 얇게 썰어 빵 위에 빼곡히 올립니다."], tip: "시나몬 가루를 살짝 뿌리면 브런치 카페 메뉴로 변신합니다." },
+            { category: "기타", title: "마늘빵 (식빵 활용)", videoId: "rwdtmHGSDqk", ingredients: ["식빵 2장", "버터 2스푼", "다진마늘 1스푼", "설탕 1스푼", "파슬리 가루"], instructions: ["식빵을 스틱 모양으로 3등분하여 자릅니다.", "전자레인지에 살짝 녹인 버터에 다진마늘, 설탕, 파슬리를 섞어 마늘버터를 만듭니다.", "식빵 윗면에 마늘버터를 바르고 에어프라이어 170도에서 5~6분 바삭하게 굽습니다."], tip: "에어프라이어가 없다면 프라이팬 약불에서 뚜껑을 덮고 은근하게 구워도 됩니다." },
+            { category: "기타", title: "닭가슴살 양배추 볶음", videoId: "tQ6rvrAYZV8", ingredients: ["시판 훈제 닭가슴살 1팩", "양배추 2줌", "굴소스 1스푼", "후추 약간"], instructions: ["닭가슴살을 한입 크기로 깍둑썰기하고, 양배추도 큼직하게 썹니다.", "기름을 살짝 두른 팬에 양배추를 먼저 볶아 단맛을 냅니다.", "양배추 숨이 살짝 죽으면 닭가슴살과 굴소스를 넣고 빠르게 볶아냅니다."], tip: "포만감이 크고 칼로리는 낮아 다이어트 한 끼로 완벽합니다." },
+            { category: "기타", title: "참치 카레", videoId: "", ingredients: ["카레가루 4스푼", "참치 1캔", "양파 1개", "물 2.5컵"], instructions: ["냄비에 참치 기름을 붓고 채 썬 양파를 갈색이 될 때까지 볶습니다.", "물을 붓고 끓으면 기름 뺀 참치 살을 넣습니다.", "불을 끄고 카레가루를 뭉치지 않게 풀어준 뒤 다시 약불로 걸쭉해질 때까지 끓입니다."], tip: "고기가 끓는 시간을 기다릴 필요 없이 10분 만에 완성되는 초스피드 카레입니다." },
+            { category: "기타", title: "콘치즈 토스트", videoId: "32KoeQ1pj9Q", ingredients: ["식빵 1장", "옥수수 통조림 2스푼", "마요네즈 1스푼", "설탕 1/2스푼", "모짜렐라 치즈"], instructions: ["물기를 뺀 옥수수 콘에 마요네즈와 설탕을 버무립니다.", "식빵 위에 옥수수를 넓게 펴 바르고 그 위를 치즈로 덮습니다.", "에어프라이어 180도에 5분 또는 전자레인지에 2분 돌립니다."], tip: "가장자리가 바삭한 에어프라이어 조리 방식을 추천합니다." },
+            { category: "기타", title: "크래미 오이 샌드위치", videoId: "YDAYZpQKmuk", ingredients: ["식빵 2장", "크래미 3개", "오이 1/4개", "마요네즈 2스푼", "허니머스타드 1스푼"], instructions: ["오이를 얇게 채 썰어 소금에 10분 절인 뒤 물기를 꽉 짭니다.", "크래미를 결대로 찢어 절인 오이, 마요네즈, 머스타드와 버무립니다.", "부드러운 식빵 사이에 크래미 샐러드를 듬뿍 넣고 반으로 자릅니다."], tip: "오이의 수분을 완벽하게 짜내야 시간이 지나도 샌드위치가 눅눅해지지 않습니다." },
+            { category: "기타", title: "자취생 스키야키", videoId: "OQVVz9WEJrk", ingredients: ["대패삼겹살 150g", "알배기 배추 3장", "두부 1/4모", "간장 3스푼", "설탕 2스푼", "계란 1개"], instructions: ["팬에 간장, 설탕, 물 3스푼을 끓여 스키야키 소스를 만듭니다.", "자작한 소스에 고기, 썰어둔 배추, 두부를 넣고 끓이며 졸입니다.", "고기와 채소가 익으면 생계란을 푼 종지에 푹 찍어 먹습니다."], tip: "전골처럼 국물을 떠먹는 것이 아니라, 짭조름하게 졸인 재료를 날계란에 찍어 중화시켜 먹는 요리입니다." }
         ];
 
         const container = document.getElementById('recipe-container');
         const modal = document.getElementById('videoModal');
         const ytPlayer = document.getElementById('ytPlayer');
-        const emptyState = document.getElementById('emptyState');
+        const ytLink = document.getElementById('ytLink');
         const modalTitle = document.getElementById('modalTitle');
-        
+        const closeBtn = document.getElementById('closeBtn');
+
         let currentCategory = '전체'; // 필터 상태 동기화용 변수
         let lastRandomTitle = ""; // 랜덤 뽑기 무한 루프 방지용 (이름으로 추적)
+        let lastFocused = null; // 모달을 닫으면 포커스를 돌려줄 버튼
 
-        // 유튜브 URL 파싱 알고리즘
-        function extractYouTubeId(url) {
-            if (!url) return null;
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) ? match[2] : null;
+        // 레시피 텍스트를 HTML에 넣기 전에 특수문자를 이스케이프
+        function escapeHtml(text) {
+            return String(text).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+        }
+
+        function youtubeSearchUrl(recipe) {
+            return `https://www.youtube.com/results?search_query=${encodeURIComponent(recipe.title + ' 레시피')}`;
+        }
+
+        // 영상이 있으면 앱 안에서 재생, 없으면 유튜브 검색 결과를 새 탭으로 연다
+        function playRecipe(recipe, trigger) {
+            if (!recipe.videoId) {
+                window.open(youtubeSearchUrl(recipe), '_blank', 'noopener');
+                return;
+            }
+            openVideoModal(recipe, trigger);
         }
 
         // 인앱 모달 송출 로직
-        function openVideoModal(url, recipeName) {
-            const videoId = extractYouTubeId(url);
-            modalTitle.innerText = recipeName;
-            
-            if (videoId) {
-                ytPlayer.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-                ytPlayer.style.display = 'block';
-                emptyState.style.display = 'none';
-            } else {
-                // 방어 코드 (빈 화면)
-                ytPlayer.src = '';
-                ytPlayer.style.display = 'none';
-                emptyState.style.display = 'flex';
-            }
-            
+        function openVideoModal(recipe, trigger) {
+            lastFocused = trigger || document.activeElement;
+            modalTitle.textContent = recipe.title;
+            ytPlayer.title = `${recipe.title} 레시피 영상`;
+            ytPlayer.src = `https://www.youtube-nocookie.com/embed/${recipe.videoId}?autoplay=1&playsinline=1&rel=0&cc_load_policy=1&hl=ko`;
+            ytLink.href = `https://www.youtube.com/watch?v=${recipe.videoId}`;
+
+            modal.hidden = false;
             modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
             setTimeout(() => modal.classList.add('show'), 10);
+            closeBtn.focus();
         }
 
         function closeModal() {
+            if (modal.hidden) return;
             modal.classList.remove('show');
+            document.body.style.overflow = '';
             setTimeout(() => {
                 modal.style.display = 'none';
-                ytPlayer.src = ''; 
+                modal.hidden = true;
+                ytPlayer.src = '';
             }, 300);
+            if (lastFocused) lastFocused.focus();
+        }
+
+        // 카드 한 장의 HTML (목록과 랜덤 추천이 함께 사용)
+        function createCard(recipe, badgeText) {
+            const index = recipes.indexOf(recipe);
+            const title = escapeHtml(recipe.title);
+            const card = document.createElement('article');
+            card.className = 'recipe-card';
+
+            const ingredientsHtml = recipe.ingredients.map(ing => `<li class="tag">${escapeHtml(ing)}</li>`).join('');
+            const instructionsHtml = recipe.instructions.map(inst => `<li>${escapeHtml(inst)}</li>`).join('');
+
+            const thumbHtml = recipe.videoId ? `
+                <button type="button" class="thumb-btn" data-index="${index}" aria-label="${title} 영상 재생">
+                    <img src="https://i.ytimg.com/vi/${recipe.videoId}/mqdefault.jpg" alt="" loading="lazy" width="320" height="180">
+                    <span class="thumb-play" aria-hidden="true"></span>
+                </button>` : '';
+
+            const playHtml = recipe.videoId
+                ? `<button type="button" class="play-btn" data-index="${index}"><span class="play-icon" aria-hidden="true">▶️</span> 레시피 영상 바로보기</button>`
+                : `<button type="button" class="play-btn search" data-index="${index}"><span aria-hidden="true">🔍</span> 유튜브에서 영상 찾아보기<span class="sr-only">(새 탭)</span></button>`;
+
+            card.innerHTML = `
+                ${thumbHtml}
+                <div class="card-header">
+                    <span class="category-badge">${escapeHtml(badgeText || recipe.category)}</span>
+                    <h2 class="recipe-title">${title}</h2>
+                </div>
+
+                <ul class="ingredients-tags" aria-label="재료">
+                    ${ingredientsHtml}
+                </ul>
+
+                <div class="instructions-box">
+                    <ol aria-label="조리 순서">${instructionsHtml}</ol>
+                </div>
+
+                ${recipe.tip ? `
+                <div class="tip-box">
+                    💡 <strong>엽쌤의 꿀팁!</strong><br>${escapeHtml(recipe.tip)}
+                </div>
+                ` : ''}
+
+                ${playHtml}
+            `;
+            return card;
+        }
+
+        function getRecipesInCategory() {
+            return currentCategory === '전체' ? recipes : recipes.filter(r => r.category === currentCategory);
         }
 
         // 레시피 렌더링 함수
         function renderRecipes(filterCategory) {
             currentCategory = filterCategory; // 현재 상태 업데이트
-            container.innerHTML = ""; 
-            
-            let filtered = recipes;
-            if (currentCategory !== '전체') {
-                filtered = recipes.filter(r => r.category === currentCategory);
-            }
+            container.innerHTML = "";
 
             const fragment = document.createDocumentFragment();
+            getRecipesInCategory().forEach(recipe => fragment.appendChild(createCard(recipe)));
 
-            filtered.forEach(recipe => {
-                const card = document.createElement('article');
-                card.className = 'recipe-card';
-                
-                const ingredientsHtml = recipe.ingredients.map(ing => `<span class="tag">${ing}</span>`).join('');
-                const instructionsHtml = recipe.instructions.map(inst => `<li>${inst}</li>`).join('');
-
-                card.innerHTML = `
-                    <div class="card-header">
-                        <span class="category-badge">${recipe.category}</span>
-                        <h2 class="recipe-title">${recipe.title}</h2>
-                    </div>
-                    
-                    <div class="ingredients-tags">
-                        ${ingredientsHtml}
-                    </div>
-                    
-                    <div class="instructions-box">
-                        <ol>${instructionsHtml}</ol>
-                    </div>
-                    
-                    ${recipe.tip ? `
-                    <div class="tip-box">
-                        💡 <strong>엽쌤의 꿀팁!</strong><br>${recipe.tip}
-                    </div>
-                    ` : ''}
-
-                    <button class="play-btn" onclick="openVideoModal('${recipe.videoUrl}', '${recipe.title}')">
-                        <span class="play-icon">▶️</span> 레시피 영상 바로보기
-                    </button>
-                `;
-                fragment.appendChild(card);
-            });
-            
             container.appendChild(fragment);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // 카테고리 필터 클릭
         function filterRecipes(category) {
-            const btns = document.querySelectorAll('.category-btn');
-            btns.forEach(btn => {
-                if (btn.dataset.category === category) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                const isActive = btn.dataset.category === category;
+                btn.classList.toggle('active', isActive);
+                btn.setAttribute('aria-pressed', String(isActive));
             });
             renderRecipes(category);
         }
@@ -565,10 +662,7 @@
         // 상태 불일치 버그를 100% 차단한 무결점 랜덤 뽑기
         function pickRandomRecipe() {
             // 현재 선택된 카테고리를 기준으로 타겟 배열 생성
-            let targetRecipes = recipes;
-            if (currentCategory !== '전체') {
-                targetRecipes = recipes.filter(r => r.category === currentCategory);
-            }
+            const targetRecipes = getRecipesInCategory();
 
             let randomRecipe;
             // 배열 크기가 1보다 클 때만 중복 검사 (무한 루프 방지)
@@ -580,47 +674,53 @@
             } else {
                 randomRecipe = targetRecipes[0];
             }
-            
+
             lastRandomTitle = randomRecipe.title;
-            
+
             container.innerHTML = "";
-            
-            const card = document.createElement('article');
-            card.className = 'recipe-card';
-            
-            const ingredientsHtml = randomRecipe.ingredients.map(ing => `<span class="tag">${ing}</span>`).join('');
-            const instructionsHtml = randomRecipe.instructions.map(inst => `<li>${inst}</li>`).join('');
-
-            card.innerHTML = `
-                <div class="card-header">
-                    <span class="category-badge">🎉 오늘의 추천 메뉴</span>
-                    <h2 class="recipe-title">${randomRecipe.title}</h2>
-                </div>
-                
-                <div class="ingredients-tags">
-                    ${ingredientsHtml}
-                </div>
-                
-                <div class="instructions-box">
-                    <ol>${instructionsHtml}</ol>
-                </div>
-                
-                ${randomRecipe.tip ? `
-                <div class="tip-box">
-                    💡 <strong>엽쌤의 꿀팁!</strong><br>${randomRecipe.tip}
-                </div>
-                ` : ''}
-
-                <button class="play-btn" onclick="openVideoModal('${randomRecipe.videoUrl}', '${randomRecipe.title}')">
-                    <span class="play-icon">▶️</span> 레시피 영상 바로보기
-                </button>
-            `;
-            container.appendChild(card);
+            container.appendChild(createCard(randomRecipe, '🎉 오늘의 추천 메뉴'));
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        // 이벤트 연결
+        document.getElementById('category-nav').addEventListener('click', e => {
+            const btn = e.target.closest('.category-btn');
+            if (btn) filterRecipes(btn.dataset.category);
+        });
+        document.getElementById('random-banner').addEventListener('click', pickRandomRecipe);
+        container.addEventListener('click', e => {
+            const btn = e.target.closest('[data-index]');
+            if (btn) playRecipe(recipes[Number(btn.dataset.index)], btn);
+        });
+        // 썸네일을 못 불러오면 깨진 이미지 아이콘 대신 회색 배경만 보여준다
+        container.addEventListener('error', e => {
+            if (e.target.tagName === 'IMG') e.target.style.visibility = 'hidden';
+        }, true);
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', e => {
+            if (e.target === modal) closeModal(); // 영상 바깥 어두운 영역을 누르면 닫기
+        });
+        document.addEventListener('keydown', e => {
+            if (modal.hidden) return;
+            if (e.key === 'Escape') {
+                closeModal();
+            } else if (e.key === 'Tab') {
+                // 모달이 열려 있는 동안 포커스를 모달 안에 가둔다
+                const focusables = [closeBtn, ytPlayer, ytLink];
+                const first = focusables[0];
+                const last = focusables[focusables.length - 1];
+                if (e.shiftKey && document.activeElement === first) {
+                    e.preventDefault();
+                    last.focus();
+                } else if (!e.shiftKey && document.activeElement === last) {
+                    e.preventDefault();
+                    first.focus();
+                }
+            }
+        });
+
         // 초기 화면 설정
-        window.onload = () => filterRecipes('전체');
+        filterRecipes('전체');
 
     </script>
 </body>
