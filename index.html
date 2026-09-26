@@ -240,7 +240,7 @@
     </footer>
 
     <script>
-        // 100개의 요리 레시피 데이터 모음
+        // 100개의 요리 레시피 데이터
         const recipes = [
             // ==================== [ 한식 20선 ] ====================
             { category: "한식", title: "참치 김치찌개", ingredients: ["참치 1캔", "신김치 1컵", "양파 1/2개", "대파 1/3대", "다진마늘 1스푼"], instructions: ["냄비에 참치기름을 두르고 신김치를 볶습니다.", "김치가 투명해지면 양파를 넣고 볶다가 물을 붓습니다.", "끓어오르면 참치 살과 대파, 마늘을 넣고 5분 더 끓입니다."], tip: "참치기름으로 김치를 볶아야 국물 맛이 훨씬 깊어집니다." },
@@ -356,10 +356,14 @@
         const container = document.getElementById('recipe-container');
         let lastRandomIndex = -1; // 랜덤 뽑기 중복 당첨 방지
 
-        // ★ 핵심: 검색창 건너뛰고 첫 번째 유튜브 영상으로 즉시 강제 이동시키는 마법의 URL 생성기 ★
-        const createDirectVideoLink = (keyword) => {
-            // 인터넷 검색엔진의 "I'm Feeling Lucky(!ducky)" 문법을 활용하여 유튜브 도메인 내 첫 검색결과 영상으로 우회 즉시 이동시킵니다.
-            return `https://duckduckgo.com/?q=${encodeURIComponent('!ducky site:youtube.com ' + keyword)}`;
+        // 유튜브 모바일 최적화 검색 결과창 링크 생성
+        const createYoutubeSearchLink = (keyword, isLatest = false) => {
+            let baseUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(keyword)}`;
+            // 3번째 버튼(최신)에만 '업로드 날짜순' 파라미터 강제 추가
+            if (isLatest) {
+                baseUrl += `&sp=CAI%253D`;
+            }
+            return baseUrl;
         };
 
         // 레시피 카드 렌더링 함수
@@ -380,16 +384,16 @@
                 const ingredientsHtml = recipe.ingredients.map(ing => `<li>${ing}</li>`).join('');
                 const instructionsHtml = recipe.instructions.map(inst => `<li>${inst}</li>`).join('');
 
-                // 요리 이름으로 가장 적합한 검색어 3가지 구성
+                // 오류 없는 가장 완벽한 유튜브 검색 결과창 라우팅 적용
                 const kwChef = `백종원 ${recipe.title}`;
                 const kwShorts = `1분요리 쇼츠 ${recipe.title}`;
                 const kwLatest = `${recipe.title} 레시피`;
 
                 card.innerHTML = `
                     <div class="yt-links-container">
-                        <a href="${createDirectVideoLink(kwChef)}" target="_blank" class="yt-link-btn" aria-label="👨‍🍳 유명 셰프 레시피 다이렉트 재생">👨‍🍳 유명 셰프 레시피 다이렉트 재생</a>
-                        <a href="${createDirectVideoLink(kwShorts)}" target="_blank" class="yt-link-btn" aria-label="⏱️ 1분 요리 쇼츠 다이렉트 재생">⏱️ 1분 요리 쇼츠 다이렉트 재생</a>
-                        <a href="${createDirectVideoLink(kwLatest)}" target="_blank" class="yt-link-btn" aria-label="✨ 인기 레시피 다이렉트 재생">✨ 인기 레시피 다이렉트 재생</a>
+                        <a href="${createYoutubeSearchLink(kwChef)}" target="_blank" class="yt-link-btn" aria-label="👨‍🍳 유명 셰프 레시피 검색">👨‍🍳 유명 셰프 레시피 검색</a>
+                        <a href="${createYoutubeSearchLink(kwShorts)}" target="_blank" class="yt-link-btn" aria-label="⏱️ 1분 요리 쇼츠 보기">⏱️ 1분 요리 쇼츠 보기</a>
+                        <a href="${createYoutubeSearchLink(kwLatest, true)}" target="_blank" class="yt-link-btn" aria-label="✨ 가장 최신 영상 보기">✨ 가장 최신 영상 보기</a>
                     </div>
                     <div class="card-content">
                         <span class="category-badge">${recipe.category}</span>
@@ -455,9 +459,9 @@
 
             card.innerHTML = `
                 <div class="yt-links-container">
-                    <a href="${createDirectVideoLink(kwChef)}" target="_blank" class="yt-link-btn" aria-label="👨‍🍳 유명 셰프 레시피 다이렉트 재생">👨‍🍳 유명 셰프 레시피 다이렉트 재생</a>
-                    <a href="${createDirectVideoLink(kwShorts)}" target="_blank" class="yt-link-btn" aria-label="⏱️ 1분 요리 쇼츠 다이렉트 재생">⏱️ 1분 요리 쇼츠 다이렉트 재생</a>
-                    <a href="${createDirectVideoLink(kwLatest)}" target="_blank" class="yt-link-btn" aria-label="✨ 인기 레시피 다이렉트 재생">✨ 인기 레시피 다이렉트 재생</a>
+                    <a href="${createYoutubeSearchLink(kwChef)}" target="_blank" class="yt-link-btn" aria-label="👨‍🍳 유명 셰프 레시피 검색">👨‍🍳 유명 셰프 레시피 검색</a>
+                    <a href="${createYoutubeSearchLink(kwShorts)}" target="_blank" class="yt-link-btn" aria-label="⏱️ 1분 요리 쇼츠 보기">⏱️ 1분 요리 쇼츠 보기</a>
+                    <a href="${createYoutubeSearchLink(kwLatest, true)}" target="_blank" class="yt-link-btn" aria-label="✨ 가장 최신 영상 보기">✨ 가장 최신 영상 보기</a>
                 </div>
                 <div class="card-content">
                     <span class="category-badge">${randomRecipe.category}</span>
