@@ -3,21 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="자취생·혼밥러를 위한 초간단 레시피 100선. 재료, 조리 순서, 유튜브 영상까지 한 번에.">
-    <meta name="theme-color" content="#E11D48">
     <title>엽쌤의 혼밥 스쿨</title>
+    <meta name="description" content="자취생·혼밥러를 위한 초간단 레시피 100선. 재료, 조리 순서, 유튜브 영상까지 한 번에.">
+    <meta name="theme-color" content="#F8FAFC">
+
+    <!-- 카카오톡·SNS 링크 미리보기 -->
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="엽쌤의 혼밥 스쿨">
+    <meta property="og:title" content="엽쌤의 혼밥 스쿨 - 초간단 혼밥 레시피 100선">
+    <meta property="og:description" content="냉장고 속 재료로 뚝딱! 재료 검색, 단계별 요리 모드, 유튜브 영상까지 한 번에.">
+    <meta name="twitter:card" content="summary">
+
+    <!-- 홈 화면에 추가 (PWA) -->
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="icons/icon-192.png" type="image/png">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-title" content="혼밥스쿨">
+    <meta name="mobile-web-app-capable" content="yes">
+
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <script>
+        // 화면이 그려지기 전에 저장된 테마·글자 크기를 적용해 깜빡임을 막는다
+        try {
+            var savedTheme = JSON.parse(localStorage.getItem('honbap-theme'));
+            if (savedTheme === 'light' || savedTheme === 'dark') document.documentElement.dataset.theme = savedTheme;
+            if (JSON.parse(localStorage.getItem('honbap-large-text'))) document.documentElement.dataset.text = 'large';
+        } catch (e) { /* 저장소를 쓸 수 없으면 기본값 */ }
+    </script>
     <style>
         :root {
-            --primary: #E11D48;
-            --primary-dark: #BE123C;
-            --primary-gradient: linear-gradient(135deg, #E11D48 0%, #C2410C 100%);
-            --bg-color: #F8FAFC; 
-            --card-bg: #FFFFFF;
-            --text-dark: #0F172A;
-            --text-gray: #475569;
-            --tag-bg: #F1F5F9;
+            color-scheme: light;
+            --fill: #E11D48;              /* 흰 글자를 올리는 강조 배경 */
+            --accent: #E11D48;            /* 배경 위 강조 글자·아이콘 */
+            --brand-gradient: linear-gradient(135deg, #E11D48 0%, #C2410C 100%);
+            --title-gradient: linear-gradient(135deg, #E11D48 0%, #C2410C 100%);
+            --bg: #F8FAFC;
+            --surface: #FFFFFF;
+            --surface-2: #F1F5F9;
+            --text: #0F172A;
+            --text-2: #334155;
+            --text-muted: #475569;
+            --border: #CBD5E1;
+            --input-border: #7C8BA1;      /* 입력창 테두리는 배경 대비 3:1 이상 */
+            --header-bg: rgba(248, 250, 252, 0.88);
+            --inverse-bg: #0F172A;
+            --inverse-text: #FFFFFF;
+            --badge-bg: #FFF1F2;
+            --badge-text: #BE123C;
+            --tip-bg: #FEF3C7;
+            --tip-text: #92400E;
+            --quick-bg: #FFF7ED;
+            --quick-border: #FED7AA;
+            --thumb-bg: #E2E8F0;
+            --done-text: #475569;
+            --focus: #2563EB;
+            --shadow: 0 12px 24px rgba(148, 163, 184, 0.12);
         }
+        /* 다크 모드: 시스템 설정을 따르되, 사용자가 직접 고른 테마가 있으면 그것을 우선 */
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                color-scheme: dark;
+                --accent: #FB7185;
+                --title-gradient: linear-gradient(135deg, #FB7185 0%, #FB923C 100%);
+                --bg: #0B1120;
+                --surface: #1E293B;
+                --surface-2: #273449;
+                --text: #F1F5F9;
+                --text-2: #E2E8F0;
+                --text-muted: #CBD5E1;
+                --border: #475569;
+                --input-border: #718096;
+                --header-bg: rgba(11, 17, 32, 0.88);
+                --inverse-bg: #F1F5F9;
+                --inverse-text: #0F172A;
+                --badge-bg: #4C0519;
+                --badge-text: #FDA4AF;
+                --tip-bg: #422006;
+                --tip-text: #FCD34D;
+                --quick-bg: #431407;
+                --quick-border: #9A3412;
+                --thumb-bg: #334155;
+                --done-text: #94A3B8;
+                --focus: #60A5FA;
+                --shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+            }
+        }
+        :root[data-theme="dark"] {
+            color-scheme: dark;
+            --accent: #FB7185;
+            --title-gradient: linear-gradient(135deg, #FB7185 0%, #FB923C 100%);
+            --bg: #0B1120;
+            --surface: #1E293B;
+            --surface-2: #273449;
+            --text: #F1F5F9;
+            --text-2: #E2E8F0;
+            --text-muted: #CBD5E1;
+            --border: #475569;
+            --input-border: #718096;
+            --header-bg: rgba(11, 17, 32, 0.88);
+            --inverse-bg: #F1F5F9;
+            --inverse-text: #0F172A;
+            --badge-bg: #4C0519;
+            --badge-text: #FDA4AF;
+            --tip-bg: #422006;
+            --tip-text: #FCD34D;
+            --quick-bg: #431407;
+            --quick-border: #9A3412;
+            --thumb-bg: #334155;
+            --done-text: #94A3B8;
+            --focus: #60A5FA;
+            --shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        /* 큰 글씨 모드: 모든 크기가 rem 단위라 기준 글자 크기만 키우면 된다 */
+        :root[data-text="large"] { font-size: 118.75%; }
 
         * {
             box-sizing: border-box;
@@ -26,271 +126,58 @@
 
         body {
             margin: 0;
-            padding: 0;
+            padding: 0 0 40px 0;
             font-family: 'Pretendard', -apple-system, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-dark);
+            background-color: var(--bg);
+            color: var(--text);
             word-break: keep-all;
-            overflow-wrap: break-word; 
+            overflow-wrap: break-word;
             overscroll-behavior-y: none;
-            padding-bottom: 40px;
         }
+        body:has(dialog[open]) { overflow: hidden; }
+
+        button { font: inherit; color: inherit; }
 
         header {
-            background: rgba(255, 255, 255, 0.85);
+            background: var(--header-bg);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            padding: 16px 20px;
+            padding: 12px 16px 12px 20px;
             position: sticky;
             top: 0;
             z-index: 100;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 8px;
         }
-
         header h1 {
             margin: 0;
             font-size: 1.3rem;
             font-weight: 800;
             letter-spacing: -0.5px;
-            background: var(--primary-gradient);
+            background: var(--title-gradient);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
-        .category-nav {
-            display: flex;
-            overflow-x: auto;
-            white-space: nowrap;
-            padding: 12px 20px;
-            gap: 8px;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-            -webkit-overflow-scrolling: touch; 
-        }
-        .category-nav::-webkit-scrollbar { display: none; }
-
-        .category-btn {
-            padding: 8px 18px;
-            background: var(--card-bg);
-            border: 1px solid #E2E8F0;
-            color: var(--text-gray);
-            border-radius: 30px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
-
-        .category-btn.active {
-            background: var(--text-dark);
-            border-color: var(--text-dark);
-            color: white;
-            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.2);
-        }
-
-        .random-banner {
-            width: calc(100% - 40px);
-            border: none;
-            font: inherit;
-            text-align: left;
-            margin: 10px 20px 20px 20px;
-            background: var(--primary-gradient);
-            border-radius: 20px;
-            padding: 18px 20px;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(225, 29, 72, 0.2);
-            transition: transform 0.2s;
-        }
-        .random-banner:active { transform: scale(0.97); }
-        .random-title { display: block; font-size: 1.1rem; font-weight: 800; }
-        .random-desc { display: block; margin-top: 4px; font-size: 0.85rem; font-weight: 500; }
-        .random-icon { font-size: 2rem; }
-
-        #recipe-container {
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .recipe-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 20px;
-            box-shadow: 0 12px 24px rgba(148, 163, 184, 0.08);
-            border: 1px solid rgba(255,255,255,0.5);
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .card-header {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        .category-badge {
-            align-self: flex-start;
-            background: #FFF1F2;
-            color: var(--primary-dark);
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 800;
-        }
-        .recipe-title {
-            margin: 0;
-            font-size: 1.3rem;
-            font-weight: 800;
-            line-height: 1.35;
-            color: var(--text-dark);
-        }
-
-        .ingredients-tags {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-        .tag {
-            background: var(--tag-bg);
-            color: var(--text-gray);
-            padding: 5px 10px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        .tag::before { content: '#'; opacity: 0.5; margin-right: 2px; }
-
-        .instructions-box {
-            background: #F8FAFC;
-            border-radius: 16px;
-            padding: 16px;
-            margin: 0;
-        }
-        .instructions-box ol {
-            margin: 0;
-            padding-left: 18px;
-            color: #334155;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            font-weight: 500;
-        }
-        .instructions-box li { margin-bottom: 6px; }
-        .instructions-box li::marker { font-weight: 800; color: var(--primary); }
-
-        .tip-box {
-            font-size: 0.85rem;
-            color: #92400E;
-            background: #FEF3C7;
-            padding: 10px 14px;
-            border-radius: 12px;
-            font-weight: 600;
-        }
-
-        .play-btn {
-            background: #1e293b;
-            color: #ffffff;
-            border: none;
-            padding: 14px;
-            border-radius: 14px;
+        .header-actions { display: flex; gap: 6px; flex-shrink: 0; }
+        .icon-btn {
+            min-width: 44px; height: 44px;
+            padding: 0 10px;
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            background: var(--surface);
+            color: var(--text);
             font-size: 1rem;
-            font-weight: 700;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
+            font-weight: 800;
             cursor: pointer;
-            margin-top: auto; 
-            width: 100%;
+            display: inline-flex; align-items: center; justify-content: center; gap: 4px;
         }
-        .play-btn:active {
-            background: #0f172a;
-            transform: scale(0.97);
-        }
-        .play-icon { color: #ff0000; font-size: 1.2rem; }
-
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .modal-overlay.show { opacity: 1; }
-        .modal-content {
-            width: 95%;
-            max-width: 800px;
-            background: #111;
-            border-radius: 16px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            transform: translateY(20px);
-            transition: transform 0.3s ease;
-        }
-        .modal-overlay.show .modal-content { transform: translateY(0); }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 16px;
-            background: #1A1A1A;
-            color: #FFF;
-        }
-        .modal-title {
-            font-size: 0.95rem;
-            font-weight: 600;
-            margin: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 80%;
-        }
-        .close-btn {
-            background: rgba(255,255,255,0.15);
-            color: white;
-            border: none;
-            width: 32px; height: 32px;
-            border-radius: 16px;
-            font-size: 1.1rem;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .close-btn:active { background: rgba(255,255,255,0.3); }
-        
-        .video-wrapper {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%; 
-            background: #000;
-        }
-        .video-wrapper iframe {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            border: none;
-        }
+        .icon-btn[aria-pressed="true"] { background: var(--inverse-bg); color: var(--inverse-text); border-color: var(--inverse-bg); }
+        .install-btn { font-size: 0.85rem; }
+        .install-btn[hidden] { display: none; }
 
         /* 검색창 */
         .search-box {
@@ -312,17 +199,16 @@
             padding: 14px 16px 14px 46px;
             font: inherit;
             font-size: 1rem; /* 16px 이상이어야 iOS가 입력할 때 화면을 확대하지 않는다 */
-            color: var(--text-dark);
-            background: var(--card-bg);
-            border: 2px solid #CBD5E1;
+            color: var(--text);
+            background: var(--surface);
+            border: 2px solid var(--input-border);
             border-radius: 16px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
         }
-        #search-input::placeholder { color: #64748B; }
+        #search-input::placeholder { color: var(--text-muted); }
         #search-input:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.15);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.2);
         }
 
         .quick-tags {
@@ -337,20 +223,47 @@
             margin: 0 auto;
         }
         .quick-tags::-webkit-scrollbar { display: none; }
-        .quick-label { font-size: 0.8rem; font-weight: 700; color: var(--text-gray); margin-right: 2px; }
+        .quick-label { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-right: 2px; }
         .quick-tag {
             padding: 6px 12px;
-            font: inherit;
             font-size: 0.85rem;
             font-weight: 600;
-            color: var(--text-dark);
-            background: #FFF7ED;
-            border: 1px solid #FED7AA;
+            color: var(--text);
+            background: var(--quick-bg);
+            border: 1px solid var(--quick-border);
             border-radius: 20px;
             cursor: pointer;
         }
         .quick-tag:active { transform: scale(0.95); }
 
+        .category-nav {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 12px 20px;
+            gap: 8px;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .category-nav::-webkit-scrollbar { display: none; }
+        .category-btn {
+            padding: 8px 18px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            border-radius: 30px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .category-btn.active {
+            background: var(--inverse-bg);
+            border-color: var(--inverse-bg);
+            color: var(--inverse-text);
+        }
         .fav-count {
             display: inline-block;
             min-width: 20px;
@@ -360,9 +273,31 @@
             line-height: 20px;
             text-align: center;
             color: #FFFFFF;
-            background: var(--primary);
+            background: var(--fill);
             border-radius: 10px;
         }
+
+        .random-banner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: calc(100% - 40px);
+            max-width: 1160px;
+            margin: 4px auto 16px auto;
+            padding: 18px 20px;
+            border: none;
+            border-radius: 20px;
+            text-align: left;
+            color: #FFFFFF;
+            background: var(--brand-gradient);
+            box-shadow: 0 10px 20px rgba(225, 29, 72, 0.2);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .random-banner:active { transform: scale(0.97); }
+        .random-title { display: block; font-size: 1.1rem; font-weight: 800; }
+        .random-desc { display: block; margin-top: 4px; font-size: 0.85rem; font-weight: 500; }
+        .random-icon { font-size: 2rem; }
 
         .result-status {
             max-width: 1200px;
@@ -370,14 +305,66 @@
             padding: 0 20px;
             font-size: 0.9rem;
             font-weight: 600;
-            color: var(--text-gray);
+            color: var(--text-muted);
         }
 
+        /* 레시피 목록 카드 */
+        #recipe-container {
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .recipe-card {
+            background: var(--surface);
+            border-radius: 24px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
         .card-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
+        .category-badge {
+            background: var(--badge-bg);
+            color: var(--badge-text);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+        .recipe-title {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 800;
+            line-height: 1.35;
+        }
+        .ingredients-tags {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .tag {
+            background: var(--surface-2);
+            color: var(--text-muted);
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .tag::before { content: '#'; opacity: 0.6; margin-right: 2px; }
+        .tag.more::before { content: none; }
+
         .fav-btn {
             width: 44px; height: 44px; /* 손가락으로 누르기 충분한 크기 */
             margin: -8px -8px -8px 0;
@@ -387,29 +374,27 @@
             cursor: pointer;
             display: flex; align-items: center; justify-content: center;
         }
-        .fav-icon { font-size: 1.5rem; line-height: 1; color: #64748B; }
-        .fav-btn[aria-pressed="true"] .fav-icon { color: var(--primary); }
+        .fav-icon { font-size: 1.5rem; line-height: 1; color: var(--text-muted); }
+        .fav-btn[aria-pressed="true"] .fav-icon { color: var(--accent); }
         .fav-btn:active { transform: scale(0.85); }
 
-        .empty-result {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-gray);
-            line-height: 1.6;
-        }
-        .empty-emoji { font-size: 3rem; margin: 0; color: var(--primary); }
-        .clear-search-btn {
-            margin-top: 8px;
-            padding: 10px 20px;
-            font: inherit;
+        .card-actions { margin-top: auto; display: flex; }
+        .primary-btn, .secondary-btn {
+            flex: 1;
+            min-height: 48px;
+            padding: 12px 16px;
+            border-radius: 14px;
+            font-size: 1rem;
             font-weight: 700;
-            color: #FFFFFF;
-            background: var(--text-dark);
-            border: none;
-            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
             cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s;
         }
+        .primary-btn { background: var(--inverse-bg); color: var(--inverse-text); border: none; }
+        .secondary-btn { background: var(--surface); color: var(--text); border: 2px solid var(--border); }
+        .primary-btn:active, .secondary-btn:active { transform: scale(0.97); }
+        .secondary-btn[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
 
         /* 카드 상단 영상 썸네일 */
         .thumb-btn {
@@ -422,7 +407,7 @@
             border-radius: 24px 24px 0 0;
             overflow: hidden;
             aspect-ratio: 16 / 9;
-            background: #E2E8F0;
+            background: var(--thumb-bg);
             cursor: pointer;
         }
         .thumb-btn img {
@@ -451,21 +436,165 @@
             margin-left: 3px;
         }
 
-        .play-btn.search { background: #FFFFFF; color: var(--text-dark); border: 2px solid #CBD5E1; }
+        .empty-result {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .empty-emoji { font-size: 3rem; margin: 0; color: var(--accent); }
 
-        .modal-footer {
+        /* 레시피 상세 화면 (모바일은 아래에서 올라오는 시트, 넓은 화면은 가운데 창) */
+        .sheet {
+            width: 100%;
+            max-width: 640px;
+            max-height: 92vh;
+            max-height: 92dvh;
+            margin: auto auto 0 auto;
+            padding: 0;
+            border: none;
+            border-radius: 24px 24px 0 0;
+            background: var(--surface);
+            color: var(--text);
+            overflow-y: auto;
+            overscroll-behavior: contain;
+        }
+        .sheet[open] { animation: sheet-up 0.25s ease-out; }
+        .sheet::backdrop { background: rgba(0, 0, 0, 0.6); }
+        @keyframes sheet-up { from { transform: translateY(40px); opacity: 0; } }
+        @media (min-width: 700px) {
+            .sheet { margin: auto; border-radius: 24px; max-height: 88vh; }
+        }
+        .sheet-bar {
+            position: sticky;
+            top: 0;
+            z-index: 2;
             display: flex;
             justify-content: flex-end;
-            padding: 10px 16px;
+            gap: 8px;
+            padding: 10px 12px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+        }
+        .sheet .thumb-btn { width: 100%; margin: 0; border-radius: 0; }
+        .detail-content { padding: 20px 20px 28px 20px; display: flex; flex-direction: column; gap: 16px; }
+        .detail-title { margin: 0; font-size: 1.5rem; font-weight: 800; line-height: 1.3; }
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 8px;
+            margin: 0 0 8px 0;
+            font-size: 1.05rem;
+            font-weight: 800;
+        }
+        .section-hint { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); }
+
+        .check-list, .step-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+        .check-list { flex-direction: row; flex-wrap: wrap; }
+        .check-item, .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            border-radius: 14px;
+            background: var(--surface-2);
+            cursor: pointer;
+        }
+        .check-item { padding: 10px 14px; font-weight: 600; font-size: 0.95rem; }
+        .step-item { padding: 14px 16px; font-size: 1.05rem; line-height: 1.6; color: var(--text-2); }
+        .check-item input, .step-item input {
+            flex-shrink: 0;
+            width: 22px; height: 22px;
+            margin: 0.15em 0 0 0;
+            accent-color: var(--fill);
+            cursor: pointer;
+        }
+        .step-num { flex-shrink: 0; font-weight: 800; color: var(--accent); }
+        .check-item:has(input:checked) span,
+        .step-item:has(input:checked) .step-text { text-decoration: line-through; color: var(--done-text); }
+
+        .progress-text { margin: 0 0 8px 0; font-size: 0.9rem; font-weight: 700; color: var(--text-muted); }
+        .progress-bar { height: 8px; border-radius: 4px; background: var(--surface-2); overflow: hidden; margin-bottom: 12px; }
+        .progress-fill { height: 100%; width: 0; background: var(--brand-gradient); transition: width 0.3s ease; }
+
+        .tip-box {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--tip-text);
+            background: var(--tip-bg);
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+        .detail-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .detail-actions .primary-btn { grid-column: 1 / -1; }
+
+        /* 영상 재생 창 */
+        .video-dialog {
+            width: 95%;
+            max-width: 800px;
+            padding: 0;
+            border: none;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #111111;
+            color: #FFFFFF;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        .video-dialog::backdrop { background: rgba(0, 0, 0, 0.85); }
+        .video-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 12px 12px 16px;
             background: #1A1A1A;
         }
-        .yt-link {
-            color: #F1F5F9;
-            font-size: 0.85rem;
+        .video-title {
+            font-size: 0.95rem;
             font-weight: 600;
-            text-decoration: underline;
-            text-underline-offset: 3px;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
+        .close-btn {
+            flex-shrink: 0;
+            width: 44px; height: 44px;
+            border: none;
+            border-radius: 22px;
+            background: var(--surface-2);
+            color: var(--text);
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .video-dialog .close-btn { background: rgba(255,255,255,0.15); color: #FFFFFF; }
+        .video-wrapper { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000000; }
+        .video-wrapper iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+        .video-footer { display: flex; justify-content: flex-end; padding: 10px 16px; background: #1A1A1A; }
+        .yt-link { color: #F1F5F9; font-size: 0.85rem; font-weight: 600; text-underline-offset: 3px; }
+
+        /* 공유·복사 결과 안내 */
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 24px;
+            z-index: 10;
+            transform: translate(-50%, 20px);
+            width: max-content;
+            max-width: calc(100vw - 32px);
+            padding: 12px 18px;
+            border-radius: 12px;
+            background: var(--inverse-bg);
+            color: var(--inverse-text);
+            font-size: 0.9rem;
+            font-weight: 600;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+        .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
         .sr-only {
             position: absolute;
@@ -478,8 +607,8 @@
         }
 
         /* 키보드 사용자를 위한 포커스 표시 */
-        button:focus-visible, a:focus-visible {
-            outline: 3px solid #2563EB;
+        button:focus-visible, a:focus-visible, input:focus-visible {
+            outline: 3px solid var(--focus);
             outline-offset: 3px;
         }
 
@@ -496,6 +625,11 @@
 
     <header>
         <h1>🍳 엽쌤의 혼밥 스쿨</h1>
+        <div class="header-actions">
+            <button type="button" class="icon-btn install-btn" id="install-btn" hidden>📲 앱 설치</button>
+            <button type="button" class="icon-btn" id="text-size-btn" aria-pressed="false" aria-label="큰 글씨">가<span aria-hidden="true">+</span></button>
+            <button type="button" class="icon-btn" id="theme-btn" aria-pressed="false" aria-label="다크 모드"><span aria-hidden="true" id="theme-icon">🌙</span></button>
+        </div>
     </header>
 
     <form class="search-box" id="search-form" role="search">
@@ -515,7 +649,7 @@
 
     <nav class="category-nav" id="category-nav" aria-label="요리 종류">
         <button class="category-btn active" data-category="전체" aria-pressed="true">전체보기</button>
-        <button class="category-btn fav-tab" data-category="즐겨찾기" aria-pressed="false"><span aria-hidden="true">♥ </span>즐겨찾기 <span class="fav-count" id="fav-count">0</span></button>
+        <button class="category-btn" data-category="즐겨찾기" aria-pressed="false"><span aria-hidden="true">♥ </span>즐겨찾기 <span class="fav-count" id="fav-count">0</span></button>
         <button class="category-btn" data-category="한식" aria-pressed="false"><span aria-hidden="true">🇰🇷 </span>한식</button>
         <button class="category-btn" data-category="중식" aria-pressed="false"><span aria-hidden="true">🇨🇳 </span>중식</button>
         <button class="category-btn" data-category="일식" aria-pressed="false"><span aria-hidden="true">🇯🇵 </span>일식</button>
@@ -537,23 +671,31 @@
         <!-- 레시피 카드가 삽입됩니다. -->
     </main>
 
-    <!-- 인앱 모달 플레이어 -->
-    <div id="videoModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title" id="modalTitle">레시피 영상</h3>
-                <button type="button" class="close-btn" id="closeBtn" aria-label="영상 닫기">✕</button>
-            </div>
-            <div class="video-wrapper">
-                <iframe id="ytPlayer" title="레시피 영상" src=""
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-            </div>
-            <div class="modal-footer">
-                <a id="ytLink" class="yt-link" href="#" target="_blank" rel="noopener">영상이 재생되지 않나요? 유튜브에서 보기 ↗</a>
-            </div>
+    <!-- 레시피 상세 화면 -->
+    <dialog class="sheet" id="detail-dialog" aria-labelledby="detail-title">
+        <div class="sheet-bar">
+            <button type="button" class="close-btn" id="detail-close" aria-label="레시피 닫기">✕</button>
         </div>
-    </div>
+        <div id="detail-body"></div>
+    </dialog>
+
+    <!-- 영상 재생 창 -->
+    <dialog class="video-dialog" id="video-dialog" aria-labelledby="video-title">
+        <div class="video-header">
+            <h2 class="video-title" id="video-title">레시피 영상</h2>
+            <button type="button" class="close-btn" id="video-close" aria-label="영상 닫기">✕</button>
+        </div>
+        <div class="video-wrapper">
+            <iframe id="yt-player" title="레시피 영상" src=""
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+        <div class="video-footer">
+            <a id="yt-link" class="yt-link" href="#" target="_blank" rel="noopener">영상이 재생되지 않나요? 유튜브에서 보기 ↗</a>
+        </div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script>
         const recipes = [
@@ -668,54 +810,37 @@
             { category: "기타", title: "자취생 스키야키", videoId: "OQVVz9WEJrk", ingredients: ["대패삼겹살 150g", "알배기 배추 3장", "두부 1/4모", "간장 3스푼", "설탕 2스푼", "계란 1개"], instructions: ["팬에 간장, 설탕, 물 3스푼을 끓여 스키야키 소스를 만듭니다.", "자작한 소스에 고기, 썰어둔 배추, 두부를 넣고 끓이며 졸입니다.", "고기와 채소가 익으면 생계란을 푼 종지에 푹 찍어 먹습니다."], tip: "전골처럼 국물을 떠먹는 것이 아니라, 짭조름하게 졸인 재료를 날계란에 찍어 중화시켜 먹는 요리입니다." }
         ];
 
+        const root = document.documentElement;
         const container = document.getElementById('recipe-container');
-        const modal = document.getElementById('videoModal');
-        const ytPlayer = document.getElementById('ytPlayer');
-        const ytLink = document.getElementById('ytLink');
-        const modalTitle = document.getElementById('modalTitle');
-        const closeBtn = document.getElementById('closeBtn');
+        const resultStatus = document.getElementById('result-status');
+        const searchInput = document.getElementById('search-input');
+        const detailDialog = document.getElementById('detail-dialog');
+        const detailBody = document.getElementById('detail-body');
+        const videoDialog = document.getElementById('video-dialog');
+        const ytPlayer = document.getElementById('yt-player');
+        const ytLink = document.getElementById('yt-link');
+        const toast = document.getElementById('toast');
+        const canWakeLock = 'wakeLock' in navigator;
 
         let currentCategory = '전체'; // 필터 상태 동기화용 변수
-        let lastRandomTitle = ""; // 랜덤 뽑기 무한 루프 방지용 (이름으로 추적)
-        let lastFocused = null; // 모달을 닫으면 포커스를 돌려줄 버튼
         let searchQuery = ""; // 검색창에 입력한 메뉴·재료
+        let lastRandomTitle = ""; // 랜덤 뽑기 연속 중복 방지용 (이름으로 추적)
+        let wantWakeLock = false; // 요리하는 동안 화면 켜두기를 켰는지
+        let wakeLock = null;
 
-        const searchInput = document.getElementById('search-input');
-        const resultStatus = document.getElementById('result-status');
-
-        // 즐겨찾기는 레시피 제목으로 이 브라우저에 저장한다 (저장소를 못 쓰는 환경에서도 동작하도록 try/catch)
-        const FAVORITES_KEY = 'honbap-favorites';
-        let favorites = new Set();
-        try {
-            favorites = new Set(JSON.parse(localStorage.getItem(FAVORITES_KEY)) || []);
-        } catch (e) { /* 저장된 값이 없거나 읽을 수 없음 */ }
-
-        function saveFavorites() {
+        // ---------- 브라우저 저장소 (저장소를 못 쓰는 환경에서도 동작하도록 try/catch) ----------
+        function readStore(key, fallback) {
             try {
-                localStorage.setItem(FAVORITES_KEY, JSON.stringify([...favorites]));
+                const value = localStorage.getItem(key);
+                return value === null ? fallback : JSON.parse(value);
+            } catch (e) {
+                return fallback;
+            }
+        }
+        function writeStore(key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
             } catch (e) { /* 개인 정보 보호 모드 등에서는 이번 방문 동안만 유지 */ }
-        }
-
-        function toggleFavorite(recipe, btn) {
-            if (favorites.has(recipe.title)) {
-                favorites.delete(recipe.title);
-            } else {
-                favorites.add(recipe.title);
-            }
-            saveFavorites();
-            updateFavoriteCount();
-
-            if (currentCategory === '즐겨찾기') {
-                renderRecipes({ keepScroll: true });
-                return;
-            }
-            const isFav = favorites.has(recipe.title);
-            btn.setAttribute('aria-pressed', String(isFav));
-            btn.querySelector('.fav-icon').textContent = isFav ? '♥' : '♡';
-        }
-
-        function updateFavoriteCount() {
-            document.getElementById('fav-count').textContent = favorites.size;
         }
 
         // 레시피 텍스트를 HTML에 넣기 전에 특수문자를 이스케이프
@@ -723,95 +848,140 @@
             return String(text).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
         }
 
+        function showToast(message) {
+            // 열린 dialog 위에서도 보이도록 가장 위에 열린 창 안으로 옮긴다
+            const host = videoDialog.open ? videoDialog : detailDialog.open ? detailDialog : document.body;
+            host.appendChild(toast);
+            toast.textContent = message;
+            toast.classList.add('show');
+            clearTimeout(showToast.timer);
+            showToast.timer = setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        // ---------- 다크 모드 · 큰 글씨 ----------
+        const themeBtn = document.getElementById('theme-btn');
+        const textSizeBtn = document.getElementById('text-size-btn');
+        const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+        function isDarkTheme() {
+            return root.dataset.theme ? root.dataset.theme === 'dark' : darkQuery.matches;
+        }
+        function updateThemeUI() {
+            const dark = isDarkTheme();
+            themeBtn.setAttribute('aria-pressed', String(dark));
+            document.getElementById('theme-icon').textContent = dark ? '☀️' : '🌙';
+            document.querySelector('meta[name="theme-color"]').content = dark ? '#0B1120' : '#F8FAFC';
+        }
+        themeBtn.addEventListener('click', () => {
+            root.dataset.theme = isDarkTheme() ? 'light' : 'dark';
+            writeStore('honbap-theme', root.dataset.theme);
+            updateThemeUI();
+        });
+        darkQuery.addEventListener('change', updateThemeUI); // 직접 고르지 않았다면 시스템 설정 변경을 따라간다
+
+        function updateTextSizeUI() {
+            textSizeBtn.setAttribute('aria-pressed', String(root.dataset.text === 'large'));
+        }
+        textSizeBtn.addEventListener('click', () => {
+            const large = root.dataset.text !== 'large';
+            if (large) {
+                root.dataset.text = 'large';
+            } else {
+                delete root.dataset.text;
+            }
+            writeStore('honbap-large-text', large);
+            updateTextSizeUI();
+            showToast(large ? '글씨를 크게 표시해요' : '기본 글씨 크기로 돌아왔어요');
+        });
+
+        // ---------- 즐겨찾기 (레시피 제목으로 이 브라우저에 저장) ----------
+        const FAVORITES_KEY = 'honbap-favorites';
+        const favorites = new Set(readStore(FAVORITES_KEY, []));
+
+        function toggleFavorite(recipe) {
+            if (favorites.has(recipe.title)) {
+                favorites.delete(recipe.title);
+            } else {
+                favorites.add(recipe.title);
+            }
+            writeStore(FAVORITES_KEY, [...favorites]);
+            updateFavoriteCount();
+
+            if (currentCategory === '즐겨찾기') {
+                renderRecipes({ keepScroll: true });
+            }
+            // 목록 카드와 상세 화면의 하트를 함께 갱신
+            const isFav = favorites.has(recipe.title);
+            document.querySelectorAll(`[data-action="fav"][data-index="${recipes.indexOf(recipe)}"]`).forEach(btn => {
+                btn.setAttribute('aria-pressed', String(isFav));
+                btn.querySelector('.fav-icon').textContent = isFav ? '♥' : '♡';
+            });
+        }
+
+        function updateFavoriteCount() {
+            document.getElementById('fav-count').textContent = favorites.size;
+        }
+
+        function favButtonHtml(recipe) {
+            const isFav = favorites.has(recipe.title);
+            return `<button type="button" class="fav-btn" data-action="fav" data-index="${recipes.indexOf(recipe)}" aria-pressed="${isFav}" aria-label="${escapeHtml(recipe.title)} 즐겨찾기">
+                        <span class="fav-icon" aria-hidden="true">${isFav ? '♥' : '♡'}</span>
+                    </button>`;
+        }
+
+        function thumbHtml(recipe) {
+            if (!recipe.videoId) return '';
+            return `<button type="button" class="thumb-btn" data-action="play" data-index="${recipes.indexOf(recipe)}" aria-label="${escapeHtml(recipe.title)} 영상 재생">
+                    <img src="https://i.ytimg.com/vi/${recipe.videoId}/mqdefault.jpg" alt="" loading="lazy" width="320" height="180">
+                    <span class="thumb-play" aria-hidden="true"></span>
+                </button>`;
+        }
+
+        // ---------- 영상 ----------
         function youtubeSearchUrl(recipe) {
             return `https://www.youtube.com/results?search_query=${encodeURIComponent(recipe.title + ' 레시피')}`;
         }
 
         // 영상이 있으면 앱 안에서 재생, 없으면 유튜브 검색 결과를 새 탭으로 연다
-        function playRecipe(recipe, trigger) {
+        function playRecipe(recipe) {
             if (!recipe.videoId) {
                 window.open(youtubeSearchUrl(recipe), '_blank', 'noopener');
                 return;
             }
-            openVideoModal(recipe, trigger);
-        }
-
-        // 인앱 모달 송출 로직
-        function openVideoModal(recipe, trigger) {
-            lastFocused = trigger || document.activeElement;
-            modalTitle.textContent = recipe.title;
+            document.getElementById('video-title').textContent = recipe.title;
             ytPlayer.title = `${recipe.title} 레시피 영상`;
             ytPlayer.src = `https://www.youtube-nocookie.com/embed/${recipe.videoId}?autoplay=1&playsinline=1&rel=0&cc_load_policy=1&hl=ko`;
             ytLink.href = `https://www.youtube.com/watch?v=${recipe.videoId}`;
-
-            modal.hidden = false;
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-            setTimeout(() => modal.classList.add('show'), 10);
-            closeBtn.focus();
+            videoDialog.showModal();
         }
 
-        function closeModal() {
-            if (modal.hidden) return;
-            modal.classList.remove('show');
-            document.body.style.overflow = '';
-            setTimeout(() => {
-                modal.style.display = 'none';
-                modal.hidden = true;
-                ytPlayer.src = '';
-            }, 300);
-            if (lastFocused) lastFocused.focus();
-        }
+        document.getElementById('video-close').addEventListener('click', () => videoDialog.close());
+        videoDialog.addEventListener('close', () => { ytPlayer.src = ''; }); // 닫으면 재생도 멈춘다
 
-        // 카드 한 장의 HTML (목록과 랜덤 추천이 함께 사용)
-        function createCard(recipe, badgeText) {
+        // ---------- 목록 카드 ----------
+        function createCard(recipe) {
             const index = recipes.indexOf(recipe);
-            const title = escapeHtml(recipe.title);
             const card = document.createElement('article');
             card.className = 'recipe-card';
 
-            const ingredientsHtml = recipe.ingredients.map(ing => `<li class="tag">${escapeHtml(ing)}</li>`).join('');
-            const instructionsHtml = recipe.instructions.map(inst => `<li>${escapeHtml(inst)}</li>`).join('');
-
-            const thumbHtml = recipe.videoId ? `
-                <button type="button" class="thumb-btn" data-index="${index}" aria-label="${title} 영상 재생">
-                    <img src="https://i.ytimg.com/vi/${recipe.videoId}/mqdefault.jpg" alt="" loading="lazy" width="320" height="180">
-                    <span class="thumb-play" aria-hidden="true"></span>
-                </button>` : '';
-
-            const playHtml = recipe.videoId
-                ? `<button type="button" class="play-btn" data-index="${index}"><span class="play-icon" aria-hidden="true">▶️</span> 레시피 영상 바로보기</button>`
-                : `<button type="button" class="play-btn search" data-index="${index}"><span aria-hidden="true">🔍</span> 유튜브에서 영상 찾아보기<span class="sr-only">(새 탭)</span></button>`;
-
-            const isFav = favorites.has(recipe.title);
+            const shown = recipe.ingredients.slice(0, 4);
+            const rest = recipe.ingredients.length - shown.length;
+            const tagsHtml = shown.map(ing => `<li class="tag">${escapeHtml(ing)}</li>`).join('')
+                + (rest > 0 ? `<li class="tag more">외 ${rest}개</li>` : '');
 
             card.innerHTML = `
-                ${thumbHtml}
-                <div class="card-header">
-                    <div class="card-meta">
-                        <span class="category-badge">${escapeHtml(badgeText || recipe.category)}</span>
-                        <button type="button" class="fav-btn" data-fav-index="${index}" aria-pressed="${isFav}" aria-label="${title} 즐겨찾기">
-                            <span class="fav-icon" aria-hidden="true">${isFav ? '♥' : '♡'}</span>
-                        </button>
-                    </div>
-                    <h2 class="recipe-title">${title}</h2>
+                ${thumbHtml(recipe)}
+                <div class="card-meta">
+                    <span class="category-badge">${escapeHtml(recipe.category)}</span>
+                    ${favButtonHtml(recipe)}
                 </div>
-
-                <ul class="ingredients-tags" aria-label="재료">
-                    ${ingredientsHtml}
-                </ul>
-
-                <div class="instructions-box">
-                    <ol aria-label="조리 순서">${instructionsHtml}</ol>
+                <h2 class="recipe-title">${escapeHtml(recipe.title)}</h2>
+                <ul class="ingredients-tags" aria-label="재료">${tagsHtml}</ul>
+                <div class="card-actions">
+                    <button type="button" class="primary-btn" data-action="detail" data-index="${index}">
+                        <span aria-hidden="true">📖</span> 레시피 보기<span class="sr-only">: ${escapeHtml(recipe.title)}</span>
+                    </button>
                 </div>
-
-                ${recipe.tip ? `
-                <div class="tip-box">
-                    💡 <strong>엽쌤의 꿀팁!</strong><br>${escapeHtml(recipe.tip)}
-                </div>
-                ` : ''}
-
-                ${playHtml}
             `;
             return card;
         }
@@ -845,7 +1015,7 @@
             } else {
                 empty.innerHTML = `<p class="empty-emoji" aria-hidden="true">🥲</p>
                     <p><strong>'${escapeHtml(searchQuery)}'</strong>에 맞는 레시피가 없어요.<br>재료 이름을 짧게 바꿔 보거나 다른 카테고리에서 찾아보세요.</p>
-                    <button type="button" class="clear-search-btn" id="clear-search-btn">검색어 지우기</button>`;
+                    <button type="button" class="primary-btn" data-action="clear-search" style="display:inline-flex">검색어 지우기</button>`;
             }
             container.appendChild(empty);
         }
@@ -880,12 +1050,153 @@
             renderRecipes();
         }
 
-        // 상태 불일치 버그를 100% 차단한 무결점 랜덤 뽑기
+        // ---------- 레시피 상세 화면 · 요리 모드 ----------
+        function openDetail(recipe, { random = false } = {}) {
+            const index = recipes.indexOf(recipe);
+            const stepsHtml = recipe.instructions.map((step, i) => `
+                <li><label class="step-item">
+                    <input type="checkbox" class="step-check">
+                    <span class="step-num" aria-hidden="true">${i + 1}</span>
+                    <span class="step-text">${escapeHtml(step)}</span>
+                </label></li>`).join('');
+            const ingredientsHtml = recipe.ingredients.map(ing => `
+                <li><label class="check-item"><input type="checkbox"><span>${escapeHtml(ing)}</span></label></li>`).join('');
+
+            const playHtml = recipe.videoId
+                ? `<button type="button" class="primary-btn" data-action="play" data-index="${index}"><span aria-hidden="true">▶️</span> 레시피 영상 보기</button>`
+                : `<button type="button" class="primary-btn" data-action="play" data-index="${index}"><span aria-hidden="true">🔍</span> 유튜브에서 영상 찾아보기<span class="sr-only">(새 탭)</span></button>`;
+
+            detailBody.innerHTML = `
+                ${thumbHtml(recipe)}
+                <div class="detail-content">
+                    <div class="card-meta">
+                        <span class="category-badge">${random ? '🎉 오늘의 추천 메뉴' : escapeHtml(recipe.category)}</span>
+                        ${favButtonHtml(recipe)}
+                    </div>
+                    <h2 class="detail-title" id="detail-title">${escapeHtml(recipe.title)}</h2>
+
+                    <section aria-labelledby="ingredients-heading">
+                        <h3 class="section-title" id="ingredients-heading">재료 <span class="section-hint">준비한 재료를 체크하세요</span></h3>
+                        <ul class="check-list">${ingredientsHtml}</ul>
+                    </section>
+
+                    <section aria-labelledby="steps-heading">
+                        <h3 class="section-title" id="steps-heading">조리 순서</h3>
+                        <p class="progress-text" id="step-progress" aria-live="polite">0 / ${recipe.instructions.length} 단계 완료</p>
+                        <div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="step-progress-fill"></div></div>
+                        <ol class="step-list">${stepsHtml}</ol>
+                    </section>
+
+                    ${recipe.tip ? `<div class="tip-box">💡 <strong>엽쌤의 꿀팁!</strong><br>${escapeHtml(recipe.tip)}</div>` : ''}
+
+                    <div class="detail-actions">
+                        ${playHtml}
+                        ${canWakeLock ? `<button type="button" class="secondary-btn" data-action="wake" aria-pressed="${wantWakeLock}"><span aria-hidden="true">💡</span> 화면 켜두기</button>` : ''}
+                        <button type="button" class="secondary-btn" data-action="share" data-index="${index}"><span aria-hidden="true">🔗</span> 공유하기</button>
+                        ${random ? `<button type="button" class="secondary-btn" data-action="reroll"><span aria-hidden="true">🎲</span> 다시 뽑기</button>` : ''}
+                    </div>
+                </div>
+            `;
+
+            if (!detailDialog.open) detailDialog.showModal();
+            detailDialog.scrollTop = 0;
+            // 주소에 레시피를 남겨, 새로고침하거나 링크를 공유해도 이 레시피가 열리게 한다
+            history.replaceState(null, '', `#recipe=${encodeURIComponent(recipe.title)}`);
+        }
+
+        function updateStepProgress() {
+            const checks = detailBody.querySelectorAll('.step-check');
+            const done = [...checks].filter(c => c.checked).length;
+            const progress = document.getElementById('step-progress');
+            progress.textContent = done === checks.length
+                ? `🎉 ${checks.length}단계 모두 완료! 맛있게 드세요`
+                : `${done} / ${checks.length} 단계 완료`;
+            document.getElementById('step-progress-fill').style.width = `${(done / checks.length) * 100}%`;
+        }
+
+        document.getElementById('detail-close').addEventListener('click', () => detailDialog.close());
+        detailDialog.addEventListener('close', () => {
+            wantWakeLock = false;
+            releaseWakeLock();
+            history.replaceState(null, '', location.pathname + location.search);
+        });
+        detailBody.addEventListener('change', e => {
+            if (e.target.classList.contains('step-check')) updateStepProgress();
+        });
+
+        // 요리하는 동안 화면이 꺼지지 않게 (지원하는 브라우저에서만 버튼이 보인다)
+        async function requestWakeLock() {
+            try {
+                wakeLock = await navigator.wakeLock.request('screen');
+                wakeLock.addEventListener('release', () => { wakeLock = null; });
+            } catch (e) {
+                wantWakeLock = false;
+                showToast('이 기기에서는 화면 켜두기를 사용할 수 없어요');
+            }
+        }
+        function releaseWakeLock() {
+            if (wakeLock) wakeLock.release();
+            wakeLock = null;
+        }
+        async function toggleWakeLock(btn) {
+            wantWakeLock = !wantWakeLock;
+            if (wantWakeLock) {
+                await requestWakeLock();
+            } else {
+                releaseWakeLock();
+            }
+            btn.setAttribute('aria-pressed', String(wantWakeLock));
+            if (wantWakeLock) showToast('레시피를 닫을 때까지 화면이 켜져 있어요');
+        }
+        // 다른 앱에 다녀오면 브라우저가 화면 켜두기를 풀기 때문에 다시 요청한다
+        document.addEventListener('visibilitychange', () => {
+            if (wantWakeLock && !wakeLock && document.visibilityState === 'visible') requestWakeLock();
+        });
+
+        // ---------- 공유 ----------
+        async function shareRecipe(recipe) {
+            const url = `${location.origin}${location.pathname}#recipe=${encodeURIComponent(recipe.title)}`;
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: `${recipe.title} | 엽쌤의 혼밥 스쿨`,
+                        text: `${recipe.title} 만들어 봐요! 재료: ${recipe.ingredients.join(', ')}`,
+                        url
+                    });
+                    return;
+                } catch (e) {
+                    if (e.name === 'AbortError') return; // 사용자가 공유 창을 닫음
+                }
+            }
+            try {
+                await navigator.clipboard.writeText(url);
+                showToast('레시피 링크를 복사했어요. 친구에게 붙여넣어 보내 보세요!');
+            } catch (e) {
+                showToast('링크를 복사하지 못했어요. 주소창의 주소를 복사해 주세요.');
+            }
+        }
+
+        // 공유받은 링크(#recipe=메뉴이름)로 들어오면 그 레시피를 바로 연다
+        function openRecipeFromHash() {
+            const match = location.hash.match(/^#recipe=(.+)$/);
+            if (!match) return;
+            let title;
+            try {
+                title = decodeURIComponent(match[1]);
+            } catch (e) {
+                return;
+            }
+            const recipe = recipes.find(r => r.title === title);
+            if (recipe) openDetail(recipe);
+        }
+        window.addEventListener('hashchange', openRecipeFromHash);
+
+        // ---------- 랜덤 추천 ----------
         function pickRandomRecipe() {
             // 현재 카테고리·검색 조건을 기준으로 타겟 배열 생성
             const targetRecipes = getVisibleRecipes();
             if (targetRecipes.length === 0) {
-                renderRecipes();
+                showToast('지금 조건에 맞는 레시피가 없어요. 검색어나 카테고리를 바꿔 보세요.');
                 return;
             }
 
@@ -893,43 +1204,60 @@
             // 배열 크기가 1보다 클 때만 중복 검사 (무한 루프 방지)
             if (targetRecipes.length > 1) {
                 do {
-                    const randomIndex = Math.floor(Math.random() * targetRecipes.length);
-                    randomRecipe = targetRecipes[randomIndex];
+                    randomRecipe = targetRecipes[Math.floor(Math.random() * targetRecipes.length)];
                 } while (randomRecipe.title === lastRandomTitle);
             } else {
                 randomRecipe = targetRecipes[0];
             }
-
             lastRandomTitle = randomRecipe.title;
-
-            container.innerHTML = "";
-            container.appendChild(createCard(randomRecipe, '🎉 오늘의 추천 메뉴'));
-            resultStatus.textContent = `오늘의 추천 메뉴: ${randomRecipe.title}`;
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            openDetail(randomRecipe, { random: true });
         }
 
-        // 이벤트 연결
+        // ---------- 이벤트 연결 ----------
         document.getElementById('category-nav').addEventListener('click', e => {
             const btn = e.target.closest('.category-btn');
             if (btn) filterRecipes(btn.dataset.category);
         });
         document.getElementById('random-banner').addEventListener('click', pickRandomRecipe);
-        container.addEventListener('click', e => {
-            const favBtn = e.target.closest('[data-fav-index]');
-            if (favBtn) {
-                toggleFavorite(recipes[Number(favBtn.dataset.favIndex)], favBtn);
-                return;
+
+        // 목록과 상세 화면의 버튼을 data-action 하나로 처리
+        function handleAction(e) {
+            const btn = e.target.closest('[data-action]');
+            if (!btn) return;
+            const recipe = recipes[Number(btn.dataset.index)];
+            switch (btn.dataset.action) {
+                case 'play': playRecipe(recipe); break;
+                case 'detail': openDetail(recipe); break;
+                case 'fav': toggleFavorite(recipe); break;
+                case 'share': shareRecipe(recipe); break;
+                case 'wake': toggleWakeLock(btn); break;
+                case 'reroll': pickRandomRecipe(); break;
+                case 'clear-search':
+                    searchInput.value = '';
+                    searchQuery = '';
+                    renderRecipes();
+                    searchInput.focus();
+                    break;
             }
-            if (e.target.closest('#clear-search-btn')) {
-                searchInput.value = '';
-                searchQuery = '';
-                renderRecipes();
-                searchInput.focus();
-                return;
-            }
-            const btn = e.target.closest('[data-index]');
-            if (btn) playRecipe(recipes[Number(btn.dataset.index)], btn);
+        }
+        container.addEventListener('click', handleAction);
+        detailBody.addEventListener('click', handleAction);
+
+        // 창 바깥 어두운 영역을 누르면 닫기
+        [detailDialog, videoDialog].forEach(dialog => {
+            dialog.addEventListener('click', e => {
+                if (e.target === dialog) {
+                    const rect = dialog.getBoundingClientRect();
+                    const inside = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+                    if (!inside) dialog.close();
+                }
+            });
         });
+
+        // 썸네일을 못 불러오면 깨진 이미지 아이콘 대신 회색 배경만 보여준다
+        document.addEventListener('error', e => {
+            if (e.target.tagName === 'IMG') e.target.style.visibility = 'hidden';
+        }, true);
 
         // 입력을 잠깐 멈추면 검색 (한 글자마다 100장을 다시 그리지 않도록)
         let searchTimer;
@@ -954,36 +1282,36 @@
                 renderRecipes({ keepScroll: true });
             });
         });
-        // 썸네일을 못 불러오면 깨진 이미지 아이콘 대신 회색 배경만 보여준다
-        container.addEventListener('error', e => {
-            if (e.target.tagName === 'IMG') e.target.style.visibility = 'hidden';
-        }, true);
-        closeBtn.addEventListener('click', closeModal);
-        modal.addEventListener('click', e => {
-            if (e.target === modal) closeModal(); // 영상 바깥 어두운 영역을 누르면 닫기
+
+        // ---------- 홈 화면에 추가 (PWA) ----------
+        const installBtn = document.getElementById('install-btn');
+        let installPrompt = null;
+        window.addEventListener('beforeinstallprompt', e => {
+            e.preventDefault(); // 브라우저 기본 안내 대신 헤더의 "앱 설치" 버튼을 보여준다
+            installPrompt = e;
+            installBtn.hidden = false;
         });
-        document.addEventListener('keydown', e => {
-            if (modal.hidden) return;
-            if (e.key === 'Escape') {
-                closeModal();
-            } else if (e.key === 'Tab') {
-                // 모달이 열려 있는 동안 포커스를 모달 안에 가둔다
-                const focusables = [closeBtn, ytPlayer, ytLink];
-                const first = focusables[0];
-                const last = focusables[focusables.length - 1];
-                if (e.shiftKey && document.activeElement === first) {
-                    e.preventDefault();
-                    last.focus();
-                } else if (!e.shiftKey && document.activeElement === last) {
-                    e.preventDefault();
-                    first.focus();
-                }
-            }
+        installBtn.addEventListener('click', async () => {
+            if (!installPrompt) return;
+            installPrompt.prompt();
+            await installPrompt.userChoice;
+            installPrompt = null;
+            installBtn.hidden = true;
         });
+        window.addEventListener('appinstalled', () => { installBtn.hidden = true; });
+
+        if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(() => { /* 오프라인 기능만 빠지고 앱은 그대로 동작 */ });
+            });
+        }
 
         // 초기 화면 설정
+        updateThemeUI();
+        updateTextSizeUI();
         updateFavoriteCount();
         filterRecipes('전체');
+        openRecipeFromHash();
 
     </script>
 </body>
