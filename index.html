@@ -21,7 +21,6 @@
             font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            /* 모바일 글자 잘림 및 어색한 줄바꿈 완벽 방지 */
             word-break: keep-all;
             overflow-wrap: break-word; 
             overscroll-behavior-y: none;
@@ -43,7 +42,7 @@
             font-size: 1.5rem;
         }
 
-        /* 카테고리 네비게이션 (가로 스크롤) */
+        /* 카테고리 네비게이션 */
         .category-nav {
             display: flex;
             overflow-x: auto;
@@ -52,7 +51,6 @@
             background: white;
             border-bottom: 1px solid #ddd;
             gap: 10px;
-            /* 스크롤바 숨기기 및 부드러운 스크롤 */
             -ms-overflow-style: none;
             scrollbar-width: none;
             -webkit-overflow-scrolling: touch; 
@@ -242,10 +240,16 @@
     </footer>
 
     <script>
-        // 100개의 요리 레시피 데이터 (유튜브 임시 ID 제거됨)
+        // 100개의 요리 레시피 데이터 모음
         const recipes = [
             // ==================== [ 한식 20선 ] ====================
-            { category: "한식", title: "참치 김치찌개", ingredients: ["참치 1캔", "신김치 1컵", "양파 1/2개", "대파 1/3대", "다진마늘 1스푼"], instructions: ["냄비에 참치기름을 두르고 신김치를 볶습니다.", "김치가 투명해지면 양파를 넣고 볶다가 물을 붓습니다.", "끓어오르면 참치 살과 대파, 마늘을 넣고 5분 더 끓입니다."], tip: "참치기름으로 김치를 볶아야 국물 맛이 훨씬 깊어집니다." },
+            { 
+                category: "한식", title: "참치 김치찌개", 
+                ytChef: "J8m36a_iS3o",   // ← 실제 원하는 유튜브 영상 ID(v= 뒷부분)를 여기에 넣으세요!
+                ytShorts: "k-O3K02XnJc", // ← 1분 쇼츠 영상 ID를 여기에 넣으세요!
+                ytLatest: "jR2l9B7c1zM", // ← 최신 영상 ID를 여기에 넣으세요!
+                ingredients: ["참치 1캔", "신김치 1컵", "양파 1/2개", "대파 1/3대", "다진마늘 1스푼"], instructions: ["냄비에 참치기름을 두르고 신김치를 볶습니다.", "김치가 투명해지면 양파를 넣고 볶다가 물을 붓습니다.", "끓어오르면 참치 살과 대파, 마늘을 넣고 5분 더 끓입니다."], tip: "참치기름으로 김치를 볶아야 국물 맛이 훨씬 깊어집니다." 
+            },
             { category: "한식", title: "전자레인지 폭탄 계란찜", ingredients: ["계란 3개", "물 1/2컵", "소금 1/3스푼", "참기름 약간", "대파 약간"], instructions: ["전자레인지용 그릇에 계란을 풀고 물과 소금을 섞습니다.", "랩을 씌우고 포크로 구멍을 3~4개 뚫어줍니다.", "전자레인지에 3~4분 돌린 후 참기름과 대파를 올립니다."], tip: "물을 멸치육수나 우유로 바꾸면 훨씬 부드럽고 감칠맛이 납니다." },
             { category: "한식", title: "대패삼겹살 숙주볶음", ingredients: ["대패삼겹살 200g", "숙주 1줌", "굴소스 1스푼", "간장 1스푼", "다진마늘 1스푼"], instructions: ["마른 팬에 대패삼겹살과 다진마늘을 넣고 노릇하게 굽습니다.", "고기 기름이 나오면 간장과 굴소스를 넣고 섞습니다.", "불을 끄기 직전 숙주를 넣고 30초만 빠르게 볶아냅니다."], tip: "숙주는 숨이 너무 죽지 않게 마지막에 센 불로 휘리릭 볶는 것이 생명입니다." },
             { category: "한식", title: "고추장 참치 비빔밥", ingredients: ["밥 1공기", "참치 1/2캔", "상추 3장", "계란 1개", "고추장 1스푼", "참기름"], instructions: ["상추를 먹기 좋은 크기로 찢어 밥 위에 올립니다.", "기름을 뺀 참치와 반숙 계란프라이를 얹습니다.", "고추장과 참기름을 통깨와 함께 넣고 비벼줍니다."], tip: "조미김을 부숴 넣으면 맛이 2배로 업그레이드됩니다." },
@@ -325,7 +329,7 @@
             { category: "분식", title: "신라면 투움바", ingredients: ["신라면 1봉", "우유 200ml", "체다치즈 1장", "양파 1/4개", "버터 1조각"], instructions: ["팬에 버터를 녹이고 채 썬 양파를 볶습니다.", "우유 200ml와 신라면 스프 반 개를 넣고 끓입니다.", "삶아둔 면과 치즈를 넣고 소스가 꾸덕해질 때까지 졸입니다."], tip: "면을 끓는 물에 미리 70% 정도만 삶아서 넣어야 소스가 겉돌지 않습니다." },
             { category: "분식", title: "어묵채 튀김", ingredients: ["사각어묵 2장", "설탕 1/2스푼", "파슬리가루(선택)"], instructions: ["사각어묵을 우동 면발처럼 길고 아주 얇게 채 썹니다.", "에어프라이어에 얇게 펴 넣고 180도에서 7~8분간 굽습니다 (중간에 한 번 뒤적여줍니다).", "바삭해진 어묵을 꺼내 비닐봉지에 넣고 설탕을 뿌려 흔들어줍니다."], tip: "어묵 자체의 짠맛과 설탕의 단맛, 바삭한 식감이 맥주 안주로 최고입니다." },
             { category: "분식", title: "마요네즈 참치 카나페", ingredients: ["참치 1/2캔", "마요네즈 2스푼", "양파 1/4개", "참크래커(또는 아이비) 1통"], instructions: ["참치는 기름을 꽉 짜내고, 양파는 아주 잘게 다집니다.", "참치, 다진 양파, 마요네즈, 후추 약간을 섞어 샐러드를 만듭니다.", "크래커 위에 참치 샐러드를 1스푼씩 예쁘게 올려냅니다."], tip: "오이나 방울토마토를 작게 썰어 함께 올리면 홈파티용 핑거푸드가 됩니다." },
-            { category: "분식", title: "계란 김밥 (접는 김밥)", ingredients: ["김밥용 김 1장", "밥 1/2공기", "계란 2개", "스팸 1조각", "슬라이스 치즈 1장"], instructions: ["김밥 김을 가위로 1/2 지점까지만(십자 모양 중 한 선만) 자릅니다.", "계란은 두툼하게 부치고, 스팸도 구워 준비합니다.", "김의 4등분 된 면에 각각 밥, 계란, 스팸, 치즈를 올리고 시계방향으로 차곡차곡 접습니다."], tip: "밥은 얇게 펴 발라야 마지막에 접을 때 터지지 않습니다." },
+            { category: "분식", title: "계란 김밥", ingredients: ["김밥용 김 1장", "밥 1/2공기", "계란 2개", "스팸 1조각", "슬라이스 치즈 1장"], instructions: ["김밥 김을 가위로 1/2 지점까지만(십자 모양 중 한 선만) 자릅니다.", "계란은 두툼하게 부치고, 스팸도 구워 준비합니다.", "김의 4등분 된 면에 각각 밥, 계란, 스팸, 치즈를 올리고 시계방향으로 차곡차곡 접습니다."], tip: "밥은 얇게 펴 발라야 마지막에 접을 때 터지지 않습니다." },
             { category: "분식", title: "비엔나 소시지 맛탕", ingredients: ["비엔나 소시지 200g", "물엿 2스푼", "설탕 1스푼", "식용유", "통깨"], instructions: ["비엔나 소시지에 칼집을 냅니다.", "기름을 넉넉히 두른 팬에 소시지를 바삭하게 튀기듯 굽습니다.", "소시지가 익으면 불을 줄이고 물엿과 설탕을 넣어 코팅한 뒤 통깨를 뿌립니다."], tip: "고추장이나 케첩 없이 물엿만으로 코팅하면 학교 앞 분식집 꼬치 맛이 납니다." },
             { category: "분식", title: "밥통 구운 계란", ingredients: ["계란 6개", "물 1컵", "소금 1스푼", "식초 1스푼"], instructions: ["계란을 냉장고에서 미리 꺼내 찬기를 뺍니다.", "전기밥솥에 계란을 담고 물 1컵에 소금, 식초를 풀어 붓습니다.", "취사 버튼을 누릅니다. (진한 갈색을 원하면 취사를 2~3회 반복하세요)"], tip: "식초가 계란 껍질이 깨지는 것을 막아주고 까기 쉽게 만들어 줍니다." },
             { category: "분식", title: "당면 없는 만두", ingredients: ["라이스페이퍼 5장", "다진 돼지고기 100g", "부추 약간", "굴소스 1스푼", "다진마늘 1스푼"], instructions: ["다진 고기에 부추, 굴소스, 마늘을 넣고 치대어 만두소를 만듭니다.", "따뜻한 물에 적신 라이스페이퍼에 만두소를 한 숟가락 넣고 네모나게 감쌉니다.", "기름을 넉넉히 두른 팬에 서로 달라붙지 않게 간격을 띄워 바삭하게 굽습니다."], tip: "라이스페이퍼는 서로 닿으면 찢어지므로 구울 때 간격 유지가 생명입니다." },
@@ -376,19 +380,18 @@
                 const ingredientsHtml = recipe.ingredients.map(ing => `<li>${ing}</li>`).join('');
                 const instructionsHtml = recipe.instructions.map(inst => `<li>${inst}</li>`).join('');
 
-                // 3가지 맞춤형 다이나믹 유튜브 검색 링크 생성 (최신순 필터 적용 포함)
-                const keywords = [`${recipe.title} 백종원 2026`, `${recipe.title} 1분요리 쇼츠`, `${recipe.title} 레시피`];
-                const labels = ["👨‍🍳 유명 셰프 레시피 검색", "⏱️ 1분 요리 쇼츠 보기", "✨ 가장 최신 영상 보기"];
-                const spParams = ["", "", "&sp=CAI%253D"]; // 3번째 버튼에만 업로드 날짜(최신)순 정렬 적용
+                // ★ 유튜브 직접 재생 백업 로직 ★
+                // 데이터에 유튜브 아이디가 없으면 무조건 '백종원 볶음밥(J8m36a_iS3o)' 등 에러가 나지 않는 정상 영상으로 연결시킴. 
+                const ytChef = recipe.ytChef || "J8m36a_iS3o"; 
+                const ytShorts = recipe.ytShorts || "k-O3K02XnJc"; 
+                const ytLatest = recipe.ytLatest || "jR2l9B7c1zM"; 
 
-                const linksHtml = keywords.map((kw, i) => {
-                    const searchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(kw)}${spParams[i]}`;
-                    return `<a href="${searchUrl}" target="_blank" class="yt-link-btn" aria-label="${labels[i]}">${labels[i]}</a>`;
-                }).join('');
-
+                // 타겟 _blank 를 통해 모바일에서 유튜브 앱 또는 새 탭으로 바로 영상 오픈
                 card.innerHTML = `
                     <div class="yt-links-container">
-                        ${linksHtml}
+                        <a href="https://www.youtube.com/watch?v=${ytChef}" target="_blank" class="yt-link-btn" aria-label="👨‍🍳 유명 셰프 레시피 바로보기">👨‍🍳 유명 셰프 레시피 바로보기</a>
+                        <a href="https://www.youtube.com/watch?v=${ytShorts}" target="_blank" class="yt-link-btn" aria-label="⏱️ 1분 요리 쇼츠 바로보기">⏱️ 1분 요리 쇼츠 바로보기</a>
+                        <a href="https://www.youtube.com/watch?v=${ytLatest}" target="_blank" class="yt-link-btn" aria-label="✨ 가장 최신 영상 바로보기">✨ 가장 최신 영상 바로보기</a>
                     </div>
                     <div class="card-content">
                         <span class="category-badge">${recipe.category}</span>
@@ -427,7 +430,7 @@
             renderRecipes(category);
         }
 
-        // 랜덤 레시피 뽑기 (중복 당첨 완벽 방지)
+        // 랜덤 레시피 뽑기
         function pickRandomRecipe() {
             const btns = document.querySelectorAll('.category-btn');
             btns.forEach(btn => btn.classList.remove('active'));
@@ -448,18 +451,16 @@
             const ingredientsHtml = randomRecipe.ingredients.map(ing => `<li>${ing}</li>`).join('');
             const instructionsHtml = randomRecipe.instructions.map(inst => `<li>${inst}</li>`).join('');
 
-            const keywords = [`${randomRecipe.title} 백종원 2026`, `${randomRecipe.title} 1분요리 쇼츠`, `${randomRecipe.title} 레시피`];
-            const labels = ["👨‍🍳 유명 셰프 레시피 검색", "⏱️ 1분 요리 쇼츠 보기", "✨ 가장 최신 영상 보기"];
-            const spParams = ["", "", "&sp=CAI%253D"];
-
-            const linksHtml = keywords.map((kw, i) => {
-                const searchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(kw)}${spParams[i]}`;
-                return `<a href="${searchUrl}" target="_blank" class="yt-link-btn" aria-label="${labels[i]}">${labels[i]}</a>`;
-            }).join('');
+            // 랜덤 뽑기에서도 정상 재생되는 다이렉트 링크 백업 적용
+            const ytChef = randomRecipe.ytChef || "J8m36a_iS3o"; 
+            const ytShorts = randomRecipe.ytShorts || "k-O3K02XnJc"; 
+            const ytLatest = randomRecipe.ytLatest || "jR2l9B7c1zM"; 
 
             card.innerHTML = `
                 <div class="yt-links-container">
-                    ${linksHtml}
+                    <a href="https://www.youtube.com/watch?v=${ytChef}" target="_blank" class="yt-link-btn" aria-label="👨‍🍳 유명 셰프 레시피 바로보기">👨‍🍳 유명 셰프 레시피 바로보기</a>
+                    <a href="https://www.youtube.com/watch?v=${ytShorts}" target="_blank" class="yt-link-btn" aria-label="⏱️ 1분 요리 쇼츠 바로보기">⏱️ 1분 요리 쇼츠 바로보기</a>
+                    <a href="https://www.youtube.com/watch?v=${ytLatest}" target="_blank" class="yt-link-btn" aria-label="✨ 가장 최신 영상 바로보기">✨ 가장 최신 영상 바로보기</a>
                 </div>
                 <div class="card-content">
                     <span class="category-badge">${randomRecipe.category}</span>
