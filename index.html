@@ -744,6 +744,126 @@
         .shopping-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .shopping-actions .primary-btn { grid-column: 1 / -1; }
 
+        /* 도구 모음 (냉장고 추천 · 주간 식단 · 내 레시피) */
+        .tool-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            max-width: 1160px;
+            margin: 0 auto 16px auto;
+            padding: 0 20px;
+        }
+        .tool-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 12px 6px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .tool-card:active { transform: scale(0.97); }
+        .tool-emoji { font-size: 1.6rem; }
+        .tool-card strong { display: block; font-size: 0.9rem; }
+        .tool-card small { display: block; font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
+
+        .list-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            max-width: 1200px;
+            margin: 0 auto 12px auto;
+            padding: 0 20px;
+        }
+        .list-toolbar .result-status { margin: 0; padding: 0; }
+        select, .field input, .field textarea, .fridge-add input {
+            font: inherit;
+            font-size: 1rem;
+            color: var(--text);
+            background: var(--surface);
+            border: 1.5px solid var(--input-border);
+            border-radius: 10px;
+            padding: 8px 10px;
+        }
+        #sort-select { font-size: 0.85rem; padding: 6px 8px; min-height: 40px; }
+
+        .sheet-body { padding: 16px 20px 28px 20px; display: flex; flex-direction: column; gap: 14px; }
+        .sheet-intro { margin: 0; color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+
+        /* 냉장고 추천 */
+        .fridge-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+        .fridge-chip {
+            min-height: 40px;
+            padding: 6px 12px;
+            border: 1.5px solid var(--input-border);
+            border-radius: 20px;
+            background: var(--surface);
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .fridge-chip[aria-pressed="true"] { background: var(--inverse-bg); color: var(--inverse-text); border-color: var(--inverse-bg); }
+        .fridge-chip[aria-pressed="true"]::before { content: '✓ '; }
+        .fridge-add { display: flex; gap: 8px; }
+        .fridge-add input { flex: 1; min-width: 0; }
+        .fridge-add .secondary-btn { flex: 0 0 auto; }
+        .switch-row { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; }
+        .switch-row input { width: 20px; height: 20px; accent-color: var(--fill); }
+        .fridge-group h3 { margin: 8px 0; font-size: 1rem; font-weight: 800; }
+        .fridge-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+        .fridge-item {
+            width: 100%;
+            text-align: left;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: var(--surface-2);
+            cursor: pointer;
+        }
+        .fridge-item strong { display: block; font-size: 1rem; }
+        .fridge-item small { display: block; margin-top: 2px; font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
+        .fridge-summary { margin: 0; font-weight: 700; }
+
+        /* 주간 식단 */
+        .plan-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+        .plan-row { display: flex; align-items: center; gap: 8px; }
+        .plan-day { flex: 0 0 52px; font-weight: 800; }
+        .plan-day.today { color: var(--accent); }
+        .plan-row select { flex: 1; min-width: 0; }
+        .plan-row .text-btn { flex-shrink: 0; }
+        .plan-add { display: flex; gap: 8px; align-items: center; }
+        .plan-add select { flex: 1; min-width: 0; }
+
+        /* 나만의 기록 (별점 · 메모) */
+        .rating { border: none; margin: 0 0 8px 0; padding: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 2px; }
+        .rating legend { float: left; margin-right: 8px; font-size: 0.9rem; font-weight: 700; color: var(--text-muted); }
+        .star { position: relative; cursor: pointer; }
+        .star input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+        .star span { display: block; width: 40px; height: 44px; line-height: 44px; text-align: center; font-size: 1.7rem; color: var(--border); }
+        .star.on span { color: #F59E0B; }
+        .star input:focus-visible + span { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 8px; }
+        .memo-label { display: block; margin-bottom: 6px; font-size: 0.9rem; font-weight: 700; color: var(--text-muted); }
+        .memo { width: 100%; min-height: 72px; resize: vertical; font: inherit; font-size: 1rem; color: var(--text); background: var(--surface); border: 1.5px solid var(--input-border); border-radius: 12px; padding: 10px 12px; }
+        .memo-status { margin: 4px 0 0 0; min-height: 1.2em; font-size: 0.8rem; color: var(--text-muted); }
+        .note-badge { font-size: 0.8rem; font-weight: 800; color: var(--text-muted); margin-left: auto; margin-right: 8px; }
+
+        /* 내 레시피 입력 폼 */
+        .custom-form .field { display: flex; flex-direction: column; gap: 6px; font-size: 0.9rem; font-weight: 700; }
+        .custom-form .field textarea { resize: vertical; }
+        .field-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .field-row .field input, .field-row .field select { width: 100%; min-width: 0; }
+        .tools-field { border: 1.5px solid var(--border); border-radius: 12px; padding: 10px 12px; display: flex; flex-wrap: wrap; gap: 6px 14px; }
+        .tools-field legend { padding: 0 4px; }
+        .tools-field label { display: flex; align-items: center; gap: 6px; font-weight: 600; min-height: 32px; }
+        .tools-field input { width: 18px; height: 18px; accent-color: var(--fill); }
+        .req, .opt { font-weight: 600; color: var(--text-muted); font-size: 0.8rem; }
+        .form-error { margin: 0; color: var(--accent); font-weight: 700; min-height: 1.2em; }
+        .owner-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
         /* 공유·복사 결과 안내 */
         .toast {
             position: fixed;
@@ -825,6 +945,7 @@
         <button class="category-btn" data-category="일식" aria-pressed="false"><span aria-hidden="true">🇯🇵 </span>일식</button>
         <button class="category-btn" data-category="분식" aria-pressed="false"><span aria-hidden="true">🥘 </span>분식</button>
         <button class="category-btn" data-category="기타" aria-pressed="false"><span aria-hidden="true">🍝 </span>양식·기타</button>
+        <button class="category-btn" data-category="내 레시피" aria-pressed="false"><span aria-hidden="true">✍️ </span>내 레시피</button>
     </nav>
     <div class="filter-chips" id="filter-chips" role="group" aria-label="조리 조건">
         <button type="button" class="filter-chip" data-filter="quick" aria-pressed="false"><span aria-hidden="true">⏱ </span>10분 이내</button>
@@ -848,7 +969,23 @@
         <div class="recent-list" id="recent-list"></div>
     </section>
 
-    <p class="result-status" id="result-status" role="status"></p>
+    <div class="tool-row">
+        <button type="button" class="tool-card" id="fridge-open"><span class="tool-emoji" aria-hidden="true">🧊</span><span><strong>냉장고 추천</strong><small>있는 재료로 찾기</small></span></button>
+        <button type="button" class="tool-card" id="plan-open"><span class="tool-emoji" aria-hidden="true">📅</span><span><strong>주간 식단</strong><small>일주일 메뉴 짜기</small></span></button>
+        <button type="button" class="tool-card" id="custom-open"><span class="tool-emoji" aria-hidden="true">✍️</span><span><strong>내 레시피</strong><small>직접 추가하기</small></span></button>
+    </div>
+
+    <div class="list-toolbar">
+        <p class="result-status" id="result-status" role="status"></p>
+        <label class="sort-label">
+            <span class="sr-only">정렬</span>
+            <select id="sort-select">
+                <option value="default">기본순</option>
+                <option value="time">조리시간 짧은 순</option>
+                <option value="rating">내 별점 높은 순</option>
+            </select>
+        </label>
+    </div>
 
     <main id="recipe-container">
         <!-- 레시피 카드가 삽입됩니다. -->
@@ -885,6 +1022,91 @@
             <button type="button" class="close-btn" id="shopping-close" aria-label="장보기 목록 닫기">✕</button>
         </div>
         <div class="shopping-body" id="shopping-body"></div>
+    </dialog>
+
+    <!-- 냉장고 추천 -->
+    <dialog class="sheet" id="fridge-dialog" aria-labelledby="fridge-title">
+        <div class="sheet-bar">
+            <h2 class="sheet-title" id="fridge-title">🧊 냉장고 추천</h2>
+            <button type="button" class="close-btn" data-close aria-label="냉장고 추천 닫기">✕</button>
+        </div>
+        <div class="sheet-body">
+            <p class="sheet-intro">냉장고에 있는 재료를 모두 골라 주세요. 가진 재료로 만들 수 있는 레시피부터 보여 드려요.</p>
+            <div class="fridge-chips" id="fridge-chips" role="group" aria-label="가진 재료"></div>
+            <form class="fridge-add" id="fridge-add">
+                <label for="fridge-input" class="sr-only">다른 재료 직접 입력</label>
+                <input type="text" id="fridge-input" placeholder="다른 재료 입력 (예: 스팸)" autocomplete="off">
+                <button type="submit" class="secondary-btn">추가</button>
+            </form>
+            <label class="switch-row"><input type="checkbox" id="fridge-staples" checked> 소금·간장·설탕 같은 기본 양념은 있어요</label>
+            <div id="fridge-results" aria-live="polite"></div>
+        </div>
+    </dialog>
+
+    <!-- 주간 식단 -->
+    <dialog class="sheet" id="plan-dialog" aria-labelledby="plan-title">
+        <div class="sheet-bar">
+            <h2 class="sheet-title" id="plan-title">📅 주간 식단</h2>
+            <button type="button" class="close-btn" data-close aria-label="주간 식단 닫기">✕</button>
+        </div>
+        <div class="sheet-body">
+            <ol class="plan-list" id="plan-list"></ol>
+            <div class="shopping-actions">
+                <button type="button" class="primary-btn" data-plan="shop"><span aria-hidden="true">🛒</span> 일주일 재료 장보기 목록에 담기</button>
+                <button type="button" class="secondary-btn" data-plan="random"><span aria-hidden="true">🎲</span> 빈 칸 랜덤 채우기</button>
+                <button type="button" class="secondary-btn" data-plan="clear">모두 비우기</button>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- 나만의 레시피 추가·수정 -->
+    <dialog class="sheet" id="custom-dialog" aria-labelledby="custom-title">
+        <div class="sheet-bar">
+            <h2 class="sheet-title" id="custom-title">✍️ 내 레시피 추가</h2>
+            <button type="button" class="close-btn" data-close aria-label="내 레시피 창 닫기">✕</button>
+        </div>
+        <form class="sheet-body custom-form" id="custom-form" novalidate>
+            <label class="field">메뉴 이름 <span class="req">(필수)</span>
+                <input type="text" name="title" required maxlength="40" placeholder="예: 엄마표 계란말이">
+            </label>
+            <div class="field-row">
+                <label class="field">종류
+                    <select name="category">
+                        <option value="한식">한식</option><option value="중식">중식</option><option value="일식">일식</option>
+                        <option value="분식">분식</option><option value="기타">양식·기타</option>
+                    </select>
+                </label>
+                <label class="field">조리시간(분)
+                    <input type="number" name="time" min="1" max="600" value="10" inputmode="numeric">
+                </label>
+                <label class="field">난이도
+                    <select name="level"><option value="쉬움">쉬움</option><option value="보통">보통</option></select>
+                </label>
+            </div>
+            <fieldset class="field tools-field">
+                <legend>사용 도구</legend>
+                <label><input type="checkbox" name="tools" value="냄비"> 냄비</label>
+                <label><input type="checkbox" name="tools" value="프라이팬"> 프라이팬</label>
+                <label><input type="checkbox" name="tools" value="전자레인지"> 전자레인지</label>
+                <label><input type="checkbox" name="tools" value="에어프라이어"> 에어프라이어</label>
+                <label><input type="checkbox" name="tools" value="밥솥"> 밥솥</label>
+                <label><input type="checkbox" name="tools" value="불 없이"> 불 없이</label>
+            </fieldset>
+            <label class="field">재료 <span class="req">(필수, 한 줄에 하나씩)</span>
+                <textarea name="ingredients" rows="4" required placeholder="계란 3개&#10;대파 약간&#10;소금 1꼬집"></textarea>
+            </label>
+            <label class="field">조리 순서 <span class="req">(필수, 한 줄에 한 단계)</span>
+                <textarea name="instructions" rows="4" required placeholder="계란을 풀고 소금을 넣습니다.&#10;팬에 기름을 두르고 3분간 부칩니다."></textarea>
+            </label>
+            <label class="field">꿀팁 <span class="opt">(선택)</span>
+                <input type="text" name="tip" maxlength="120">
+            </label>
+            <label class="field">유튜브 영상 링크 <span class="opt">(선택)</span>
+                <input type="url" name="video" placeholder="https://youtu.be/...">
+            </label>
+            <p class="form-error" id="custom-error" role="alert"></p>
+            <button type="submit" class="primary-btn" id="custom-submit">저장하기</button>
+        </form>
     </dialog>
 
     <!-- 요리 타이머 (레시피를 닫아도 계속 돈다) -->
@@ -1049,14 +1271,49 @@
             } catch (e) { /* 개인 정보 보호 모드 등에서는 이번 방문 동안만 유지 */ }
         }
 
+        // ---------- 나만의 레시피 (이 브라우저에 저장, 기본 레시피 뒤에 이어 붙인다) ----------
+        const CUSTOM_KEY = 'honbap-custom';
+        readStore(CUSTOM_KEY, [])
+            .filter(r => r && r.title && Array.isArray(r.ingredients) && Array.isArray(r.instructions))
+            .forEach(r => recipes.push({ category: '기타', videoId: '', time: 10, level: '쉬움', tools: [], tip: '', ...r, custom: true }));
+
+        function saveCustomRecipes() {
+            writeStore(CUSTOM_KEY, recipes.filter(r => r.custom).map(({ custom, ...rest }) => rest));
+        }
+
         // 레시피 텍스트를 HTML에 넣기 전에 특수문자를 이스케이프
         function escapeHtml(text) {
             return String(text).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
         }
 
+        // 창 위에 창이 겹쳐 열리므로(식단 → 레시피 → 영상) 열린 순서를 기억한다
+        const modalStack = [];
+        function openModal(dialog) {
+            if (!dialog.open) {
+                dialog.showModal();
+                modalStack.push(dialog);
+            }
+            hostFloating();
+        }
+        document.querySelectorAll('dialog').forEach(dialog => {
+            dialog.addEventListener('close', () => {
+                const i = modalStack.indexOf(dialog);
+                if (i !== -1) modalStack.splice(i, 1);
+                hostFloating();
+            });
+            // 창 바깥 어두운 영역을 누르면 닫기
+            dialog.addEventListener('click', e => {
+                if (e.target !== dialog) return;
+                const rect = dialog.getBoundingClientRect();
+                const inside = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+                if (!inside) dialog.close();
+            });
+            dialog.querySelectorAll('[data-close]').forEach(btn => btn.addEventListener('click', () => dialog.close()));
+        });
+
         // 모달 dialog가 열리면 그 아래 요소는 가려지므로, 안내창·타이머를 가장 위에 열린 창 안으로 옮긴다
         function hostFloating() {
-            const host = [videoDialog, shoppingDialog, detailDialog].find(d => d.open) || document.body;
+            const host = modalStack[modalStack.length - 1] || document.body;
             if (toast.parentNode !== host) host.appendChild(toast);
             if (timerBar.parentNode !== host) host.appendChild(timerBar);
         }
@@ -1163,12 +1420,11 @@
             ytPlayer.title = `${recipe.title} 레시피 영상`;
             ytPlayer.src = `https://www.youtube-nocookie.com/embed/${recipe.videoId}?autoplay=1&playsinline=1&rel=0&cc_load_policy=1&hl=ko`;
             ytLink.href = `https://www.youtube.com/watch?v=${recipe.videoId}`;
-            videoDialog.showModal();
-            hostFloating();
+            openModal(videoDialog);
         }
 
         document.getElementById('video-close').addEventListener('click', () => videoDialog.close());
-        videoDialog.addEventListener('close', () => { ytPlayer.src = ''; hostFloating(); }); // 닫으면 재생도 멈춘다
+        videoDialog.addEventListener('close', () => { ytPlayer.src = ''; }); // 닫으면 재생도 멈춘다
 
         // ---------- 조리시간 · 난이도 · 도구 ----------
         const FIRE_TOOLS = ['냄비', '프라이팬']; // 가스레인지·인덕션이 필요한 도구
@@ -1193,6 +1449,67 @@
             return true;
         }
 
+        // ---------- 나만의 기록: 별점 · 메모 ----------
+        const NOTES_KEY = 'honbap-notes';
+        const notes = readStore(NOTES_KEY, {}); // { 레시피 제목: { rating: 1~5, memo: '...' } }
+        let notesChanged = false;
+
+        function getNote(recipe) {
+            return notes[recipe.title] || { rating: 0, memo: '' };
+        }
+        function setNote(recipe, patch) {
+            const next = { ...getNote(recipe), ...patch };
+            if (!next.rating && !next.memo) {
+                delete notes[recipe.title];
+            } else {
+                notes[recipe.title] = next;
+            }
+            writeStore(NOTES_KEY, notes);
+            notesChanged = true;
+        }
+
+        function noteBadgeHtml(recipe) {
+            const note = getNote(recipe);
+            const parts = [];
+            if (note.rating) parts.push(`<span aria-hidden="true">★</span> ${note.rating}<span class="sr-only">점</span>`);
+            if (note.memo) parts.push('<span aria-hidden="true">📝</span><span class="sr-only">메모 있음</span>');
+            return parts.length ? `<span class="note-badge">${parts.join(' ')}</span>` : '';
+        }
+
+        function notesSectionHtml(recipe) {
+            const note = getNote(recipe);
+            const stars = [1, 2, 3, 4, 5].map(n => `
+                <label class="star${n <= note.rating ? ' on' : ''}">
+                    <input type="radio" name="rating" value="${n}"${n === note.rating ? ' checked' : ''}>
+                    <span aria-hidden="true">★</span><span class="sr-only">${n}점</span>
+                </label>`).join('');
+            return `
+                <section aria-labelledby="notes-heading">
+                    <h3 class="section-title" id="notes-heading">📝 나의 기록 <span class="section-hint">이 기기에만 저장돼요</span></h3>
+                    <fieldset class="rating" id="rating">
+                        <legend>별점</legend>
+                        ${stars}
+                        <button type="button" class="text-btn" data-action="clear-rating">지우기</button>
+                    </fieldset>
+                    <label class="memo-label" for="memo">메모</label>
+                    <textarea class="memo" id="memo" rows="3" placeholder="예: 간장 반 스푼 덜 넣기, 양파 더 넣으면 맛있음">${escapeHtml(note.memo)}</textarea>
+                    <p class="memo-status" id="memo-status" aria-live="polite"></p>
+                </section>`;
+        }
+
+        function updateStars(rating) {
+            detailBody.querySelectorAll('.star').forEach((label, i) => label.classList.toggle('on', i < rating));
+        }
+
+        // ---------- 정렬 ----------
+        const sortSelect = document.getElementById('sort-select');
+        function sortRecipes(list) {
+            if (sortSelect.value === 'time') return [...list].sort((a, b) => a.time - b.time);
+            if (sortSelect.value === 'rating') return [...list].sort((a, b) => getNote(b).rating - getNote(a).rating);
+            return list;
+        }
+        sortSelect.addEventListener('change', () => renderRecipes({ keepScroll: true }));
+
         // ---------- 목록 카드 ----------
         function createCard(recipe) {
             const index = recipes.indexOf(recipe);
@@ -1207,7 +1524,8 @@
             card.innerHTML = `
                 ${thumbHtml(recipe)}
                 <div class="card-meta">
-                    <span class="category-badge">${escapeHtml(recipe.category)}</span>
+                    <span class="category-badge">${recipe.custom ? '✍️ ' : ''}${escapeHtml(recipe.category)}</span>
+                    ${noteBadgeHtml(recipe)}
                     ${favButtonHtml(recipe)}
                 </div>
                 <h2 class="recipe-title">${escapeHtml(recipe.title)}</h2>
@@ -1235,6 +1553,8 @@
             return recipes.filter(r => {
                 if (currentCategory === '즐겨찾기') {
                     if (!favorites.has(r.title)) return false;
+                } else if (currentCategory === '내 레시피') {
+                    if (!r.custom) return false;
                 } else if (currentCategory !== '전체' && r.category !== currentCategory) {
                     return false;
                 }
@@ -1248,6 +1568,10 @@
             if (currentCategory === '즐겨찾기' && !searchQuery && activeFilters.size === 0) {
                 empty.innerHTML = `<p class="empty-emoji" aria-hidden="true">♡</p>
                     <p>아직 즐겨찾기한 레시피가 없어요.<br>마음에 드는 레시피의 하트를 눌러 모아보세요!</p>`;
+            } else if (currentCategory === '내 레시피' && !searchQuery && activeFilters.size === 0) {
+                empty.innerHTML = `<p class="empty-emoji" aria-hidden="true">✍️</p>
+                    <p>아직 추가한 레시피가 없어요.<br>나만 아는 자취 레시피를 기록해 보세요!</p>
+                    <button type="button" class="primary-btn" data-action="new-custom" style="display:inline-flex">내 레시피 추가하기</button>`;
             } else {
                 const what = searchQuery ? `<strong>'${escapeHtml(searchQuery)}'</strong>에 맞는` : '지금 고른 조건에 맞는';
                 empty.innerHTML = `<p class="empty-emoji" aria-hidden="true">🥲</p>
@@ -1260,7 +1584,7 @@
         // 레시피 렌더링 함수
         function renderRecipes({ keepScroll = false } = {}) {
             container.innerHTML = "";
-            const visible = getVisibleRecipes();
+            const visible = sortRecipes(getVisibleRecipes());
 
             if (visible.length === 0) {
                 renderEmptyState();
@@ -1503,10 +1827,15 @@
                 showToast('모든 재료가 준비됐어요! 바로 요리를 시작해 보세요 🍳');
                 return;
             }
-            shoppingItems = shoppingItems.filter(item => item.recipe !== detailRecipe.title)
-                .concat(missing.map(text => ({ text, recipe: detailRecipe.title, done: false })));
-            saveShopping();
+            setShoppingForRecipe(detailRecipe.title, missing);
             showToast(`🛒 없는 재료 ${missing.length}개를 장보기 목록에 담았어요`);
+        }
+
+        // 같은 레시피를 다시 담으면 예전 항목을 새 목록으로 바꾼다
+        function setShoppingForRecipe(title, texts) {
+            shoppingItems = shoppingItems.filter(item => item.recipe !== title)
+                .concat(texts.map(text => ({ text, recipe: title, done: false })));
+            saveShopping();
         }
 
         function renderShopping() {
@@ -1533,13 +1862,11 @@
 
         function openShopping() {
             renderShopping();
-            shoppingDialog.showModal();
-            hostFloating();
+            openModal(shoppingDialog);
         }
 
         document.getElementById('shopping-btn').addEventListener('click', openShopping);
         document.getElementById('shopping-close').addEventListener('click', () => shoppingDialog.close());
-        shoppingDialog.addEventListener('close', hostFloating);
         document.getElementById('shopping-body').addEventListener('change', e => {
             const index = e.target.dataset.shoppingIndex;
             if (index === undefined) return;
@@ -1593,7 +1920,7 @@
                 ${thumbHtml(recipe)}
                 <div class="detail-content">
                     <div class="card-meta">
-                        <span class="category-badge">${random ? '🎉 오늘의 추천 메뉴' : escapeHtml(recipe.category)}</span>
+                        <span class="category-badge">${random ? '🎉 오늘의 추천 메뉴' : (recipe.custom ? '✍️ 내 레시피 · ' : '') + escapeHtml(recipe.category)}</span>
                         ${favButtonHtml(recipe)}
                     </div>
                     <h2 class="detail-title" id="detail-title">${escapeHtml(recipe.title)}</h2>
@@ -1619,7 +1946,15 @@
                         <ol class="step-list">${stepsHtml}</ol>
                     </section>
 
-                    ${recipe.tip ? `<div class="tip-box">💡 <strong>엽쌤의 꿀팁!</strong><br>${escapeHtml(recipe.tip)}</div>` : ''}
+                    ${recipe.tip ? `<div class="tip-box">💡 <strong>${recipe.custom ? '나의 꿀팁' : '엽쌤의 꿀팁!'}</strong><br>${escapeHtml(recipe.tip)}</div>` : ''}
+
+                    ${notesSectionHtml(recipe)}
+
+                    <div class="plan-add">
+                        <label for="plan-day" class="sr-only">식단에 넣을 요일</label>
+                        <select id="plan-day">${DAYS.map(d => `<option value="${d}"${d === todayName() ? ' selected' : ''}>${d}요일${d === todayName() ? ' (오늘)' : ''}</option>`).join('')}</select>
+                        <button type="button" class="secondary-btn" data-action="add-plan"><span aria-hidden="true">📅</span> 식단에 넣기</button>
+                    </div>
 
                     <div class="detail-actions">
                         ${playHtml}
@@ -1627,12 +1962,16 @@
                         <button type="button" class="secondary-btn" data-action="share" data-index="${index}"><span aria-hidden="true">🔗</span> 공유하기</button>
                         ${random ? `<button type="button" class="secondary-btn" data-action="reroll"><span aria-hidden="true">🎲</span> 다시 뽑기</button>` : ''}
                     </div>
+                    ${recipe.custom ? `
+                    <div class="owner-actions">
+                        <button type="button" class="secondary-btn" data-action="edit-custom"><span aria-hidden="true">✏️</span> 수정</button>
+                        <button type="button" class="secondary-btn" data-action="delete-custom"><span aria-hidden="true">🗑</span> 삭제</button>
+                    </div>` : ''}
                 </div>
             `;
             renderIngredients();
 
-            if (!detailDialog.open) detailDialog.showModal();
-            hostFloating();
+            openModal(detailDialog);
             detailDialog.scrollTop = 0;
             // 주소에 레시피를 남겨, 새로고침하거나 링크를 공유해도 이 레시피가 열리게 한다
             history.replaceState(null, '', `#recipe=${encodeURIComponent(recipe.title)}`);
@@ -1652,13 +1991,33 @@
         detailDialog.addEventListener('close', () => {
             detailRecipe = null;
             renderRecent(); // 보는 동안 목록이 움직이지 않도록 닫을 때 갱신
-            hostFloating();
+            if (notesChanged) {
+                notesChanged = false;
+                renderRecipes({ keepScroll: true }); // 별점·메모 표시를 카드에 반영
+            }
             wantWakeLock = false;
             releaseWakeLock();
             history.replaceState(null, '', location.pathname + location.search);
         });
         detailBody.addEventListener('change', e => {
             if (e.target.classList.contains('step-check')) updateStepProgress();
+            if (e.target.name === 'rating') {
+                const rating = Number(e.target.value);
+                setNote(detailRecipe, { rating });
+                updateStars(rating);
+            }
+        });
+        let memoTimer;
+        detailBody.addEventListener('input', e => {
+            if (e.target.id !== 'memo') return;
+            const recipe = detailRecipe;
+            const memo = e.target.value.trim();
+            clearTimeout(memoTimer);
+            memoTimer = setTimeout(() => {
+                setNote(recipe, { memo });
+                const status = document.getElementById('memo-status');
+                if (status) status.textContent = '메모를 저장했어요';
+            }, 500);
         });
 
         // 요리하는 동안 화면이 꺼지지 않게 (지원하는 브라우저에서만 버튼이 보인다)
@@ -1692,6 +2051,24 @@
 
         // ---------- 공유 ----------
         async function shareRecipe(recipe) {
+            if (recipe.custom) {
+                const text = `✍️ ${recipe.title}\n\n[재료]\n${recipe.ingredients.map(i => `- ${i}`).join('\n')}\n\n[조리 순서]\n${recipe.instructions.map((step, i) => `${i + 1}. ${step}`).join('\n')}`;
+                if (navigator.share) {
+                    try {
+                        await navigator.share({ title: recipe.title, text });
+                        return;
+                    } catch (e) {
+                        if (e.name === 'AbortError') return;
+                    }
+                }
+                try {
+                    await navigator.clipboard.writeText(text);
+                    showToast('레시피 내용을 복사했어요. 친구에게 붙여넣어 보내 보세요!');
+                } catch (e) {
+                    showToast('복사하지 못했어요');
+                }
+                return;
+            }
             const url = `${location.origin}${location.pathname}#recipe=${encodeURIComponent(recipe.title)}`;
             if (navigator.share) {
                 try {
@@ -1727,6 +2104,336 @@
             if (recipe) openDetail(recipe);
         }
         window.addEventListener('hashchange', openRecipeFromHash);
+
+        // ---------- 재료 이름 다루기 (냉장고 추천 · 일주일 장보기) ----------
+        // 분량·괄호·"시판" 같은 말을 떼고 재료 이름만 남긴다: "차돌박이(또는 우삼겹) 100g" → "차돌박이"
+        function ingredientName(text) {
+            return text.replace(/\([^)]*\)/g, '').replace(/\d[\s\S]*$/, '')
+                .replace(/\s*(약간|듬뿍|1꼬집)$/, '').replace(/^(시판|뜨거운)\s+/, '').trim();
+        }
+        // 집에 대부분 있는 기본 양념
+        const STAPLES = new Set(['설탕', '간장', '진간장', '국간장', '물', '참기름', '들기름', '소금', '후추', '굴소스', '마요네즈',
+            '다진마늘', '고추장', '된장', '식용유', '고춧가루', '식초', '물엿', '전분물', '전분가루', '케첩', '통깨', '참깨', '맛술',
+            '얼음', '올리브유', '올리브오일', '파슬리가루', '파슬리 가루', '시나몬 가루', '종이컵', '냉장고 속 채소']);
+        const isOptional = text => text.includes('(선택)');
+
+        // "김치"는 "신김치"와, "라면"은 "라면사리"와 맞지만 "밥"이 "김밥용 김"과 맞지는 않도록 단어의 앞뒤로만 비교
+        function matchesTerm(name, term) {
+            return name === term || name.split(/\s+/).some(token => token.startsWith(term) || token.endsWith(term));
+        }
+
+        // ---------- 냉장고 추천 ----------
+        const fridgeDialog = document.getElementById('fridge-dialog');
+        const FRIDGE_CHOICES = ['계란', '밥', '양파', '대파', '김치', '참치', '두부', '어묵', '식빵', '치즈', '우유', '버터',
+            '베이컨', '소시지', '삼겹살', '돼지고기', '우삼겹', '소고기', '닭가슴살', '만두', '라면', '떡', '소면', '우동면',
+            '파스타면', '감자', '양배추', '옥수수', '명란', '크래미', '콩나물', '숙주', '애호박', '깻잎', '부추', '오이',
+            '토마토', '순대', '새우', '고구마', '바나나'];
+        const FRIDGE_KEY = 'honbap-fridge';
+        const fridgeSelected = new Set(readStore(FRIDGE_KEY, []));
+        const fridgeStaples = document.getElementById('fridge-staples');
+
+        function renderFridgeChips() {
+            const choices = [...FRIDGE_CHOICES, ...[...fridgeSelected].filter(t => !FRIDGE_CHOICES.includes(t))];
+            document.getElementById('fridge-chips').innerHTML = choices.map(term =>
+                `<button type="button" class="fridge-chip" data-term="${escapeHtml(term)}" aria-pressed="${fridgeSelected.has(term)}">${escapeHtml(term)}</button>`).join('');
+        }
+
+        function renderFridgeResults() {
+            const box = document.getElementById('fridge-results');
+            const terms = [...fridgeSelected];
+            if (terms.length === 0) {
+                box.innerHTML = '<p class="fridge-summary">위에서 가진 재료를 골라 주세요.</p>';
+                return;
+            }
+            const results = recipes.map(recipe => {
+                const needed = [...new Set(recipe.ingredients.filter(i => !isOptional(i)).map(ingredientName))]
+                    .filter(name => name && !(fridgeStaples.checked && STAPLES.has(name)));
+                const have = needed.filter(name => terms.some(term => matchesTerm(name, term)));
+                return { recipe, have: have.length, missing: needed.filter(name => !have.includes(name)) };
+            }).filter(x => x.have > 0 && x.missing.length <= 2)
+              .sort((a, b) => a.missing.length - b.missing.length || b.have - a.have || a.recipe.time - b.recipe.time);
+
+            const groups = [
+                { title: '✅ 지금 바로 만들 수 있어요', items: results.filter(x => x.missing.length === 0) },
+                { title: '🛒 1개만 사면 돼요', items: results.filter(x => x.missing.length === 1) },
+                { title: '🛒 2개만 사면 돼요', items: results.filter(x => x.missing.length === 2).slice(0, 12) }
+            ].filter(g => g.items.length);
+
+            const ready = results.filter(x => x.missing.length === 0).length;
+            box.innerHTML = `<p class="fridge-summary">고른 재료 ${terms.length}개로 바로 만들 수 있는 레시피 ${ready}개, 조금만 사면 되는 레시피 ${results.length - ready}개</p>`
+                + groups.map(g => `
+                    <section class="fridge-group">
+                        <h3>${g.title}</h3>
+                        <ul class="fridge-list">${g.items.map(x => `
+                            <li><button type="button" class="fridge-item" data-action="detail" data-index="${recipes.indexOf(x.recipe)}">
+                                <strong>${escapeHtml(x.recipe.title)}</strong>
+                                <small>⏱ ${x.recipe.time}분 · 가진 재료 ${x.have}개${x.missing.length ? ` · 없는 재료: ${x.missing.map(escapeHtml).join(', ')}` : ''}</small>
+                            </button></li>`).join('')}
+                        </ul>
+                    </section>`).join('');
+        }
+
+        function toggleFridgeTerm(term, on = !fridgeSelected.has(term)) {
+            if (on) {
+                fridgeSelected.add(term);
+            } else {
+                fridgeSelected.delete(term);
+            }
+            writeStore(FRIDGE_KEY, [...fridgeSelected]);
+        }
+
+        document.getElementById('fridge-open').addEventListener('click', () => {
+            renderFridgeChips();
+            renderFridgeResults();
+            openModal(fridgeDialog);
+        });
+        document.getElementById('fridge-chips').addEventListener('click', e => {
+            const chip = e.target.closest('.fridge-chip');
+            if (!chip) return;
+            toggleFridgeTerm(chip.dataset.term);
+            chip.setAttribute('aria-pressed', String(fridgeSelected.has(chip.dataset.term)));
+            renderFridgeResults();
+        });
+        document.getElementById('fridge-add').addEventListener('submit', e => {
+            e.preventDefault();
+            const input = document.getElementById('fridge-input');
+            const term = input.value.trim();
+            if (!term) return;
+            toggleFridgeTerm(term, true);
+            input.value = '';
+            renderFridgeChips();
+            renderFridgeResults();
+        });
+        fridgeStaples.addEventListener('change', renderFridgeResults);
+        document.getElementById('fridge-results').addEventListener('click', handleAction);
+
+        // ---------- 주간 식단 ----------
+        const planDialog = document.getElementById('plan-dialog');
+        const DAYS = ['월', '화', '수', '목', '금', '토', '일'];
+        const PLAN_KEY = 'honbap-plan';
+        const plan = readStore(PLAN_KEY, {}); // { 월: 레시피 제목, ... }
+        Object.keys(plan).forEach(day => { if (!recipes.some(r => r.title === plan[day])) delete plan[day]; });
+
+        function todayName() {
+            return DAYS[(new Date().getDay() + 6) % 7]; // getDay()는 일요일이 0
+        }
+        function savePlan() {
+            writeStore(PLAN_KEY, plan);
+        }
+
+        function recipeOptionsHtml(selectedTitle) {
+            const groups = [['한식', '한식'], ['중식', '중식'], ['일식', '일식'], ['분식', '분식'], ['기타', '양식·기타']];
+            const option = r => `<option value="${escapeHtml(r.title)}"${r.title === selectedTitle ? ' selected' : ''}>${escapeHtml(r.title)}</option>`;
+            const custom = recipes.filter(r => r.custom);
+            return '<option value="">— 비어 있음 —</option>'
+                + (custom.length ? `<optgroup label="내 레시피">${custom.map(option).join('')}</optgroup>` : '')
+                + groups.map(([cat, label]) => `<optgroup label="${label}">${recipes.filter(r => !r.custom && r.category === cat).map(option).join('')}</optgroup>`).join('');
+        }
+
+        function renderPlan() {
+            const today = todayName();
+            document.getElementById('plan-list').innerHTML = DAYS.map(day => `
+                <li class="plan-row">
+                    <label class="plan-day${day === today ? ' today' : ''}" for="plan-${day}">${day}요일${day === today ? '<br><small>오늘</small>' : ''}</label>
+                    <select id="plan-${day}" data-day="${day}">${recipeOptionsHtml(plan[day])}</select>
+                    <button type="button" class="text-btn" data-plan-view="${day}"${plan[day] ? '' : ' hidden'}>보기</button>
+                </li>`).join('');
+        }
+
+        function planRecipes() {
+            return DAYS.map(day => recipes.find(r => r.title === plan[day])).filter(Boolean);
+        }
+
+        document.getElementById('plan-open').addEventListener('click', () => {
+            renderPlan();
+            openModal(planDialog);
+        });
+        document.getElementById('plan-list').addEventListener('change', e => {
+            const day = e.target.dataset.day;
+            if (!day) return;
+            if (e.target.value) {
+                plan[day] = e.target.value;
+            } else {
+                delete plan[day];
+            }
+            savePlan();
+            planDialog.querySelector(`[data-plan-view="${day}"]`).hidden = !plan[day];
+        });
+        planDialog.addEventListener('click', e => {
+            const view = e.target.closest('[data-plan-view]');
+            if (view) {
+                openDetail(recipes.find(r => r.title === plan[view.dataset.planView]));
+                return;
+            }
+            const btn = e.target.closest('[data-plan]');
+            if (!btn) return;
+            if (btn.dataset.plan === 'random') {
+                const pool = recipes.filter(r => !Object.values(plan).includes(r.title));
+                let filled = 0;
+                DAYS.forEach(day => {
+                    if (plan[day] || pool.length === 0) return;
+                    plan[day] = pool.splice(Math.floor(Math.random() * pool.length), 1)[0].title;
+                    filled++;
+                });
+                savePlan();
+                renderPlan();
+                showToast(filled ? `빈 칸 ${filled}개를 채웠어요` : '빈 칸이 없어요');
+            } else if (btn.dataset.plan === 'shop') {
+                const list = planRecipes();
+                if (list.length === 0) {
+                    showToast('먼저 식단에 레시피를 넣어 주세요');
+                    return;
+                }
+                let count = 0;
+                [...new Set(list)].forEach(recipe => {
+                    const texts = recipe.ingredients
+                        .filter(i => !isOptional(i) && !STAPLES.has(ingredientName(i)))
+                        .map(i => scaleAmount(i, servings));
+                    count += texts.length;
+                    setShoppingForRecipe(recipe.title, texts);
+                });
+                showToast(`🛒 기본 양념을 뺀 재료 ${count}개를 장보기 목록에 담았어요`);
+            } else if (btn.dataset.plan === 'clear') {
+                if (!confirm('이번 주 식단을 모두 비울까요?')) return;
+                DAYS.forEach(day => delete plan[day]);
+                savePlan();
+                renderPlan();
+            }
+        });
+
+        function addDetailToPlan() {
+            const day = document.getElementById('plan-day').value;
+            const previous = plan[day];
+            plan[day] = detailRecipe.title;
+            savePlan();
+            if (planDialog.open) renderPlan();
+            showToast(previous && previous !== detailRecipe.title
+                ? `${day}요일 식단을 '${previous}'에서 바꿨어요`
+                : `📅 ${day}요일 식단에 넣었어요`);
+        }
+
+        // ---------- 나만의 레시피 추가 · 수정 · 삭제 ----------
+        const customDialog = document.getElementById('custom-dialog');
+        const customForm = document.getElementById('custom-form');
+        const customError = document.getElementById('custom-error');
+        let editingRecipe = null;
+
+        function youtubeIdFromUrl(url) {
+            const match = url.match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/|\/live\/)([\w-]{11})/);
+            return match ? match[1] : null;
+        }
+
+        function openCustomForm(recipe = null) {
+            editingRecipe = recipe;
+            customForm.reset();
+            customError.textContent = '';
+            document.getElementById('custom-title').textContent = recipe ? '✏️ 내 레시피 수정' : '✍️ 내 레시피 추가';
+            if (recipe) {
+                const f = customForm.elements;
+                f.title.value = recipe.title;
+                f.category.value = recipe.category;
+                f.time.value = recipe.time;
+                f.level.value = recipe.level;
+                [...customForm.querySelectorAll('[name="tools"]')].forEach(box => { box.checked = recipe.tools.includes(box.value); });
+                f.ingredients.value = recipe.ingredients.join('\n');
+                f.instructions.value = recipe.instructions.join('\n');
+                f.tip.value = recipe.tip || '';
+                f.video.value = recipe.videoId ? `https://youtu.be/${recipe.videoId}` : '';
+            }
+            openModal(customDialog);
+            customForm.elements.title.focus();
+        }
+
+        // 제목이 바뀌면 즐겨찾기·최근 본·메모·식단·장보기에 저장된 이름도 함께 바꾼다
+        function renameRecipeRefs(oldTitle, newTitle) {
+            if (favorites.delete(oldTitle)) favorites.add(newTitle);
+            writeStore(FAVORITES_KEY, [...favorites]);
+            recentTitles = recentTitles.map(t => t === oldTitle ? newTitle : t);
+            writeStore(RECENT_KEY, recentTitles);
+            if (notes[oldTitle]) { notes[newTitle] = notes[oldTitle]; delete notes[oldTitle]; }
+            writeStore(NOTES_KEY, notes);
+            DAYS.forEach(day => { if (plan[day] === oldTitle) plan[day] = newTitle; });
+            savePlan();
+            shoppingItems.forEach(item => { if (item.recipe === oldTitle) item.recipe = newTitle; });
+            saveShopping();
+        }
+
+        function removeRecipeRefs(title) {
+            favorites.delete(title);
+            writeStore(FAVORITES_KEY, [...favorites]);
+            recentTitles = recentTitles.filter(t => t !== title);
+            writeStore(RECENT_KEY, recentTitles);
+            delete notes[title];
+            writeStore(NOTES_KEY, notes);
+            DAYS.forEach(day => { if (plan[day] === title) delete plan[day]; });
+            savePlan();
+        }
+
+        customForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const f = customForm.elements;
+            const lines = text => text.split('\n').map(line => line.trim()).filter(Boolean);
+            const title = f.title.value.trim();
+            const ingredients = lines(f.ingredients.value);
+            const instructions = lines(f.instructions.value);
+            const videoUrl = f.video.value.trim();
+            const videoId = videoUrl ? youtubeIdFromUrl(videoUrl) : '';
+
+            let error = '', field = null;
+            if (!title) { error = '메뉴 이름을 입력해 주세요.'; field = f.title; }
+            else if (recipes.some(r => r.title === title && r !== editingRecipe)) { error = '같은 이름의 레시피가 이미 있어요. 다른 이름을 써 주세요.'; field = f.title; }
+            else if (ingredients.length === 0) { error = '재료를 한 줄에 하나씩 입력해 주세요.'; field = f.ingredients; }
+            else if (instructions.length === 0) { error = '조리 순서를 한 줄에 한 단계씩 입력해 주세요.'; field = f.instructions; }
+            else if (videoUrl && !videoId) { error = '유튜브 영상 주소를 확인해 주세요. (예: https://youtu.be/...)'; field = f.video; }
+            if (error) {
+                customError.textContent = error;
+                field.setAttribute('aria-invalid', 'true');
+                field.focus();
+                return;
+            }
+            customForm.querySelectorAll('[aria-invalid]').forEach(el => el.removeAttribute('aria-invalid'));
+
+            const data = {
+                category: f.category.value,
+                title,
+                videoId,
+                time: Math.max(1, Number(f.time.value) || 10),
+                level: f.level.value,
+                tools: [...customForm.querySelectorAll('[name="tools"]:checked')].map(box => box.value),
+                ingredients,
+                instructions,
+                tip: f.tip.value.trim()
+            };
+            let recipe;
+            if (editingRecipe) {
+                if (editingRecipe.title !== title) renameRecipeRefs(editingRecipe.title, title);
+                recipe = Object.assign(editingRecipe, data);
+            } else {
+                recipe = { ...data, custom: true };
+                recipes.push(recipe);
+            }
+            saveCustomRecipes();
+            customDialog.close();
+            renderRecipes({ keepScroll: true });
+            renderRecent();
+            openDetail(recipe);
+            showToast(editingRecipe ? '레시피를 수정했어요' : '✍️ 내 레시피를 추가했어요');
+            editingRecipe = null;
+        });
+
+        function deleteCustomRecipe(recipe) {
+            if (!confirm(`'${recipe.title}' 레시피를 삭제할까요? 되돌릴 수 없어요.`)) return;
+            recipes.splice(recipes.indexOf(recipe), 1);
+            removeRecipeRefs(recipe.title);
+            saveCustomRecipes();
+            detailDialog.close();
+            updateFavoriteCount();
+            renderRecipes({ keepScroll: true });
+            renderRecent();
+            showToast('레시피를 삭제했어요');
+        }
+
+        document.getElementById('custom-open').addEventListener('click', () => openCustomForm());
 
         // ---------- 랜덤 추천 ----------
         function pickRandomRecipe() {
@@ -1775,6 +2482,15 @@
                 case 'timer':
                     startTimer(Number(btn.dataset.seconds), `${detailRecipe.title} ${btn.dataset.step}단계`);
                     break;
+                case 'clear-rating':
+                    setNote(detailRecipe, { rating: 0 });
+                    detailBody.querySelectorAll('input[name="rating"]').forEach(r => { r.checked = false; });
+                    updateStars(0);
+                    break;
+                case 'add-plan': addDetailToPlan(); break;
+                case 'new-custom': openCustomForm(); break;
+                case 'edit-custom': openCustomForm(detailRecipe); break;
+                case 'delete-custom': deleteCustomRecipe(detailRecipe); break;
                 case 'clear-recent':
                     recentTitles = [];
                     writeStore(RECENT_KEY, recentTitles);
@@ -1793,17 +2509,6 @@
         container.addEventListener('click', handleAction);
         detailBody.addEventListener('click', handleAction);
         document.getElementById('recent').addEventListener('click', handleAction);
-
-        // 창 바깥 어두운 영역을 누르면 닫기
-        [detailDialog, videoDialog, shoppingDialog].forEach(dialog => {
-            dialog.addEventListener('click', e => {
-                if (e.target === dialog) {
-                    const rect = dialog.getBoundingClientRect();
-                    const inside = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
-                    if (!inside) dialog.close();
-                }
-            });
-        });
 
         // 썸네일을 못 불러오면 깨진 이미지 아이콘 대신 회색 배경만 보여준다
         document.addEventListener('error', e => {
