@@ -292,6 +292,125 @@
             border: none;
         }
 
+        /* 검색창 */
+        .search-box {
+            position: relative;
+            max-width: 1200px;
+            margin: 16px auto 0 auto;
+            padding: 0 20px;
+        }
+        .search-icon {
+            position: absolute;
+            left: 36px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1rem;
+            pointer-events: none;
+        }
+        #search-input {
+            width: 100%;
+            padding: 14px 16px 14px 46px;
+            font: inherit;
+            font-size: 1rem; /* 16px 이상이어야 iOS가 입력할 때 화면을 확대하지 않는다 */
+            color: var(--text-dark);
+            background: var(--card-bg);
+            border: 2px solid #CBD5E1;
+            border-radius: 16px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+        #search-input::placeholder { color: #64748B; }
+        #search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.15);
+        }
+
+        .quick-tags {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 10px 20px 0 20px;
+            scrollbar-width: none;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .quick-tags::-webkit-scrollbar { display: none; }
+        .quick-label { font-size: 0.8rem; font-weight: 700; color: var(--text-gray); margin-right: 2px; }
+        .quick-tag {
+            padding: 6px 12px;
+            font: inherit;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            background: #FFF7ED;
+            border: 1px solid #FED7AA;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        .quick-tag:active { transform: scale(0.95); }
+
+        .fav-count {
+            display: inline-block;
+            min-width: 20px;
+            margin-left: 2px;
+            padding: 0 6px;
+            font-size: 0.75rem;
+            line-height: 20px;
+            text-align: center;
+            color: #FFFFFF;
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .result-status {
+            max-width: 1200px;
+            margin: 0 auto 12px auto;
+            padding: 0 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-gray);
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .fav-btn {
+            width: 44px; height: 44px; /* 손가락으로 누르기 충분한 크기 */
+            margin: -8px -8px -8px 0;
+            border: none;
+            background: none;
+            border-radius: 22px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .fav-icon { font-size: 1.5rem; line-height: 1; color: #64748B; }
+        .fav-btn[aria-pressed="true"] .fav-icon { color: var(--primary); }
+        .fav-btn:active { transform: scale(0.85); }
+
+        .empty-result {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+        .empty-emoji { font-size: 3rem; margin: 0; color: var(--primary); }
+        .clear-search-btn {
+            margin-top: 8px;
+            padding: 10px 20px;
+            font: inherit;
+            font-weight: 700;
+            color: #FFFFFF;
+            background: var(--text-dark);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
         /* 카드 상단 영상 썸네일 */
         .thumb-btn {
             position: relative;
@@ -379,8 +498,24 @@
         <h1>🍳 엽쌤의 혼밥 스쿨</h1>
     </header>
 
+    <form class="search-box" id="search-form" role="search">
+        <label for="search-input" class="sr-only">메뉴나 재료로 레시피 검색</label>
+        <span class="search-icon" aria-hidden="true">🔍</span>
+        <input type="search" id="search-input" placeholder="메뉴나 재료로 검색 (예: 계란 참치)" autocomplete="off" enterkeyhint="search">
+    </form>
+    <div class="quick-tags" aria-label="자주 찾는 재료">
+        <span class="quick-label">냉장고에 뭐 있어요?</span>
+        <button type="button" class="quick-tag" data-query="계란">🥚 계란</button>
+        <button type="button" class="quick-tag" data-query="참치">🐟 참치</button>
+        <button type="button" class="quick-tag" data-query="김치">🥬 김치</button>
+        <button type="button" class="quick-tag" data-query="두부">🧈 두부</button>
+        <button type="button" class="quick-tag" data-query="치즈">🧀 치즈</button>
+        <button type="button" class="quick-tag" data-query="전자레인지">⚡ 전자레인지</button>
+    </div>
+
     <nav class="category-nav" id="category-nav" aria-label="요리 종류">
         <button class="category-btn active" data-category="전체" aria-pressed="true">전체보기</button>
+        <button class="category-btn fav-tab" data-category="즐겨찾기" aria-pressed="false"><span aria-hidden="true">♥ </span>즐겨찾기 <span class="fav-count" id="fav-count">0</span></button>
         <button class="category-btn" data-category="한식" aria-pressed="false"><span aria-hidden="true">🇰🇷 </span>한식</button>
         <button class="category-btn" data-category="중식" aria-pressed="false"><span aria-hidden="true">🇨🇳 </span>중식</button>
         <button class="category-btn" data-category="일식" aria-pressed="false"><span aria-hidden="true">🇯🇵 </span>일식</button>
@@ -396,7 +531,9 @@
         <span class="random-icon" aria-hidden="true">🎲</span>
     </button>
 
-    <main id="recipe-container" aria-live="polite">
+    <p class="result-status" id="result-status" role="status"></p>
+
+    <main id="recipe-container">
         <!-- 레시피 카드가 삽입됩니다. -->
     </main>
 
@@ -541,6 +678,45 @@
         let currentCategory = '전체'; // 필터 상태 동기화용 변수
         let lastRandomTitle = ""; // 랜덤 뽑기 무한 루프 방지용 (이름으로 추적)
         let lastFocused = null; // 모달을 닫으면 포커스를 돌려줄 버튼
+        let searchQuery = ""; // 검색창에 입력한 메뉴·재료
+
+        const searchInput = document.getElementById('search-input');
+        const resultStatus = document.getElementById('result-status');
+
+        // 즐겨찾기는 레시피 제목으로 이 브라우저에 저장한다 (저장소를 못 쓰는 환경에서도 동작하도록 try/catch)
+        const FAVORITES_KEY = 'honbap-favorites';
+        let favorites = new Set();
+        try {
+            favorites = new Set(JSON.parse(localStorage.getItem(FAVORITES_KEY)) || []);
+        } catch (e) { /* 저장된 값이 없거나 읽을 수 없음 */ }
+
+        function saveFavorites() {
+            try {
+                localStorage.setItem(FAVORITES_KEY, JSON.stringify([...favorites]));
+            } catch (e) { /* 개인 정보 보호 모드 등에서는 이번 방문 동안만 유지 */ }
+        }
+
+        function toggleFavorite(recipe, btn) {
+            if (favorites.has(recipe.title)) {
+                favorites.delete(recipe.title);
+            } else {
+                favorites.add(recipe.title);
+            }
+            saveFavorites();
+            updateFavoriteCount();
+
+            if (currentCategory === '즐겨찾기') {
+                renderRecipes({ keepScroll: true });
+                return;
+            }
+            const isFav = favorites.has(recipe.title);
+            btn.setAttribute('aria-pressed', String(isFav));
+            btn.querySelector('.fav-icon').textContent = isFav ? '♥' : '♡';
+        }
+
+        function updateFavoriteCount() {
+            document.getElementById('fav-count').textContent = favorites.size;
+        }
 
         // 레시피 텍스트를 HTML에 넣기 전에 특수문자를 이스케이프
         function escapeHtml(text) {
@@ -607,10 +783,17 @@
                 ? `<button type="button" class="play-btn" data-index="${index}"><span class="play-icon" aria-hidden="true">▶️</span> 레시피 영상 바로보기</button>`
                 : `<button type="button" class="play-btn search" data-index="${index}"><span aria-hidden="true">🔍</span> 유튜브에서 영상 찾아보기<span class="sr-only">(새 탭)</span></button>`;
 
+            const isFav = favorites.has(recipe.title);
+
             card.innerHTML = `
                 ${thumbHtml}
                 <div class="card-header">
-                    <span class="category-badge">${escapeHtml(badgeText || recipe.category)}</span>
+                    <div class="card-meta">
+                        <span class="category-badge">${escapeHtml(badgeText || recipe.category)}</span>
+                        <button type="button" class="fav-btn" data-fav-index="${index}" aria-pressed="${isFav}" aria-label="${title} 즐겨찾기">
+                            <span class="fav-icon" aria-hidden="true">${isFav ? '♥' : '♡'}</span>
+                        </button>
+                    </div>
                     <h2 class="recipe-title">${title}</h2>
                 </div>
 
@@ -633,36 +816,78 @@
             return card;
         }
 
-        function getRecipesInCategory() {
-            return currentCategory === '전체' ? recipes : recipes.filter(r => r.category === currentCategory);
+        // 검색어를 띄어쓰기·쉼표로 나눠, 모든 단어가 메뉴 이름·재료·조리 순서에 들어 있는 레시피만 남긴다
+        function matchesSearch(recipe) {
+            const words = searchQuery.toLowerCase().split(/[\s,]+/).filter(Boolean);
+            if (words.length === 0) return true;
+            const haystack = [recipe.title, recipe.category, ...recipe.ingredients, ...recipe.instructions].join(' ').toLowerCase();
+            return words.every(word => haystack.includes(word));
+        }
+
+        // 현재 카테고리·즐겨찾기·검색어 조건에 맞는 레시피
+        function getVisibleRecipes() {
+            return recipes.filter(r => {
+                if (currentCategory === '즐겨찾기') {
+                    if (!favorites.has(r.title)) return false;
+                } else if (currentCategory !== '전체' && r.category !== currentCategory) {
+                    return false;
+                }
+                return matchesSearch(r);
+            });
+        }
+
+        function renderEmptyState() {
+            const empty = document.createElement('div');
+            empty.className = 'empty-result';
+            if (currentCategory === '즐겨찾기' && !searchQuery) {
+                empty.innerHTML = `<p class="empty-emoji" aria-hidden="true">♡</p>
+                    <p>아직 즐겨찾기한 레시피가 없어요.<br>마음에 드는 레시피의 하트를 눌러 모아보세요!</p>`;
+            } else {
+                empty.innerHTML = `<p class="empty-emoji" aria-hidden="true">🥲</p>
+                    <p><strong>'${escapeHtml(searchQuery)}'</strong>에 맞는 레시피가 없어요.<br>재료 이름을 짧게 바꿔 보거나 다른 카테고리에서 찾아보세요.</p>
+                    <button type="button" class="clear-search-btn" id="clear-search-btn">검색어 지우기</button>`;
+            }
+            container.appendChild(empty);
         }
 
         // 레시피 렌더링 함수
-        function renderRecipes(filterCategory) {
-            currentCategory = filterCategory; // 현재 상태 업데이트
+        function renderRecipes({ keepScroll = false } = {}) {
             container.innerHTML = "";
+            const visible = getVisibleRecipes();
 
-            const fragment = document.createDocumentFragment();
-            getRecipesInCategory().forEach(recipe => fragment.appendChild(createCard(recipe)));
+            if (visible.length === 0) {
+                renderEmptyState();
+            } else {
+                const fragment = document.createDocumentFragment();
+                visible.forEach(recipe => fragment.appendChild(createCard(recipe)));
+                container.appendChild(fragment);
+            }
 
-            container.appendChild(fragment);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            resultStatus.textContent = searchQuery
+                ? `'${searchQuery}' 검색 결과 ${visible.length}개`
+                : `레시피 ${visible.length}개`;
+            if (!keepScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // 카테고리 필터 클릭
         function filterRecipes(category) {
+            currentCategory = category; // 현재 상태 업데이트
             document.querySelectorAll('.category-btn').forEach(btn => {
                 const isActive = btn.dataset.category === category;
                 btn.classList.toggle('active', isActive);
                 btn.setAttribute('aria-pressed', String(isActive));
             });
-            renderRecipes(category);
+            renderRecipes();
         }
 
         // 상태 불일치 버그를 100% 차단한 무결점 랜덤 뽑기
         function pickRandomRecipe() {
-            // 현재 선택된 카테고리를 기준으로 타겟 배열 생성
-            const targetRecipes = getRecipesInCategory();
+            // 현재 카테고리·검색 조건을 기준으로 타겟 배열 생성
+            const targetRecipes = getVisibleRecipes();
+            if (targetRecipes.length === 0) {
+                renderRecipes();
+                return;
+            }
 
             let randomRecipe;
             // 배열 크기가 1보다 클 때만 중복 검사 (무한 루프 방지)
@@ -679,6 +904,7 @@
 
             container.innerHTML = "";
             container.appendChild(createCard(randomRecipe, '🎉 오늘의 추천 메뉴'));
+            resultStatus.textContent = `오늘의 추천 메뉴: ${randomRecipe.title}`;
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -689,8 +915,44 @@
         });
         document.getElementById('random-banner').addEventListener('click', pickRandomRecipe);
         container.addEventListener('click', e => {
+            const favBtn = e.target.closest('[data-fav-index]');
+            if (favBtn) {
+                toggleFavorite(recipes[Number(favBtn.dataset.favIndex)], favBtn);
+                return;
+            }
+            if (e.target.closest('#clear-search-btn')) {
+                searchInput.value = '';
+                searchQuery = '';
+                renderRecipes();
+                searchInput.focus();
+                return;
+            }
             const btn = e.target.closest('[data-index]');
             if (btn) playRecipe(recipes[Number(btn.dataset.index)], btn);
+        });
+
+        // 입력을 잠깐 멈추면 검색 (한 글자마다 100장을 다시 그리지 않도록)
+        let searchTimer;
+        searchInput.addEventListener('input', () => {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(() => {
+                searchQuery = searchInput.value.trim();
+                renderRecipes({ keepScroll: true });
+            }, 200);
+        });
+        document.getElementById('search-form').addEventListener('submit', e => {
+            e.preventDefault(); // 엔터를 눌러도 페이지가 새로고침되지 않게
+            clearTimeout(searchTimer);
+            searchQuery = searchInput.value.trim();
+            renderRecipes({ keepScroll: true });
+            searchInput.blur(); // 모바일에서 키보드를 닫아 결과가 보이게
+        });
+        document.querySelectorAll('.quick-tag').forEach(tag => {
+            tag.addEventListener('click', () => {
+                searchInput.value = tag.dataset.query;
+                searchQuery = tag.dataset.query;
+                renderRecipes({ keepScroll: true });
+            });
         });
         // 썸네일을 못 불러오면 깨진 이미지 아이콘 대신 회색 배경만 보여준다
         container.addEventListener('error', e => {
@@ -720,6 +982,7 @@
         });
 
         // 초기 화면 설정
+        updateFavoriteCount();
         filterRecipes('전체');
 
     </script>
