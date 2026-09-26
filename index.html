@@ -243,13 +243,7 @@
         // 100개의 요리 레시피 데이터 모음
         const recipes = [
             // ==================== [ 한식 20선 ] ====================
-            { 
-                category: "한식", title: "참치 김치찌개", 
-                ytChef: "J8m36a_iS3o",   // ← 실제 원하는 유튜브 영상 ID(v= 뒷부분)를 여기에 넣으세요!
-                ytShorts: "k-O3K02XnJc", // ← 1분 쇼츠 영상 ID를 여기에 넣으세요!
-                ytLatest: "jR2l9B7c1zM", // ← 최신 영상 ID를 여기에 넣으세요!
-                ingredients: ["참치 1캔", "신김치 1컵", "양파 1/2개", "대파 1/3대", "다진마늘 1스푼"], instructions: ["냄비에 참치기름을 두르고 신김치를 볶습니다.", "김치가 투명해지면 양파를 넣고 볶다가 물을 붓습니다.", "끓어오르면 참치 살과 대파, 마늘을 넣고 5분 더 끓입니다."], tip: "참치기름으로 김치를 볶아야 국물 맛이 훨씬 깊어집니다." 
-            },
+            { category: "한식", title: "참치 김치찌개", ingredients: ["참치 1캔", "신김치 1컵", "양파 1/2개", "대파 1/3대", "다진마늘 1스푼"], instructions: ["냄비에 참치기름을 두르고 신김치를 볶습니다.", "김치가 투명해지면 양파를 넣고 볶다가 물을 붓습니다.", "끓어오르면 참치 살과 대파, 마늘을 넣고 5분 더 끓입니다."], tip: "참치기름으로 김치를 볶아야 국물 맛이 훨씬 깊어집니다." },
             { category: "한식", title: "전자레인지 폭탄 계란찜", ingredients: ["계란 3개", "물 1/2컵", "소금 1/3스푼", "참기름 약간", "대파 약간"], instructions: ["전자레인지용 그릇에 계란을 풀고 물과 소금을 섞습니다.", "랩을 씌우고 포크로 구멍을 3~4개 뚫어줍니다.", "전자레인지에 3~4분 돌린 후 참기름과 대파를 올립니다."], tip: "물을 멸치육수나 우유로 바꾸면 훨씬 부드럽고 감칠맛이 납니다." },
             { category: "한식", title: "대패삼겹살 숙주볶음", ingredients: ["대패삼겹살 200g", "숙주 1줌", "굴소스 1스푼", "간장 1스푼", "다진마늘 1스푼"], instructions: ["마른 팬에 대패삼겹살과 다진마늘을 넣고 노릇하게 굽습니다.", "고기 기름이 나오면 간장과 굴소스를 넣고 섞습니다.", "불을 끄기 직전 숙주를 넣고 30초만 빠르게 볶아냅니다."], tip: "숙주는 숨이 너무 죽지 않게 마지막에 센 불로 휘리릭 볶는 것이 생명입니다." },
             { category: "한식", title: "고추장 참치 비빔밥", ingredients: ["밥 1공기", "참치 1/2캔", "상추 3장", "계란 1개", "고추장 1스푼", "참기름"], instructions: ["상추를 먹기 좋은 크기로 찢어 밥 위에 올립니다.", "기름을 뺀 참치와 반숙 계란프라이를 얹습니다.", "고추장과 참기름을 통깨와 함께 넣고 비벼줍니다."], tip: "조미김을 부숴 넣으면 맛이 2배로 업그레이드됩니다." },
@@ -360,7 +354,13 @@
         ];
 
         const container = document.getElementById('recipe-container');
-        let lastRandomIndex = -1; // 랜덤 뽑기 중복 당첨 방지 변수
+        let lastRandomIndex = -1; // 랜덤 뽑기 중복 당첨 방지
+
+        // ★ 핵심: 검색창 건너뛰고 첫 번째 유튜브 영상으로 즉시 강제 이동시키는 마법의 URL 생성기 ★
+        const createDirectVideoLink = (keyword) => {
+            // 인터넷 검색엔진의 "I'm Feeling Lucky(!ducky)" 문법을 활용하여 유튜브 도메인 내 첫 검색결과 영상으로 우회 즉시 이동시킵니다.
+            return `https://duckduckgo.com/?q=${encodeURIComponent('!ducky site:youtube.com ' + keyword)}`;
+        };
 
         // 레시피 카드 렌더링 함수
         function renderRecipes(filterCategory) {
@@ -380,18 +380,16 @@
                 const ingredientsHtml = recipe.ingredients.map(ing => `<li>${ing}</li>`).join('');
                 const instructionsHtml = recipe.instructions.map(inst => `<li>${inst}</li>`).join('');
 
-                // ★ 유튜브 직접 재생 백업 로직 ★
-                // 데이터에 유튜브 아이디가 없으면 무조건 '백종원 볶음밥(J8m36a_iS3o)' 등 에러가 나지 않는 정상 영상으로 연결시킴. 
-                const ytChef = recipe.ytChef || "J8m36a_iS3o"; 
-                const ytShorts = recipe.ytShorts || "k-O3K02XnJc"; 
-                const ytLatest = recipe.ytLatest || "jR2l9B7c1zM"; 
+                // 요리 이름으로 가장 적합한 검색어 3가지 구성
+                const kwChef = `백종원 ${recipe.title}`;
+                const kwShorts = `1분요리 쇼츠 ${recipe.title}`;
+                const kwLatest = `${recipe.title} 레시피`;
 
-                // 타겟 _blank 를 통해 모바일에서 유튜브 앱 또는 새 탭으로 바로 영상 오픈
                 card.innerHTML = `
                     <div class="yt-links-container">
-                        <a href="https://www.youtube.com/watch?v=${ytChef}" target="_blank" class="yt-link-btn" aria-label="👨‍🍳 유명 셰프 레시피 바로보기">👨‍🍳 유명 셰프 레시피 바로보기</a>
-                        <a href="https://www.youtube.com/watch?v=${ytShorts}" target="_blank" class="yt-link-btn" aria-label="⏱️ 1분 요리 쇼츠 바로보기">⏱️ 1분 요리 쇼츠 바로보기</a>
-                        <a href="https://www.youtube.com/watch?v=${ytLatest}" target="_blank" class="yt-link-btn" aria-label="✨ 가장 최신 영상 바로보기">✨ 가장 최신 영상 바로보기</a>
+                        <a href="${createDirectVideoLink(kwChef)}" target="_blank" class="yt-link-btn" aria-label="👨‍🍳 유명 셰프 레시피 다이렉트 재생">👨‍🍳 유명 셰프 레시피 다이렉트 재생</a>
+                        <a href="${createDirectVideoLink(kwShorts)}" target="_blank" class="yt-link-btn" aria-label="⏱️ 1분 요리 쇼츠 다이렉트 재생">⏱️ 1분 요리 쇼츠 다이렉트 재생</a>
+                        <a href="${createDirectVideoLink(kwLatest)}" target="_blank" class="yt-link-btn" aria-label="✨ 인기 레시피 다이렉트 재생">✨ 인기 레시피 다이렉트 재생</a>
                     </div>
                     <div class="card-content">
                         <span class="category-badge">${recipe.category}</span>
@@ -451,16 +449,15 @@
             const ingredientsHtml = randomRecipe.ingredients.map(ing => `<li>${ing}</li>`).join('');
             const instructionsHtml = randomRecipe.instructions.map(inst => `<li>${inst}</li>`).join('');
 
-            // 랜덤 뽑기에서도 정상 재생되는 다이렉트 링크 백업 적용
-            const ytChef = randomRecipe.ytChef || "J8m36a_iS3o"; 
-            const ytShorts = randomRecipe.ytShorts || "k-O3K02XnJc"; 
-            const ytLatest = randomRecipe.ytLatest || "jR2l9B7c1zM"; 
+            const kwChef = `백종원 ${randomRecipe.title}`;
+            const kwShorts = `1분요리 쇼츠 ${randomRecipe.title}`;
+            const kwLatest = `${randomRecipe.title} 레시피`;
 
             card.innerHTML = `
                 <div class="yt-links-container">
-                    <a href="https://www.youtube.com/watch?v=${ytChef}" target="_blank" class="yt-link-btn" aria-label="👨‍🍳 유명 셰프 레시피 바로보기">👨‍🍳 유명 셰프 레시피 바로보기</a>
-                    <a href="https://www.youtube.com/watch?v=${ytShorts}" target="_blank" class="yt-link-btn" aria-label="⏱️ 1분 요리 쇼츠 바로보기">⏱️ 1분 요리 쇼츠 바로보기</a>
-                    <a href="https://www.youtube.com/watch?v=${ytLatest}" target="_blank" class="yt-link-btn" aria-label="✨ 가장 최신 영상 바로보기">✨ 가장 최신 영상 바로보기</a>
+                    <a href="${createDirectVideoLink(kwChef)}" target="_blank" class="yt-link-btn" aria-label="👨‍🍳 유명 셰프 레시피 다이렉트 재생">👨‍🍳 유명 셰프 레시피 다이렉트 재생</a>
+                    <a href="${createDirectVideoLink(kwShorts)}" target="_blank" class="yt-link-btn" aria-label="⏱️ 1분 요리 쇼츠 다이렉트 재생">⏱️ 1분 요리 쇼츠 다이렉트 재생</a>
+                    <a href="${createDirectVideoLink(kwLatest)}" target="_blank" class="yt-link-btn" aria-label="✨ 인기 레시피 다이렉트 재생">✨ 인기 레시피 다이렉트 재생</a>
                 </div>
                 <div class="card-content">
                     <span class="category-badge">${randomRecipe.category}</span>
