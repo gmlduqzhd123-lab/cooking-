@@ -3,107 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>엽쌤의 자취방 요리 비책</title>
+    <title>엽쌤의 혼밥 스쿨</title>
+    <!-- 최고급 모던 폰트 Pretendard 로드 -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <style>
-        /* 기본 모바일 최적화 및 폰트 설정 */
+        /* 트렌디한 컬러 팔레트 & 변수 설정 */
         :root {
-            --primary-color: #ff6b6b;
-            --bg-color: #f4f6f8;
-            --card-bg: #ffffff;
-            --text-main: #333333;
-            --text-sub: #666666;
-            --yt-color: #ff0000;
+            --primary: #FF5E62;
+            --primary-gradient: linear-gradient(135deg, #FF5E62 0%, #FF9966 100%);
+            --bg-color: #F8FAFC; /* 아주 미세한 블루톤이 도는 세련된 화이트 */
+            --card-bg: #FFFFFF;
+            --text-dark: #0F172A;
+            --text-gray: #64748B;
+            --tag-bg: #F1F5F9;
+            --yt-light: #FEF2F2;
+            --yt-dark: #EF4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: 'Pretendard', -apple-system, sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-main);
+            color: var(--text-dark);
             word-break: keep-all;
             overflow-wrap: break-word; 
             overscroll-behavior-y: none;
+            padding-bottom: 40px;
         }
 
+        /* 글래스모피즘(Glassmorphism) 헤더 */
         header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 1rem;
-            text-align: center;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 16px 20px;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         header h1 {
             margin: 0;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        /* 카테고리 네비게이션 */
+        /* 플루언트 디자인 네비게이션 탭 */
         .category-nav {
             display: flex;
             overflow-x: auto;
             white-space: nowrap;
-            padding: 12px 10px;
-            background: white;
-            border-bottom: 1px solid #ddd;
-            gap: 10px;
+            padding: 12px 20px;
+            gap: 8px;
             -ms-overflow-style: none;
             scrollbar-width: none;
             -webkit-overflow-scrolling: touch; 
         }
-        .category-nav::-webkit-scrollbar {
-            display: none;
-        }
+        .category-nav::-webkit-scrollbar { display: none; }
 
         .category-btn {
-            padding: 8px 16px;
-            border: 1px solid var(--primary-color);
-            background: white;
-            color: var(--primary-color);
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
+            padding: 8px 18px;
+            background: var(--card-bg);
+            border: 1px solid #E2E8F0;
+            color: var(--text-gray);
+            border-radius: 30px;
             font-size: 0.95rem;
-            transition: background-color 0.2s, color 0.2s;
-            touch-action: manipulation;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
         .category-btn.active {
-            background: var(--primary-color);
+            background: var(--text-dark);
+            border-color: var(--text-dark);
             color: white;
+            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.2);
         }
 
-        .random-btn-container {
-            padding: 15px;
-            text-align: center;
-        }
-
-        .random-btn {
-            background-color: #4ecdc4;
+        /* 랜덤 뽑기 배너 디자인 */
+        .random-banner {
+            margin: 10px 20px 20px 20px;
+            background: var(--primary-gradient);
+            border-radius: 20px;
+            padding: 18px 20px;
             color: white;
-            border: none;
-            padding: 14px 24px;
-            border-radius: 25px;
-            font-size: 1.1rem;
-            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
-            width: 90%;
-            max-width: 400px;
-            transition: transform 0.1s;
-            touch-action: manipulation;
+            box-shadow: 0 10px 20px rgba(255, 94, 98, 0.2);
+            transition: transform 0.2s;
         }
-        .random-btn:active {
-            transform: scale(0.97);
-        }
+        .random-banner:active { transform: scale(0.97); }
+        .random-info h3 { margin: 0; font-size: 1.1rem; font-weight: 800; }
+        .random-info p { margin: 4px 0 0 0; font-size: 0.85rem; opacity: 0.9; font-weight: 500;}
+        .random-icon { font-size: 2rem; }
 
         /* 레시피 카드 컨테이너 */
         #recipe-container {
-            padding: 10px 15px 30px 15px;
+            padding: 0 20px;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
@@ -111,136 +124,146 @@
             margin: 0 auto;
         }
 
-        /* 레시피 카드 디자인 */
+        /* 모던 스타일 레시피 카드 */
         .recipe-card {
             background: var(--card-bg);
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-            margin: 5px; 
-        }
-
-        /* 유튜브 추천 영상 바로가기 버튼 영역 */
-        .yt-links-container {
+            border-radius: 24px;
+            padding: 20px;
+            box-shadow: 0 12px 24px rgba(148, 163, 184, 0.08);
+            border: 1px solid rgba(255,255,255,0.5);
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            padding: 18px 15px 0 15px;
-            background-color: #fff;
+            gap: 16px;
         }
 
-        .yt-link-btn {
+        /* 카드 헤더 (카테고리 + 제목) */
+        .card-header {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: var(--yt-color);
-            color: white;
-            text-decoration: none;
-            padding: 12px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 0.95rem;
-            text-align: center;
-            transition: background-color 0.2s, transform 0.1s;
-            box-shadow: 0 2px 4px rgba(255,0,0,0.2);
-            word-break: keep-all;
+            flex-direction: column;
+            gap: 6px;
         }
-
-        .yt-link-btn:active {
-            transform: scale(0.98);
-            background-color: #cc0000;
-        }
-
-        .card-content {
-            padding: 15px;
-        }
-
         .category-badge {
-            display: inline-block;
-            background: #ffeaa7;
-            color: #d35400;
+            align-self: flex-start;
+            background: #FFF1F2;
+            color: var(--primary);
             padding: 4px 10px;
             border-radius: 12px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 800;
-            margin-bottom: 8px;
         }
-
         .recipe-title {
-            margin: 0 0 12px 0;
-            font-size: 1.25rem;
-            line-height: 1.4;
-            font-weight: 800;
-            word-break: keep-all;
-        }
-
-        .section-title {
-            font-size: 1rem;
-            color: var(--primary-color);
-            margin: 18px 0 8px 0;
-            font-weight: bold;
-        }
-
-        ul, ol {
             margin: 0;
-            padding-left: 22px;
-            color: var(--text-sub);
-            font-size: 0.95rem;
+            font-size: 1.3rem;
+            font-weight: 800;
+            line-height: 1.35;
+            color: var(--text-dark);
+        }
+
+        /* 해시태그 칩 UI (재료) - 세로 공간 혁신적 단축 */
+        .ingredients-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .tag {
+            background: var(--tag-bg);
+            color: var(--text-gray);
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .tag::before { content: '#'; opacity: 0.5; margin-right: 2px; }
+
+        /* 조리법 박스 UI */
+        .instructions-box {
+            background: #F8FAFC;
+            border-radius: 16px;
+            padding: 16px;
+            margin: 0;
+        }
+        .instructions-box ol {
+            margin: 0;
+            padding-left: 18px;
+            color: #334155;
+            font-size: 0.9rem;
             line-height: 1.6;
+            font-weight: 500;
         }
-        
-        li {
-            margin-bottom: 4px;
-        }
+        .instructions-box li { margin-bottom: 6px; }
+        .instructions-box li::marker { font-weight: 800; color: var(--primary); }
 
+        /* 꿀팁 박스 */
         .tip-box {
-            background: #f0f8ff;
-            border-left: 4px solid #74b9ff;
-            padding: 12px;
-            margin-top: 18px;
-            font-size: 0.9rem;
-            border-radius: 0 8px 8px 0;
-            line-height: 1.5;
+            font-size: 0.85rem;
+            color: #D97706;
+            background: #FEF3C7;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-weight: 600;
         }
 
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: #999;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
+        /* 유튜브 버튼 그룹 - 하단 독(Dock) 스타일 */
+        .yt-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: auto; /* 카드가 길어져도 항상 맨 아래에 고정 */
         }
+        .yt-btn {
+            background: var(--yt-light);
+            color: var(--yt-dark);
+            text-decoration: none;
+            padding: 12px 4px;
+            border-radius: 14px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .yt-btn span { font-size: 1.2rem; } /* 이모지 크기 */
+        .yt-btn:active {
+            background: var(--yt-dark);
+            color: white;
+            transform: scale(0.95);
+        }
+
     </style>
 </head>
 <body>
 
     <header>
-        <h1>자취방 요리 비책 🍳</h1>
+        <h1>🍳 엽쌤의 혼밥 스쿨</h1>
     </header>
 
-    <nav class="category-nav" id="category-nav" aria-label="카테고리 선택">
-        <button class="category-btn active" data-category="전체" onclick="filterRecipes('전체')">전체</button>
-        <button class="category-btn" data-category="한식" onclick="filterRecipes('한식')">한식</button>
-        <button class="category-btn" data-category="중식" onclick="filterRecipes('중식')">중식</button>
-        <button class="category-btn" data-category="일식" onclick="filterRecipes('일식')">일식</button>
-        <button class="category-btn" data-category="분식" onclick="filterRecipes('분식')">분식</button>
-        <button class="category-btn" data-category="기타" onclick="filterRecipes('기타')">기타</button>
+    <nav class="category-nav" id="category-nav">
+        <button class="category-btn active" data-category="전체" onclick="filterRecipes('전체')">전체보기</button>
+        <button class="category-btn" data-category="한식" onclick="filterRecipes('한식')">🇰🇷 한식</button>
+        <button class="category-btn" data-category="중식" onclick="filterRecipes('중식')">🇨🇳 중식</button>
+        <button class="category-btn" data-category="일식" onclick="filterRecipes('일식')">🇯🇵 일식</button>
+        <button class="category-btn" data-category="분식" onclick="filterRecipes('분식')">🥘 분식</button>
+        <button class="category-btn" data-category="기타" onclick="filterRecipes('기타')">🍝 양식·기타</button>
     </nav>
 
-    <div class="random-btn-container">
-        <button class="random-btn" onclick="pickRandomRecipe()" aria-label="랜덤 메뉴 추천받기">🎲 오늘 뭐 먹지? (랜덤 뽑기)</button>
+    <!-- 트렌디한 배너형 랜덤 버튼 -->
+    <div class="random-banner" onclick="pickRandomRecipe()">
+        <div class="random-info">
+            <h3>오늘 뭐 먹을지 고민이라면?</h3>
+            <p>버튼을 눌러 메뉴를 추천받아보세요!</p>
+        </div>
+        <div class="random-icon">🎲</div>
     </div>
 
-    <main id="recipe-container" aria-live="polite">
+    <main id="recipe-container">
         <!-- 레시피 카드가 자바스크립트를 통해 동적으로 삽입됩니다. -->
     </main>
 
-    <footer>
-        Made by. 엽쌤
-    </footer>
-
     <script>
-        // 100개의 요리 레시피 데이터
+        // 100개의 요리 레시피 데이터 모음
         const recipes = [
             // ==================== [ 한식 20선 ] ====================
             { category: "한식", title: "참치 김치찌개", ingredients: ["참치 1캔", "신김치 1컵", "양파 1/2개", "대파 1/3대", "다진마늘 1스푼"], instructions: ["냄비에 참치기름을 두르고 신김치를 볶습니다.", "김치가 투명해지면 양파를 넣고 볶다가 물을 붓습니다.", "끓어오르면 참치 살과 대파, 마늘을 넣고 5분 더 끓입니다."], tip: "참치기름으로 김치를 볶아야 국물 맛이 훨씬 깊어집니다." },
@@ -354,15 +377,12 @@
         ];
 
         const container = document.getElementById('recipe-container');
-        let lastRandomIndex = -1; // 랜덤 뽑기 중복 당첨 방지
+        let lastRandomIndex = -1;
 
-        // 유튜브 모바일 최적화 검색 결과창 링크 생성
+        // 유튜브 검색 결과창 라우팅 (검색 결과로 안전하게 연결)
         const createYoutubeSearchLink = (keyword, isLatest = false) => {
             let baseUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(keyword)}`;
-            // 3번째 버튼(최신)에만 '업로드 날짜순' 파라미터 강제 추가
-            if (isLatest) {
-                baseUrl += `&sp=CAI%253D`;
-            }
+            if (isLatest) baseUrl += `&sp=CAI%253D`;
             return baseUrl;
         };
 
@@ -381,35 +401,47 @@
                 const card = document.createElement('article');
                 card.className = 'recipe-card';
                 
-                const ingredientsHtml = recipe.ingredients.map(ing => `<li>${ing}</li>`).join('');
+                // 1. 해시태그 칩으로 변경된 준비물
+                const ingredientsHtml = recipe.ingredients.map(ing => `<span class="tag">${ing}</span>`).join('');
+                
+                // 2. 심플해진 조리법
                 const instructionsHtml = recipe.instructions.map(inst => `<li>${inst}</li>`).join('');
 
-                // 오류 없는 가장 완벽한 유튜브 검색 결과창 라우팅 적용
+                // 3. 유튜브 키워드 설정
                 const kwChef = `백종원 ${recipe.title}`;
                 const kwShorts = `1분요리 쇼츠 ${recipe.title}`;
                 const kwLatest = `${recipe.title} 레시피`;
 
                 card.innerHTML = `
-                    <div class="yt-links-container">
-                        <a href="${createYoutubeSearchLink(kwChef)}" target="_blank" class="yt-link-btn" aria-label="👨‍🍳 유명 셰프 레시피 검색">👨‍🍳 유명 셰프 레시피 검색</a>
-                        <a href="${createYoutubeSearchLink(kwShorts)}" target="_blank" class="yt-link-btn" aria-label="⏱️ 1분 요리 쇼츠 보기">⏱️ 1분 요리 쇼츠 보기</a>
-                        <a href="${createYoutubeSearchLink(kwLatest, true)}" target="_blank" class="yt-link-btn" aria-label="✨ 가장 최신 영상 보기">✨ 가장 최신 영상 보기</a>
-                    </div>
-                    <div class="card-content">
+                    <div class="card-header">
                         <span class="category-badge">${recipe.category}</span>
                         <h2 class="recipe-title">${recipe.title}</h2>
-                        
-                        <div class="section-title">🛒 준비물</div>
-                        <ul>${ingredientsHtml}</ul>
-                        
-                        <div class="section-title">🍳 만드는 법</div>
+                    </div>
+                    
+                    <div class="ingredients-tags">
+                        ${ingredientsHtml}
+                    </div>
+                    
+                    <div class="instructions-box">
                         <ol>${instructionsHtml}</ol>
-                        
-                        ${recipe.tip ? `
-                        <div class="tip-box">
-                            💡 <strong>꿀팁:</strong> ${recipe.tip}
-                        </div>
-                        ` : ''}
+                    </div>
+                    
+                    ${recipe.tip ? `
+                    <div class="tip-box">
+                        💡 <strong>엽쌤의 꿀팁!</strong><br>${recipe.tip}
+                    </div>
+                    ` : ''}
+
+                    <div class="yt-grid">
+                        <a href="${createYoutubeSearchLink(kwChef)}" target="_blank" class="yt-btn">
+                            <span>👨‍🍳</span> 유명 셰프
+                        </a>
+                        <a href="${createYoutubeSearchLink(kwShorts)}" target="_blank" class="yt-btn">
+                            <span>⏱️</span> 1분 쇼츠
+                        </a>
+                        <a href="${createYoutubeSearchLink(kwLatest, true)}" target="_blank" class="yt-btn">
+                            <span>✨</span> 최신 영상
+                        </a>
                     </div>
                 `;
                 fragment.appendChild(card);
@@ -419,7 +451,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 카테고리 필터 변경 함수
+        // 카테고리 탭 클릭 이벤트
         function filterRecipes(category) {
             const btns = document.querySelectorAll('.category-btn');
             btns.forEach(btn => {
@@ -432,7 +464,7 @@
             renderRecipes(category);
         }
 
-        // 랜덤 레시피 뽑기
+        // 랜덤 뽑기 기능
         function pickRandomRecipe() {
             const btns = document.querySelectorAll('.category-btn');
             btns.forEach(btn => btn.classList.remove('active'));
@@ -450,7 +482,7 @@
             const card = document.createElement('article');
             card.className = 'recipe-card';
             
-            const ingredientsHtml = randomRecipe.ingredients.map(ing => `<li>${ing}</li>`).join('');
+            const ingredientsHtml = randomRecipe.ingredients.map(ing => `<span class="tag">${ing}</span>`).join('');
             const instructionsHtml = randomRecipe.instructions.map(inst => `<li>${inst}</li>`).join('');
 
             const kwChef = `백종원 ${randomRecipe.title}`;
@@ -458,33 +490,42 @@
             const kwLatest = `${randomRecipe.title} 레시피`;
 
             card.innerHTML = `
-                <div class="yt-links-container">
-                    <a href="${createYoutubeSearchLink(kwChef)}" target="_blank" class="yt-link-btn" aria-label="👨‍🍳 유명 셰프 레시피 검색">👨‍🍳 유명 셰프 레시피 검색</a>
-                    <a href="${createYoutubeSearchLink(kwShorts)}" target="_blank" class="yt-link-btn" aria-label="⏱️ 1분 요리 쇼츠 보기">⏱️ 1분 요리 쇼츠 보기</a>
-                    <a href="${createYoutubeSearchLink(kwLatest, true)}" target="_blank" class="yt-link-btn" aria-label="✨ 가장 최신 영상 보기">✨ 가장 최신 영상 보기</a>
+                <div class="card-header">
+                    <span class="category-badge">🎉 오늘의 추천 메뉴</span>
+                    <h2 class="recipe-title">${randomRecipe.title}</h2>
                 </div>
-                <div class="card-content">
-                    <span class="category-badge">${randomRecipe.category}</span>
-                    <h2 class="recipe-title">오늘의 당첨 메뉴: ${randomRecipe.title}! 🎉</h2>
-                    
-                    <div class="section-title">🛒 준비물</div>
-                    <ul>${ingredientsHtml}</ul>
-                    
-                    <div class="section-title">🍳 만드는 법</div>
+                
+                <div class="ingredients-tags">
+                    ${ingredientsHtml}
+                </div>
+                
+                <div class="instructions-box">
                     <ol>${instructionsHtml}</ol>
-                    
-                    ${randomRecipe.tip ? `
-                    <div class="tip-box">
-                        💡 <strong>꿀팁:</strong> ${randomRecipe.tip}
-                    </div>
-                    ` : ''}
+                </div>
+                
+                ${randomRecipe.tip ? `
+                <div class="tip-box">
+                    💡 <strong>엽쌤의 꿀팁!</strong><br>${randomRecipe.tip}
+                </div>
+                ` : ''}
+
+                <div class="yt-grid">
+                    <a href="${createYoutubeSearchLink(kwChef)}" target="_blank" class="yt-btn">
+                        <span>👨‍🍳</span> 유명 셰프
+                    </a>
+                    <a href="${createYoutubeSearchLink(kwShorts)}" target="_blank" class="yt-btn">
+                        <span>⏱️</span> 1분 쇼츠
+                    </a>
+                    <a href="${createYoutubeSearchLink(kwLatest, true)}" target="_blank" class="yt-btn">
+                        <span>✨</span> 최신 영상
+                    </a>
                 </div>
             `;
             container.appendChild(card);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 앱 처음 켤 때 전체 레시피 렌더링
+        // 페이지 로드 시 초기화
         window.onload = () => filterRecipes('전체');
 
     </script>
