@@ -162,7 +162,9 @@
             background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .header-actions { display: flex; gap: 6px; flex-shrink: 0; }
+        .header-actions { display: flex; flex-shrink: 0; gap: 6px; }
+        header h1 { min-width: 0; }
+        @media (max-width: 380px) { header h1 { font-size: 1.1rem; } }
         .icon-btn {
             min-width: 44px; height: 44px;
             padding: 0 10px;
@@ -175,6 +177,8 @@
             cursor: pointer;
             display: inline-flex; align-items: center; justify-content: center; gap: 4px;
         }
+        #shopping-btn { position: relative; }
+        #shopping-count { position: absolute; top: -4px; right: -4px; margin: 0; }
         .icon-btn[aria-pressed="true"] { background: var(--inverse-bg); color: var(--inverse-text); border-color: var(--inverse-bg); }
         .install-btn { font-size: 0.85rem; }
         .install-btn[hidden] { display: none; }
@@ -276,6 +280,7 @@
             background: var(--fill);
             border-radius: 10px;
         }
+        .fav-count[hidden] { display: none; }
 
         .filter-chips {
             display: flex;
@@ -617,6 +622,128 @@
         .video-footer { display: flex; justify-content: flex-end; padding: 10px 16px; background: #1A1A1A; }
         .yt-link { color: #F1F5F9; font-size: 0.85rem; font-weight: 600; text-underline-offset: 3px; }
 
+        /* 최근 본 레시피 */
+        .recent { max-width: 1200px; margin: 0 auto 16px auto; padding: 0 20px; }
+        .recent[hidden] { display: none; }
+        .recent-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .recent-title { margin: 0; font-size: 1rem; font-weight: 800; }
+        .recent-list { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+        .recent-list::-webkit-scrollbar { display: none; }
+        .recent-chip {
+            flex-shrink: 0;
+            display: flex; align-items: center; gap: 8px;
+            padding: 6px 12px 6px 6px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .recent-chip img, .recent-chip .recent-emoji {
+            width: 48px; height: 36px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: var(--thumb-bg);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .text-btn {
+            min-height: 44px;
+            padding: 0 8px;
+            border: none;
+            background: none;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            cursor: pointer;
+        }
+
+        /* 인분 조절 */
+        .servings { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+        .servings-label { font-size: 0.9rem; font-weight: 700; color: var(--text-muted); }
+        .step-btn {
+            width: 44px; height: 44px;
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            background: var(--surface-2);
+            color: var(--text);
+            font-size: 1.2rem;
+            font-weight: 800;
+            cursor: pointer;
+        }
+        .step-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .servings-value { min-width: 56px; text-align: center; font-size: 1.05rem; font-weight: 800; }
+        .servings-note { margin: 8px 0 0 0; font-size: 0.85rem; font-weight: 600; color: var(--tip-text); }
+        .servings-note[hidden] { display: none; }
+        .cart-btn { margin-top: 10px; width: 100%; }
+
+        /* 조리 단계 옆 타이머 버튼 */
+        .step-row { display: flex; flex-direction: column; gap: 6px; }
+        .step-timers { display: flex; flex-wrap: wrap; gap: 6px; padding-left: 12px; }
+        .step-timer-btn {
+            min-height: 36px;
+            padding: 4px 12px;
+            border: 1.5px solid var(--accent);
+            border-radius: 18px;
+            background: var(--surface);
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        /* 화면 아래 고정 타이머 */
+        .timer-bar {
+            position: fixed;
+            left: 50%;
+            bottom: 16px;
+            z-index: 11;
+            transform: translateX(-50%);
+            width: calc(100% - 32px);
+            max-width: 480px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px 10px 16px;
+            border-radius: 18px;
+            background: var(--inverse-bg);
+            color: var(--inverse-text);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .timer-bar[hidden] { display: none; }
+        .timer-bar.done { background: var(--fill); color: #FFFFFF; animation: timer-pulse 1s ease-in-out infinite; }
+        /* 크기를 바꾸면 버튼 누르기가 어려우므로 바깥 빛만 깜빡인다 */
+        @keyframes timer-pulse { 50% { box-shadow: 0 0 0 8px rgba(225, 29, 72, 0.35), 0 10px 30px rgba(0, 0, 0, 0.3); } }
+        .timer-icon { font-size: 1.5rem; }
+        .timer-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+        .timer-time { font-size: 1.4rem; font-variant-numeric: tabular-nums; }
+        .timer-label { font-size: 0.8rem; opacity: 0.9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .timer-btn {
+            min-height: 44px;
+            padding: 0 12px;
+            border: 1px solid currentColor;
+            border-radius: 12px;
+            background: transparent;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .timer-btn[hidden] { display: none; }
+        :root.timer-running .toast { bottom: 100px; }
+        :root.timer-running body { padding-bottom: 110px; }
+
+        /* 장보기 목록 */
+        .sheet-title { margin: 0 auto 0 8px; align-self: center; font-size: 1.1rem; font-weight: 800; }
+        .shopping-body { padding: 16px 20px 28px 20px; display: flex; flex-direction: column; gap: 18px; }
+        .shopping-group h3 { margin: 0 0 8px 0; font-size: 0.95rem; font-weight: 800; color: var(--text-muted); }
+        .shopping-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+        .shopping-list .check-item { width: 100%; }
+        .shopping-empty { text-align: center; color: var(--text-muted); line-height: 1.6; padding: 24px 0; }
+        .shopping-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .shopping-actions .primary-btn { grid-column: 1 / -1; }
+
         /* 공유·복사 결과 안내 */
         .toast {
             position: fixed;
@@ -669,6 +796,7 @@
         <h1>🍳 엽쌤의 혼밥 스쿨</h1>
         <div class="header-actions">
             <button type="button" class="icon-btn install-btn" id="install-btn" hidden>📲 앱 설치</button>
+            <button type="button" class="icon-btn" id="shopping-btn" aria-label="장보기 목록"><span aria-hidden="true">🛒</span><span class="fav-count" id="shopping-count" aria-hidden="true" hidden>0</span></button>
             <button type="button" class="icon-btn" id="text-size-btn" aria-pressed="false" aria-label="큰 글씨">가<span aria-hidden="true">+</span></button>
             <button type="button" class="icon-btn" id="theme-btn" aria-pressed="false" aria-label="다크 모드"><span aria-hidden="true" id="theme-icon">🌙</span></button>
         </div>
@@ -712,6 +840,14 @@
         <span class="random-icon" aria-hidden="true">🎲</span>
     </button>
 
+    <section class="recent" id="recent" aria-labelledby="recent-title" hidden>
+        <div class="recent-head">
+            <h2 class="recent-title" id="recent-title">🕘 최근 본 레시피</h2>
+            <button type="button" class="text-btn" data-action="clear-recent">지우기</button>
+        </div>
+        <div class="recent-list" id="recent-list"></div>
+    </section>
+
     <p class="result-status" id="result-status" role="status"></p>
 
     <main id="recipe-container">
@@ -741,6 +877,26 @@
             <a id="yt-link" class="yt-link" href="#" target="_blank" rel="noopener">영상이 재생되지 않나요? 유튜브에서 보기 ↗</a>
         </div>
     </dialog>
+
+    <!-- 장보기 목록 -->
+    <dialog class="sheet" id="shopping-dialog" aria-labelledby="shopping-title">
+        <div class="sheet-bar">
+            <h2 class="sheet-title" id="shopping-title">🛒 장보기 목록</h2>
+            <button type="button" class="close-btn" id="shopping-close" aria-label="장보기 목록 닫기">✕</button>
+        </div>
+        <div class="shopping-body" id="shopping-body"></div>
+    </dialog>
+
+    <!-- 요리 타이머 (레시피를 닫아도 계속 돈다) -->
+    <div class="timer-bar" id="timer-bar" hidden>
+        <span class="timer-icon" aria-hidden="true">⏲</span>
+        <div class="timer-info">
+            <strong class="timer-time" id="timer-time" role="timer" aria-live="off">0:00</strong>
+            <span class="timer-label" id="timer-label"></span>
+        </div>
+        <button type="button" class="timer-btn" id="timer-pause">일시정지</button>
+        <button type="button" class="timer-btn" id="timer-cancel">취소</button>
+    </div>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -867,6 +1023,8 @@
         const ytPlayer = document.getElementById('yt-player');
         const ytLink = document.getElementById('yt-link');
         const toast = document.getElementById('toast');
+        const shoppingDialog = document.getElementById('shopping-dialog');
+        const timerBar = document.getElementById('timer-bar');
         const canWakeLock = 'wakeLock' in navigator;
 
         let currentCategory = '전체'; // 필터 상태 동기화용 변수
@@ -896,10 +1054,15 @@
             return String(text).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
         }
 
+        // 모달 dialog가 열리면 그 아래 요소는 가려지므로, 안내창·타이머를 가장 위에 열린 창 안으로 옮긴다
+        function hostFloating() {
+            const host = [videoDialog, shoppingDialog, detailDialog].find(d => d.open) || document.body;
+            if (toast.parentNode !== host) host.appendChild(toast);
+            if (timerBar.parentNode !== host) host.appendChild(timerBar);
+        }
+
         function showToast(message) {
-            // 열린 dialog 위에서도 보이도록 가장 위에 열린 창 안으로 옮긴다
-            const host = videoDialog.open ? videoDialog : detailDialog.open ? detailDialog : document.body;
-            host.appendChild(toast);
+            hostFloating();
             toast.textContent = message;
             toast.classList.add('show');
             clearTimeout(showToast.timer);
@@ -1001,10 +1164,11 @@
             ytPlayer.src = `https://www.youtube-nocookie.com/embed/${recipe.videoId}?autoplay=1&playsinline=1&rel=0&cc_load_policy=1&hl=ko`;
             ytLink.href = `https://www.youtube.com/watch?v=${recipe.videoId}`;
             videoDialog.showModal();
+            hostFloating();
         }
 
         document.getElementById('video-close').addEventListener('click', () => videoDialog.close());
-        videoDialog.addEventListener('close', () => { ytPlayer.src = ''; }); // 닫으면 재생도 멈춘다
+        videoDialog.addEventListener('close', () => { ytPlayer.src = ''; hostFloating(); }); // 닫으면 재생도 멈춘다
 
         // ---------- 조리시간 · 난이도 · 도구 ----------
         const FIRE_TOOLS = ['냄비', '프라이팬']; // 가스레인지·인덕션이 필요한 도구
@@ -1127,16 +1291,299 @@
         }
 
         // ---------- 레시피 상세 화면 · 요리 모드 ----------
+        // ---------- 인분 조절 ----------
+        const MAX_SERVINGS = 4;
+        let servings = Math.min(MAX_SERVINGS, Math.max(1, Number(readStore('honbap-servings', 1)) || 1));
+        let detailRecipe = null; // 지금 상세 화면에 열린 레시피
+
+        // 0.5 → "1/2", 1.5 → "1.5", 4/3 → "1과 1/3" 처럼 요리할 때 읽기 쉬운 숫자로
+        function formatAmount(value) {
+            const rounded = Math.round(value * 100) / 100;
+            if (Number.isInteger(rounded)) return String(rounded);
+            const whole = Math.floor(rounded);
+            const frac = rounded - whole;
+            for (const d of [2, 3, 4]) {
+                const n = Math.round(frac * d);
+                if (n > 0 && n < d && Math.abs(frac - n / d) < 0.02) {
+                    if (d === 2 && whole > 0) return `${whole}.5`; // 데이터와 같은 1.5 표기
+                    return whole > 0 ? `${whole}과 ${n}/${d}` : `${n}/${d}`;
+                }
+            }
+            return String(Math.round(rounded * 10) / 10);
+        }
+
+        // "양파 1/2개", "버터 1조각(10g)", "얼음 2~3알"처럼 재료 글자 속 숫자를 모두 곱한다 ("약간"은 그대로)
+        function scaleAmount(text, factor) {
+            if (factor === 1) return text;
+            return text.replace(/(\d+(?:\.\d+)?)(?:\/(\d+))?/g, (m, num, den) =>
+                formatAmount((den ? Number(num) / Number(den) : Number(num)) * factor));
+        }
+
+        function renderIngredients() {
+            const list = document.getElementById('ingredient-list');
+            const checked = [...list.querySelectorAll('input')].map(input => input.checked); // 인분을 바꿔도 체크는 유지
+            list.innerHTML = detailRecipe.ingredients.map((ing, i) => `
+                <li><label class="check-item"><input type="checkbox"${checked[i] ? ' checked' : ''}><span>${escapeHtml(scaleAmount(ing, servings))}</span></label></li>`).join('');
+            document.getElementById('servings-value').textContent = `${servings}인분`;
+            document.getElementById('servings-minus').disabled = servings <= 1;
+            document.getElementById('servings-plus').disabled = servings >= MAX_SERVINGS;
+            const note = document.getElementById('servings-note');
+            note.hidden = servings === 1;
+            note.textContent = `재료 양을 ${servings}배로 계산했어요. 조리 순서에 적힌 물·양념 양도 ${servings}배로 늘려 주세요.`;
+        }
+
+        function changeServings(delta) {
+            servings = Math.min(MAX_SERVINGS, Math.max(1, servings + delta));
+            writeStore('honbap-servings', servings);
+            renderIngredients();
+        }
+
+        // ---------- 요리 타이머 ----------
+        // "5분", "3~4분"(짧은 쪽), "1분 30초", "30초"를 찾는다. "1분 전"처럼 시점을 뜻하는 말과 "2~3시간" 숙성은 제외
+        const TIME_PATTERN = /(\d+)(?:~\d+)?\s*분(?:\s*(\d+)\s*초)?|(\d+)\s*초/g;
+
+        function findTimers(step) {
+            const timers = [];
+            for (const m of step.matchAll(TIME_PATTERN)) {
+                const after = step.slice(m.index + m[0].length).trimStart();
+                if (after.startsWith('전')) continue;
+                const seconds = m[3] ? Number(m[3]) : Number(m[1]) * 60 + Number(m[2] || 0);
+                timers.push({ seconds, label: formatDuration(seconds) });
+            }
+            return timers;
+        }
+
+        function formatDuration(seconds) {
+            const min = Math.floor(seconds / 60);
+            const sec = seconds % 60;
+            return [min ? `${min}분` : '', sec ? `${sec}초` : ''].filter(Boolean).join(' ');
+        }
+
+        function formatClock(ms) {
+            const total = Math.max(0, Math.ceil(ms / 1000));
+            return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, '0')}`;
+        }
+
+        const timer = { endAt: 0, remaining: 0, paused: false, label: '', interval: null };
+        const timerTime = document.getElementById('timer-time');
+        const timerLabel = document.getElementById('timer-label');
+        const timerPause = document.getElementById('timer-pause');
+        const timerCancel = document.getElementById('timer-cancel');
+        const baseTitle = document.title;
+        let audioCtx = null;
+
+        function startTimer(seconds, label) {
+            // 소리는 사용자가 버튼을 누른 순간에 준비해야 휴대폰에서도 울린다
+            try {
+                audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+                audioCtx.resume();
+            } catch (e) { /* 소리 없이 진동·안내만 */ }
+
+            clearInterval(timer.interval);
+            timer.endAt = Date.now() + seconds * 1000;
+            timer.paused = false;
+            timer.label = label;
+            timerBar.classList.remove('done');
+            timerBar.hidden = false;
+            root.classList.add('timer-running');
+            timerPause.hidden = false;
+            timerPause.textContent = '일시정지';
+            timerCancel.textContent = '취소';
+            timerLabel.textContent = label;
+            hostFloating();
+            tickTimer();
+            // 남은 시간을 시계 기준으로 계산해, 화면이 꺼졌다 켜져도 정확하다
+            timer.interval = setInterval(tickTimer, 250);
+            showToast(`⏲ ${formatDuration(seconds)} 타이머를 시작했어요`);
+        }
+
+        function tickTimer() {
+            if (timer.paused) return;
+            const left = timer.endAt - Date.now();
+            timerTime.textContent = formatClock(left);
+            document.title = `⏲ ${formatClock(left)} · ${baseTitle}`;
+            if (left <= 0) finishTimer();
+        }
+
+        function finishTimer() {
+            clearInterval(timer.interval);
+            timerTime.textContent = '시간 끝!';
+            document.title = `⏰ 시간 끝! · ${baseTitle}`;
+            timerBar.classList.add('done');
+            timerPause.hidden = true;
+            timerCancel.textContent = '확인';
+            showToast(`⏰ ${timer.label} 시간이 다 됐어요!`);
+            if (navigator.vibrate) navigator.vibrate([300, 150, 300, 150, 300]);
+            playBeep();
+        }
+
+        function playBeep() {
+            if (!audioCtx) return;
+            try {
+                const now = audioCtx.currentTime;
+                [0, 0.4, 0.8].forEach(offset => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.frequency.value = 880;
+                    gain.gain.setValueAtTime(0.3, now + offset);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.3);
+                    osc.connect(gain).connect(audioCtx.destination);
+                    osc.start(now + offset);
+                    osc.stop(now + offset + 0.3);
+                });
+            } catch (e) { /* 소리를 낼 수 없는 환경 */ }
+        }
+
+        function stopTimer() {
+            clearInterval(timer.interval);
+            timerBar.hidden = true;
+            timerBar.classList.remove('done');
+            root.classList.remove('timer-running');
+            document.title = baseTitle;
+        }
+
+        timerPause.addEventListener('click', () => {
+            if (timer.paused) {
+                timer.endAt = Date.now() + timer.remaining;
+                timer.paused = false;
+                timerPause.textContent = '일시정지';
+                tickTimer();
+            } else {
+                timer.remaining = timer.endAt - Date.now();
+                timer.paused = true;
+                timerPause.textContent = '계속';
+            }
+        });
+        timerCancel.addEventListener('click', stopTimer);
+
+        // ---------- 최근 본 레시피 ----------
+        const RECENT_KEY = 'honbap-recent';
+        const MAX_RECENT = 8;
+        let recentTitles = readStore(RECENT_KEY, []).filter(title => recipes.some(r => r.title === title));
+
+        function rememberRecent(recipe) {
+            recentTitles = [recipe.title, ...recentTitles.filter(t => t !== recipe.title)].slice(0, MAX_RECENT);
+            writeStore(RECENT_KEY, recentTitles);
+        }
+
+        function renderRecent() {
+            const section = document.getElementById('recent');
+            section.hidden = recentTitles.length === 0;
+            document.getElementById('recent-list').innerHTML = recentTitles.map(title => {
+                const recipe = recipes.find(r => r.title === title);
+                const pic = recipe.videoId
+                    ? `<img src="https://i.ytimg.com/vi/${recipe.videoId}/default.jpg" alt="" loading="lazy" width="48" height="36">`
+                    : '<span class="recent-emoji" aria-hidden="true">🍳</span>';
+                return `<button type="button" class="recent-chip" data-action="detail" data-index="${recipes.indexOf(recipe)}">${pic}${escapeHtml(title)}</button>`;
+            }).join('');
+        }
+
+        // ---------- 장보기 목록 ----------
+        const SHOPPING_KEY = 'honbap-shopping';
+        let shoppingItems = readStore(SHOPPING_KEY, []); // [{ text, recipe, done }]
+
+        function saveShopping() {
+            writeStore(SHOPPING_KEY, shoppingItems);
+            updateShoppingCount();
+        }
+
+        function updateShoppingCount() {
+            const left = shoppingItems.filter(item => !item.done).length;
+            const badge = document.getElementById('shopping-count');
+            badge.hidden = left === 0;
+            badge.textContent = left;
+            document.getElementById('shopping-btn').setAttribute('aria-label', left ? `장보기 목록, 살 것 ${left}개` : '장보기 목록');
+        }
+
+        // 상세 화면에서 체크하지 않은(= 집에 없는) 재료만 담는다. 같은 레시피를 다시 담으면 새 목록으로 바꾼다
+        function addMissingToShopping() {
+            const missing = [...document.querySelectorAll('#ingredient-list input:not(:checked)')]
+                .map(input => input.nextElementSibling.textContent);
+            if (missing.length === 0) {
+                showToast('모든 재료가 준비됐어요! 바로 요리를 시작해 보세요 🍳');
+                return;
+            }
+            shoppingItems = shoppingItems.filter(item => item.recipe !== detailRecipe.title)
+                .concat(missing.map(text => ({ text, recipe: detailRecipe.title, done: false })));
+            saveShopping();
+            showToast(`🛒 없는 재료 ${missing.length}개를 장보기 목록에 담았어요`);
+        }
+
+        function renderShopping() {
+            const body = document.getElementById('shopping-body');
+            if (shoppingItems.length === 0) {
+                body.innerHTML = `<p class="shopping-empty">장보기 목록이 비어 있어요.<br>레시피에서 <strong>준비한 재료를 체크</strong>하고<br>"🛒 없는 재료 담기"를 눌러 보세요.</p>`;
+                return;
+            }
+            const groups = [...new Set(shoppingItems.map(item => item.recipe))];
+            body.innerHTML = groups.map(recipeTitle => `
+                <section class="shopping-group">
+                    <h3>${escapeHtml(recipeTitle)}</h3>
+                    <ul class="shopping-list">
+                        ${shoppingItems.map((item, i) => item.recipe !== recipeTitle ? '' : `
+                            <li><label class="check-item"><input type="checkbox" data-shopping-index="${i}"${item.done ? ' checked' : ''}><span>${escapeHtml(item.text)}</span></label></li>`).join('')}
+                    </ul>
+                </section>`).join('') + `
+                <div class="shopping-actions">
+                    <button type="button" class="primary-btn" data-shop="copy"><span aria-hidden="true">📋</span> 목록 복사하기</button>
+                    <button type="button" class="secondary-btn" data-shop="clear-done">산 것 지우기</button>
+                    <button type="button" class="secondary-btn" data-shop="clear-all">모두 비우기</button>
+                </div>`;
+        }
+
+        function openShopping() {
+            renderShopping();
+            shoppingDialog.showModal();
+            hostFloating();
+        }
+
+        document.getElementById('shopping-btn').addEventListener('click', openShopping);
+        document.getElementById('shopping-close').addEventListener('click', () => shoppingDialog.close());
+        shoppingDialog.addEventListener('close', hostFloating);
+        document.getElementById('shopping-body').addEventListener('change', e => {
+            const index = e.target.dataset.shoppingIndex;
+            if (index === undefined) return;
+            shoppingItems[Number(index)].done = e.target.checked;
+            saveShopping();
+        });
+        document.getElementById('shopping-body').addEventListener('click', async e => {
+            const btn = e.target.closest('[data-shop]');
+            if (!btn) return;
+            if (btn.dataset.shop === 'copy') {
+                const text = '🛒 장보기 목록\n' + shoppingItems.filter(item => !item.done).map(item => `- ${item.text} (${item.recipe})`).join('\n');
+                try {
+                    await navigator.clipboard.writeText(text);
+                    showToast('살 것만 복사했어요. 메모나 카톡에 붙여넣어 보세요!');
+                } catch (err) {
+                    showToast('복사하지 못했어요');
+                }
+                return;
+            }
+            if (btn.dataset.shop === 'clear-all' && !confirm('장보기 목록을 모두 비울까요?')) return;
+            shoppingItems = btn.dataset.shop === 'clear-done' ? shoppingItems.filter(item => !item.done) : [];
+            saveShopping();
+            renderShopping();
+        });
+
+        // ---------- 레시피 상세 화면 · 요리 모드 ----------
         function openDetail(recipe, { random = false } = {}) {
             const index = recipes.indexOf(recipe);
-            const stepsHtml = recipe.instructions.map((step, i) => `
-                <li><label class="step-item">
-                    <input type="checkbox" class="step-check">
-                    <span class="step-num" aria-hidden="true">${i + 1}</span>
-                    <span class="step-text">${escapeHtml(step)}</span>
-                </label></li>`).join('');
-            const ingredientsHtml = recipe.ingredients.map(ing => `
-                <li><label class="check-item"><input type="checkbox"><span>${escapeHtml(ing)}</span></label></li>`).join('');
+            detailRecipe = recipe;
+            rememberRecent(recipe);
+
+            const stepsHtml = recipe.instructions.map((step, i) => {
+                const timersHtml = findTimers(step).map(t =>
+                    `<button type="button" class="step-timer-btn" data-action="timer" data-seconds="${t.seconds}" data-step="${i + 1}">⏲ ${t.label}<span class="sr-only"> 타이머 시작</span></button>`).join('');
+                return `
+                <li class="step-row">
+                    <label class="step-item">
+                        <input type="checkbox" class="step-check">
+                        <span class="step-num" aria-hidden="true">${i + 1}</span>
+                        <span class="step-text">${escapeHtml(step)}</span>
+                    </label>
+                    ${timersHtml ? `<div class="step-timers">${timersHtml}</div>` : ''}
+                </li>`;
+            }).join('');
 
             const playHtml = recipe.videoId
                 ? `<button type="button" class="primary-btn" data-action="play" data-index="${index}"><span aria-hidden="true">▶️</span> 레시피 영상 보기</button>`
@@ -1154,7 +1601,15 @@
 
                     <section aria-labelledby="ingredients-heading">
                         <h3 class="section-title" id="ingredients-heading">재료 <span class="section-hint">준비한 재료를 체크하세요</span></h3>
-                        <ul class="check-list">${ingredientsHtml}</ul>
+                        <div class="servings" role="group" aria-label="인분 조절">
+                            <span class="servings-label">양 조절</span>
+                            <button type="button" class="step-btn" id="servings-minus" data-action="servings-minus" aria-label="1인분 줄이기">−</button>
+                            <output class="servings-value" id="servings-value" aria-live="polite">1인분</output>
+                            <button type="button" class="step-btn" id="servings-plus" data-action="servings-plus" aria-label="1인분 늘리기">+</button>
+                        </div>
+                        <ul class="check-list" id="ingredient-list"></ul>
+                        <p class="servings-note" id="servings-note" hidden></p>
+                        <button type="button" class="secondary-btn cart-btn" data-action="add-shopping"><span aria-hidden="true">🛒</span> 없는 재료 장보기 목록에 담기</button>
                     </section>
 
                     <section aria-labelledby="steps-heading">
@@ -1174,8 +1629,10 @@
                     </div>
                 </div>
             `;
+            renderIngredients();
 
             if (!detailDialog.open) detailDialog.showModal();
+            hostFloating();
             detailDialog.scrollTop = 0;
             // 주소에 레시피를 남겨, 새로고침하거나 링크를 공유해도 이 레시피가 열리게 한다
             history.replaceState(null, '', `#recipe=${encodeURIComponent(recipe.title)}`);
@@ -1193,6 +1650,9 @@
 
         document.getElementById('detail-close').addEventListener('click', () => detailDialog.close());
         detailDialog.addEventListener('close', () => {
+            detailRecipe = null;
+            renderRecent(); // 보는 동안 목록이 움직이지 않도록 닫을 때 갱신
+            hostFloating();
             wantWakeLock = false;
             releaseWakeLock();
             history.replaceState(null, '', location.pathname + location.search);
@@ -1309,6 +1769,17 @@
                 case 'share': shareRecipe(recipe); break;
                 case 'wake': toggleWakeLock(btn); break;
                 case 'reroll': pickRandomRecipe(); break;
+                case 'servings-minus': changeServings(-1); break;
+                case 'servings-plus': changeServings(1); break;
+                case 'add-shopping': addMissingToShopping(); break;
+                case 'timer':
+                    startTimer(Number(btn.dataset.seconds), `${detailRecipe.title} ${btn.dataset.step}단계`);
+                    break;
+                case 'clear-recent':
+                    recentTitles = [];
+                    writeStore(RECENT_KEY, recentTitles);
+                    renderRecent();
+                    break;
                 case 'clear-search':
                     searchInput.value = '';
                     searchQuery = '';
@@ -1321,9 +1792,10 @@
         }
         container.addEventListener('click', handleAction);
         detailBody.addEventListener('click', handleAction);
+        document.getElementById('recent').addEventListener('click', handleAction);
 
         // 창 바깥 어두운 영역을 누르면 닫기
-        [detailDialog, videoDialog].forEach(dialog => {
+        [detailDialog, videoDialog, shoppingDialog].forEach(dialog => {
             dialog.addEventListener('click', e => {
                 if (e.target === dialog) {
                     const rect = dialog.getBoundingClientRect();
@@ -1407,6 +1879,8 @@
         updateThemeUI();
         updateTextSizeUI();
         updateFavoriteCount();
+        updateShoppingCount();
+        renderRecent();
         filterRecipes('전체');
         openRecipeFromHash();
 
