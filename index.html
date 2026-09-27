@@ -967,6 +967,57 @@
             .progress-fill { background: Highlight; }
         }
 
+        /* 수업 모드 · 알레르기 */
+        .setting-chip {
+            position: relative;
+            flex-shrink: 0;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--text);
+            background: var(--surface);
+            border: 1.5px solid var(--input-border);
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .setting-chip.on { background: var(--tip-bg); color: var(--tip-text); border-color: var(--tip-text); }
+        .class-banner {
+            max-width: 1160px;
+            margin: 0 auto 12px auto;
+            padding: 0 20px;
+        }
+        .class-banner[hidden] { display: none; }
+        .class-banner-inner {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: var(--tip-bg);
+            color: var(--tip-text);
+            font-size: 0.9rem;
+            font-weight: 700;
+            line-height: 1.5;
+        }
+        .class-banner-inner p { margin: 0; flex: 1; }
+        .class-banner-inner .text-btn { color: var(--tip-text); flex-shrink: 0; }
+        .setting-section { display: flex; flex-direction: column; gap: 10px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+        .setting-section:last-child { border-bottom: none; }
+        .big-switch { font-size: 1rem; font-weight: 800; }
+        .big-switch input { width: 24px; height: 24px; }
+        .class-list { margin: 0; padding-left: 20px; font-size: 0.85rem; line-height: 1.7; color: var(--text-muted); }
+        .class-link { width: 100%; font: inherit; font-size: 0.85rem; padding: 10px 12px; border: 1.5px solid var(--input-border); border-radius: 10px; background: var(--surface-2); color: var(--text); }
+        .allergy-warning { padding: 10px 12px; border-radius: 10px; background: var(--surface-2); }
+
+        .card-allergy { margin: 0; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); line-height: 1.5; }
+        .allergy-box { padding: 12px 14px; border-radius: 12px; background: var(--surface-2); font-size: 0.9rem; line-height: 1.6; }
+        .allergy-box strong { color: var(--badge-text); } /* 회색 배경 위에서도 4.5:1 이상 */
+        .allergy-box.danger { border: 2px solid var(--accent); }
+        .allergy-danger { margin: 0 0 6px 0; font-weight: 800; color: var(--badge-text); }
+        .allergy-box small { display: block; margin-top: 4px; font-size: 0.8rem; color: var(--text-muted); }
+        .class-prep { padding: 12px 14px; border-radius: 12px; border: 2px dashed var(--tip-text); background: var(--tip-bg); color: var(--tip-text); font-size: 0.9rem; font-weight: 700; line-height: 1.6; }
+        .class-prep p { margin: 0; }
+
         /* 공유·복사 결과 안내 */
         .toast {
             position: fixed;
@@ -1055,10 +1106,14 @@
         <button class="category-btn" data-category="내 레시피" aria-pressed="false"><span aria-hidden="true">✍️ </span>내 레시피</button>
     </nav>
     <div class="filter-chips" id="filter-chips" role="group" aria-label="조리 조건">
+        <button type="button" class="setting-chip" id="class-chip" aria-haspopup="dialog"><span aria-hidden="true">🏫 </span>수업 모드<span id="class-chip-state">: 끔</span></button>
+        <button type="button" class="setting-chip" id="allergy-chip" aria-haspopup="dialog"><span aria-hidden="true">⚠️ </span>알레르기 제외<span id="allergy-chip-state"></span></button>
         <button type="button" class="filter-chip" data-filter="quick" aria-pressed="false"><span aria-hidden="true">⏱ </span>10분 이내</button>
         <button type="button" class="filter-chip" data-filter="easy" aria-pressed="false"><span aria-hidden="true">🌱 </span>난이도 쉬움</button>
         <button type="button" class="filter-chip" data-filter="nofire" aria-pressed="false"><span aria-hidden="true">🔌 </span>불 없이<span class="sr-only"> (가스레인지 없이 전자레인지·에어프라이어·밥솥만)</span></button>
     </div>
+
+    <div class="class-banner" id="class-banner" hidden></div>
 
     <div class="tool-row" role="group" aria-label="도구">
         <button type="button" class="tool-card tool-random" id="random-banner"><span class="tool-emoji" aria-hidden="true">🎲</span><strong>랜덤 추천</strong><span class="sr-only">: 오늘 뭐 먹을지 골라 드려요</span></button>
@@ -1216,6 +1271,41 @@
             <p class="form-error" id="custom-error" role="alert"></p>
             <button type="submit" class="primary-btn" id="custom-submit">저장하기</button>
         </form>
+    </dialog>
+
+    <!-- 수업 모드 · 알레르기 제외 설정 -->
+    <dialog class="sheet" id="class-dialog" aria-labelledby="class-title">
+        <div class="sheet-bar">
+            <h2 class="sheet-title" id="class-title">🏫 수업 모드 · ⚠️ 알레르기</h2>
+            <button type="button" class="close-btn" data-close aria-label="설정 창 닫기">✕</button>
+        </div>
+        <div class="sheet-body">
+            <section aria-labelledby="class-mode-heading" class="setting-section">
+                <h3 class="data-subtitle" id="class-mode-heading">🏫 수업 모드</h3>
+                <label class="switch-row big-switch"><input type="checkbox" id="class-toggle"> 수업 모드 켜기</label>
+                <p class="data-hint">초등 실과 실습에 알맞은 <strong>불·칼을 거의 쓰지 않는 레시피</strong>와 직접 추가한 레시피만 보여요.
+                    레시피마다 <strong>선생님 준비 사항</strong>과 <strong>실습 전 안전 체크리스트</strong>가 함께 나와요.</p>
+                <ul class="class-list" id="class-list"></ul>
+            </section>
+
+            <section aria-labelledby="allergy-heading" class="setting-section" id="allergy-section">
+                <h3 class="data-subtitle" id="allergy-heading">⚠️ 알레르기 제외</h3>
+                <p class="data-hint">먹으면 안 되는 식품을 고르면 그 식품이 들어간 레시피를 모두 숨겨요. 번호는 학교 급식표와 같아요.</p>
+                <div class="fridge-chips" id="allergy-chips" role="group" aria-label="제외할 알레르기 유발 식품"></div>
+                <button type="button" class="text-btn" id="allergy-clear">모두 해제</button>
+                <p class="data-hint allergy-warning">⚠️ 알레르기 표시는 <strong>재료 이름을 보고 자동으로</strong> 붙인 것이에요.
+                    소스·면·빵·어묵 같은 가공식품은 제품마다 성분이 다르니 <strong>포장지의 알레르기 표시를 꼭 확인</strong>해 주세요.</p>
+            </section>
+
+            <section aria-labelledby="class-share-heading" class="setting-section">
+                <h3 class="data-subtitle" id="class-share-heading">👩‍🏫 학생에게 보내기</h3>
+                <p class="data-hint">이 링크로 들어오면 학생 기기도 <strong>수업 모드</strong>와 지금 고른 <strong>알레르기 제외</strong> 설정으로 바로 열려요.
+                    클래스룸·알림장에 붙이거나 QR 코드로 만들어 칠판에 띄워 보세요.</p>
+                <label class="sr-only" for="class-link">학생용 링크</label>
+                <input type="text" id="class-link" class="class-link" readonly>
+                <button type="button" class="primary-btn" id="class-link-copy"><span aria-hidden="true">🔗</span> 학생용 링크 복사하기</button>
+            </section>
+        </div>
     </dialog>
 
     <!-- 내 기록 백업 · 복원 -->
@@ -1614,6 +1704,120 @@
         document.getElementById('video-close').addEventListener('click', () => videoDialog.close());
         videoDialog.addEventListener('close', () => videoWrapper.replaceChildren()); // iframe을 없애 재생도 멈춘다
 
+        // ---------- 알레르기 유발 식품 (학교 급식표와 같은 19종 · 같은 번호) ----------
+        // 재료 이름에 들어 있는 말로 찾는다. 모르면 빠뜨리는 것보다 표시하는 쪽이 안전하므로 넉넉하게 잡는다.
+        const ALLERGENS = [
+            { no: 1, name: '난류', words: ['계란', '달걀', '노른자', '마요네즈'] },
+            { no: 2, name: '우유', words: ['우유', '치즈', '버터', '생크림', '연유', '식빵', '핫케이크', '카레가루'] },
+            { no: 3, name: '메밀', words: ['메밀'] },
+            { no: 4, name: '땅콩', words: ['땅콩'] },
+            { no: 5, name: '대두', words: ['간장', '된장', '두부', '두반장', '낫토', '유부', '고추장', '굴소스', '짜장', '짜파게티', '쯔유', '시로다시', '콩', '돈까스소스'] },
+            { no: 6, name: '밀', words: ['밀가루', '밀떡', '부침가루', '식빵', '소면', '우동', '라면', '파스타', '쫄면', '짜파게티', '너구리', '진짬뽕', '만두', '핫케이크', '크래커', '간장', '고추장', '돈까스', '카레가루', '메밀면', '어묵'] },
+            { no: 7, name: '고등어', words: ['고등어'] },
+            { no: 8, name: '게', words: ['게맛살', '크래미', '꽃게'] },
+            { no: 9, name: '새우', words: ['새우', '김치'] }, // 김치는 새우젓이 들어가는 경우가 많다
+            { no: 10, name: '돼지고기', words: ['돼지', /(?<!우)삼겹/, '베이컨', '햄', '스팸', '소시지', '순대', /돈까스(?!소스)/] }, // 우삼겹은 소고기
+            { no: 11, name: '복숭아', words: ['복숭아'] },
+            { no: 12, name: '토마토', words: ['토마토', '케첩', '돈까스소스'] },
+            { no: 13, name: '아황산류', words: ['와인'] },
+            { no: 14, name: '호두', words: ['호두'] },
+            { no: 15, name: '닭고기', words: ['닭', '치킨'] },
+            { no: 16, name: '쇠고기', words: ['소고기', '쇠고기', '차돌', '우삼겹', '샤브샤브'] },
+            { no: 17, name: '오징어', words: ['오징어'] },
+            { no: 18, name: '조개류', words: ['굴소스', '조개', '바지락', '홍합', '전복'] },
+            { no: 19, name: '잣', words: [/(^|[\s,])잣/] }
+        ];
+        const CIRCLED = '①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲';
+
+        function recipeAllergens(recipe) {
+            const text = recipe.ingredients.join(', ');
+            return ALLERGENS.filter(a => a.words.some(word => typeof word === 'string' ? text.includes(word) : word.test(text)));
+        }
+
+        // 목록 카드용 한 줄 표시
+        function cardAllergyHtml(recipe) {
+            const list = recipeAllergens(recipe);
+            if (list.length === 0) return '';
+            return `<p class="card-allergy"><span aria-hidden="true">⚠️</span><span class="sr-only">알레르기 유발 식품:</span> ${list.map(a => `<span aria-hidden="true">${CIRCLED[a.no - 1]}</span>${a.name}`).join(' ')}</p>`;
+        }
+
+        // 상세 화면용 (가공식품 확인 안내 포함)
+        function detailAllergyHtml(recipe) {
+            const list = recipeAllergens(recipe);
+            const names = list.map(a => `<span aria-hidden="true">${CIRCLED[a.no - 1]}</span>${a.name}`).join(', ');
+            // 공유 링크·식단 등으로 제외한 식품이 든 레시피를 열었을 때 눈에 띄게 경고
+            const avoided = list.filter(a => avoidAllergens.has(a.no));
+            return `<div class="allergy-box${avoided.length ? ' danger' : ''}"${avoided.length ? ' role="alert"' : ''}>
+                    ${avoided.length ? `<p class="allergy-danger"><span aria-hidden="true">🚫</span> 지금 제외한 식품(${avoided.map(a => a.name).join(', ')})이 들어 있어요!</p>` : ''}
+                    <span aria-hidden="true">⚠️</span> 알레르기 유발 식품: ${list.length ? `<strong>${names}</strong>` : '재료 이름으로는 찾지 못했어요'}
+                    <small>재료 이름을 보고 자동으로 표시했어요. 소스·면·빵 같은 가공식품은 포장지의 알레르기 표시를 꼭 확인하세요.</small>
+                </div>`;
+        }
+
+        // ---------- 수업 모드 (초등 실과 실습용) ----------
+        // 불·칼을 거의 쓰지 않는 레시피와 선생님 준비 사항
+        const CLASS_RECIPES = {
+            '참치마요 주먹밥': '밥은 미리 지어 한 김 식혀 두고, 비닐장갑을 준비해 주세요.',
+            '마요네즈 참치 카나페': '양파는 선생님이 미리 아주 잘게 다져 오거나 빼고 만들어요.',
+            '식빵 피자': '양파는 미리 다져 오고, 전자레인지용 접시를 준비해 주세요.',
+            '콘치즈 토스트': '옥수수 물기를 뺄 체를 준비하고, 전자레인지로 데워요.',
+            '떠먹는 고구마 피자': '고구마는 미리 쪄 오고, 전자레인지용 내열 그릇을 준비해 주세요.',
+            '전자레인지 폭탄 계란찜': '전자레인지용 그릇·랩·포크를 준비하고, 꺼낼 때는 오븐 장갑을 껴요.',
+            '전자레인지 계란빵': '전자레인지용 컵을 쓰고, 노른자는 꼭 포크로 찔러야 터지지 않아요.',
+            '바나나 토스트': '식빵은 굽지 않고 그대로 써도 돼요. 바나나는 플라스틱 칼로 썰어요.',
+            '크래미 오이 샌드위치': '오이는 선생님이 미리 채 썰어 오세요.',
+            '타마고 샌드위치': '계란은 선생님이 미리 삶아 오면 불 없이 만들 수 있어요.'
+        };
+        const SAFETY_CHECKS = [
+            '🧼 비누로 손을 30초 이상 씻었어요',
+            '👕 앞치마를 입고 긴 머리는 묶었어요',
+            '⚠️ 모둠 친구의 알레르기를 확인했어요',
+            '🔥 전자레인지에서 꺼낸 그릇은 뜨거우니 오븐 장갑을 껴요',
+            '💨 랩은 내 몸에서 먼 쪽부터 벗겨요 (뜨거운 김 조심)',
+            '🧽 다 쓴 도구를 정리하고 쓰레기는 분리배출해요'
+        ];
+
+        let classMode = readStore('honbap-class', false) === true;
+        const avoidAllergens = new Set(readStore('honbap-avoid', []).filter(n => Number.isInteger(n) && n >= 1 && n <= 19));
+        let openedFromClassLink = false;
+
+        // 선생님이 보낸 링크(?mode=class&avoid=1,6)로 들어오면 설정을 저장하고 주소는 깔끔하게
+        (() => {
+            const params = new URLSearchParams(location.search);
+            if (!params.has('mode') && !params.has('avoid')) return;
+            if (params.get('mode') === 'class') {
+                classMode = true;
+                openedFromClassLink = true;
+            }
+            if (params.has('avoid')) {
+                avoidAllergens.clear();
+                params.get('avoid').split(',').map(Number).filter(n => Number.isInteger(n) && n >= 1 && n <= 19).forEach(n => avoidAllergens.add(n));
+            }
+            writeStore('honbap-class', classMode);
+            writeStore('honbap-avoid', [...avoidAllergens]);
+            history.replaceState(history.state, '', location.pathname + location.hash);
+        })();
+
+        // 수업 모드·알레르기 제외 조건을 통과한 레시피만 목록·랜덤·냉장고 추천·식단에 쓴다
+        function isAllowed(recipe) {
+            if (classMode && !recipe.custom && !(recipe.title in CLASS_RECIPES)) return false;
+            if (avoidAllergens.size && recipeAllergens(recipe).some(a => avoidAllergens.has(a.no))) return false;
+            return true;
+        }
+
+        function classSectionHtml(recipe) {
+            if (!classMode) return '';
+            const prep = CLASS_RECIPES[recipe.title];
+            return `
+                ${prep ? `<div class="class-prep"><p><span aria-hidden="true">👩‍🏫</span> 선생님 준비: ${escapeHtml(prep)}</p></div>` : ''}
+                <section aria-labelledby="safety-heading">
+                    <h3 class="section-title" id="safety-heading">🦺 실습 전 안전 체크 <span class="section-hint">모두 체크하고 시작해요</span></h3>
+                    <ul class="check-list safety-list">${SAFETY_CHECKS.map(item => `
+                        <li><label class="check-item"><input type="checkbox"><span>${item}</span></label></li>`).join('')}
+                    </ul>
+                </section>`;
+        }
+
         // ---------- 조리시간 · 난이도 · 도구 ----------
         const FIRE_TOOLS = ['냄비', '프라이팬']; // 가스레인지·인덕션이 필요한 도구
 
@@ -1719,6 +1923,7 @@
                 </div>
                 <h3 class="recipe-title" id="card-title-${index}"><button type="button" class="title-btn" data-action="detail" data-index="${index}">${escapeHtml(recipe.title)}</button></h3>
                 ${metaHtml(recipe)}
+                ${cardAllergyHtml(recipe)}
                 <ul class="ingredients-tags" aria-label="재료">${tagsHtml}</ul>
                 <div class="card-actions">
                     <button type="button" class="primary-btn" data-action="detail" data-index="${index}" tabindex="-1">
@@ -1740,6 +1945,7 @@
         // 현재 카테고리·즐겨찾기·검색어 조건에 맞는 레시피
         function getVisibleRecipes() {
             return recipes.filter(r => {
+                if (!isAllowed(r)) return false;
                 if (currentCategory === '즐겨찾기') {
                     if (!favorites.has(r.title)) return false;
                 } else if (currentCategory === '내 레시피') {
@@ -1765,6 +1971,7 @@
                 const what = searchQuery ? `<strong>'${escapeHtml(searchQuery)}'</strong>에 맞는` : '지금 고른 조건에 맞는';
                 empty.innerHTML = `<p class="empty-emoji" aria-hidden="true">🥲</p>
                     <p>${what} 레시피가 없어요.<br>검색어나 조건을 줄여 보거나 다른 카테고리에서 찾아보세요.</p>
+                    ${classMode || avoidAllergens.size ? '<p>🏫 수업 모드와 ⚠️ 알레르기 제외 설정은 위쪽 버튼에서 바꿀 수 있어요.</p>' : ''}
                     <button type="button" class="primary-btn" data-action="clear-search" style="display:inline-flex">검색어·조건 모두 지우기</button>`;
             }
             container.appendChild(empty);
@@ -1786,6 +1993,8 @@
             const filterNames = { quick: '10분 이내', easy: '쉬움', nofire: '불 없이' };
             const conditions = [...activeFilters].map(f => filterNames[f]);
             if (searchQuery) conditions.unshift(`'${searchQuery}'`);
+            if (avoidAllergens.size) conditions.unshift(`알레르기 ${avoidAllergens.size}종 제외`);
+            if (classMode) conditions.unshift('수업용');
             resultStatus.textContent = conditions.length
                 ? `${conditions.join(' · ')} 레시피 ${visible.length}개`
                 : `레시피 ${visible.length}개`;
@@ -1990,8 +2199,9 @@
 
         function renderRecent() {
             const section = document.getElementById('recent');
-            section.hidden = recentTitles.length === 0;
-            document.getElementById('recent-list').innerHTML = recentTitles.map(title => {
+            const shown = recentTitles.filter(title => isAllowed(recipes.find(r => r.title === title)));
+            section.hidden = shown.length === 0;
+            document.getElementById('recent-list').innerHTML = shown.map(title => {
                 const recipe = recipes.find(r => r.title === title);
                 const pic = recipe.videoId
                     ? `<img src="https://i.ytimg.com/vi/${recipe.videoId}/default.jpg" alt="" loading="lazy" width="48" height="36">`
@@ -2123,6 +2333,8 @@
                     </div>
                     <h2 class="detail-title" id="detail-title">${escapeHtml(recipe.title)}</h2>
                     ${metaHtml(recipe)}
+                    ${detailAllergyHtml(recipe)}
+                    ${classSectionHtml(recipe)}
 
                     <section aria-labelledby="ingredients-heading">
                         <h3 class="section-title" id="ingredients-heading">재료 <span class="section-hint">준비한 재료를 체크하세요</span></h3>
@@ -2346,7 +2558,7 @@
                 box.innerHTML = '<p class="fridge-summary">위에서 가진 재료를 골라 주세요.</p>';
                 return;
             }
-            const results = recipes.map(recipe => {
+            const results = recipes.filter(isAllowed).map(recipe => {
                 const needed = [...new Set(recipe.ingredients.filter(i => !isOptional(i)).map(ingredientName))]
                     .filter(name => name && !(fridgeStaples.checked && STAPLES.has(name)));
                 const have = needed.filter(name => terms.some(term => matchesTerm(name, term)));
@@ -2425,10 +2637,14 @@
         function recipeOptionsHtml(selectedTitle) {
             const groups = [['한식', '한식'], ['중식', '중식'], ['일식', '일식'], ['분식', '분식'], ['기타', '양식·기타']];
             const option = r => `<option value="${escapeHtml(r.title)}"${r.title === selectedTitle ? ' selected' : ''}>${escapeHtml(r.title)}</option>`;
-            const custom = recipes.filter(r => r.custom);
+            const pool = recipes.filter(r => isAllowed(r) || r.title === selectedTitle); // 이미 넣은 메뉴는 남겨 둔다
+            const custom = pool.filter(r => r.custom);
             return '<option value="">— 비어 있음 —</option>'
                 + (custom.length ? `<optgroup label="내 레시피">${custom.map(option).join('')}</optgroup>` : '')
-                + groups.map(([cat, label]) => `<optgroup label="${label}">${recipes.filter(r => !r.custom && r.category === cat).map(option).join('')}</optgroup>`).join('');
+                + groups.map(([cat, label]) => {
+                    const items = pool.filter(r => !r.custom && r.category === cat);
+                    return items.length ? `<optgroup label="${label}">${items.map(option).join('')}</optgroup>` : '';
+                }).join('');
         }
 
         function renderPlan() {
@@ -2469,7 +2685,7 @@
             const btn = e.target.closest('[data-plan]');
             if (!btn) return;
             if (btn.dataset.plan === 'random') {
-                const pool = recipes.filter(r => !Object.values(plan).includes(r.title));
+                const pool = recipes.filter(r => isAllowed(r) && !Object.values(plan).includes(r.title));
                 let filled = 0;
                 DAYS.forEach(day => {
                     if (plan[day] || pool.length === 0) return;
@@ -2823,7 +3039,9 @@
             'honbap-fridge': 'array',
             'honbap-servings': 'number',
             'honbap-theme': 'string',
-            'honbap-large-text': 'boolean'
+            'honbap-large-text': 'boolean',
+            'honbap-class': 'boolean',
+            'honbap-avoid': 'array'
         };
         let pendingBackup = null; // 불러온 뒤 합치기/덮어쓰기를 기다리는 백업
 
@@ -2997,13 +3215,106 @@
             location.reload();
         });
 
+        // ---------- 수업 모드 · 알레르기 설정 창 ----------
+        const classDialog = document.getElementById('class-dialog');
+        const classToggle = document.getElementById('class-toggle');
+
+        function classLink() {
+            const avoid = [...avoidAllergens].sort((a, b) => a - b);
+            return `${location.origin}${location.pathname}?mode=class${avoid.length ? `&avoid=${avoid.join(',')}` : ''}`;
+        }
+
+        function renderClassUI() {
+            classToggle.checked = classMode;
+            document.getElementById('class-chip-state').textContent = classMode ? ': 켬' : ': 끔';
+            document.getElementById('class-chip').classList.toggle('on', classMode);
+            const avoidNames = [...avoidAllergens].sort((a, b) => a - b).map(n => `${CIRCLED[n - 1]}${ALLERGENS[n - 1].name}`);
+            document.getElementById('allergy-chip-state').textContent = avoidNames.length ? ` ${avoidNames.length}` : '';
+            document.getElementById('allergy-chip').classList.toggle('on', avoidNames.length > 0);
+            document.getElementById('allergy-chips').innerHTML = ALLERGENS.map(a =>
+                `<button type="button" class="fridge-chip" data-allergen="${a.no}" aria-pressed="${avoidAllergens.has(a.no)}"><span aria-hidden="true">${CIRCLED[a.no - 1]}</span>${a.name}</button>`).join('');
+            document.getElementById('class-list').innerHTML = Object.keys(CLASS_RECIPES).map(title => {
+                const recipe = recipes.find(r => r.title === title);
+                const hidden = recipe && !isAllowed(recipe) && classMode;
+                return `<li>${escapeHtml(title)}${hidden ? ' <em>(알레르기 제외로 숨김)</em>' : ''}</li>`;
+            }).join('');
+            document.getElementById('class-link').value = classLink();
+
+            const banner = document.getElementById('class-banner');
+            banner.hidden = !classMode && avoidNames.length === 0;
+            const parts = [];
+            if (classMode) parts.push('<strong>🏫 수업 모드</strong> · 초등 실습용 레시피만 보여요');
+            if (avoidNames.length) parts.push(`<strong>⚠️ 알레르기 제외</strong> · ${avoidNames.join(' ')}`);
+            banner.innerHTML = `<div class="class-banner-inner"><p>${parts.join('<br>')}</p><button type="button" class="text-btn" id="class-banner-edit">설정 바꾸기</button></div>`;
+        }
+
+        function applyClassSettings() {
+            writeStore('honbap-class', classMode);
+            writeStore('honbap-avoid', [...avoidAllergens]);
+            renderClassUI();
+            renderRecipes({ keepScroll: true });
+            renderRecent();
+        }
+
+        function openClassDialog(focusAllergy = false) {
+            renderClassUI();
+            openModal(classDialog);
+            if (focusAllergy) {
+                document.getElementById('allergy-section').scrollIntoView({ block: 'start' });
+                document.querySelector('#allergy-chips button').focus();
+            }
+        }
+
+        document.getElementById('class-chip').addEventListener('click', () => openClassDialog());
+        document.getElementById('allergy-chip').addEventListener('click', () => openClassDialog(true));
+        document.getElementById('class-banner').addEventListener('click', e => {
+            if (e.target.closest('#class-banner-edit')) openClassDialog();
+        });
+        classToggle.addEventListener('change', () => {
+            if (!classToggle.checked && !confirm('수업 모드를 끌까요? 모든 레시피가 다시 보여요.')) {
+                classToggle.checked = true;
+                return;
+            }
+            classMode = classToggle.checked;
+            applyClassSettings();
+            showToast(classMode ? '🏫 수업 모드를 켰어요' : '수업 모드를 껐어요');
+        });
+        document.getElementById('allergy-chips').addEventListener('click', e => {
+            const chip = e.target.closest('[data-allergen]');
+            if (!chip) return;
+            const no = Number(chip.dataset.allergen);
+            if (avoidAllergens.has(no)) {
+                avoidAllergens.delete(no);
+            } else {
+                avoidAllergens.add(no);
+            }
+            applyClassSettings();
+            document.querySelector(`#allergy-chips [data-allergen="${no}"]`).focus(); // 다시 그려도 포커스 유지
+        });
+        document.getElementById('allergy-clear').addEventListener('click', () => {
+            avoidAllergens.clear();
+            applyClassSettings();
+        });
+        document.getElementById('class-link-copy').addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(classLink());
+                showToast('🔗 학생용 링크를 복사했어요');
+            } catch (e) {
+                const input = document.getElementById('class-link');
+                input.select();
+                showToast('링크를 길게 눌러 복사해 주세요');
+            }
+        });
+
         // 초기 화면 설정
         updateThemeUI();
         updateTextSizeUI();
         updateFavoriteCount();
         updateShoppingCount();
+        renderClassUI();
         renderRecent();
         filterRecipes('전체');
+        if (openedFromClassLink) showToast('🏫 선생님이 보낸 수업 모드로 열었어요');
         openRecipeFromHash();
         if (location.hash === '#restored' || location.hash === '#reset') {
             showToast(location.hash === '#restored' ? '📂 백업한 기록을 불러왔어요' : '모든 기록을 지웠어요');
