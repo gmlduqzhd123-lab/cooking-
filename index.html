@@ -1018,6 +1018,29 @@
         .class-prep { padding: 12px 14px; border-radius: 12px; border: 2px dashed var(--tip-text); background: var(--tip-bg); color: var(--tip-text); font-size: 0.9rem; font-weight: 700; line-height: 1.6; }
         .class-prep p { margin: 0; }
 
+        /* 영양소 */
+        .card-nutrition { margin: 0; display: flex; flex-wrap: wrap; gap: 4px; }
+        .nutri-tag { display: inline-flex; gap: 2px; padding: 2px 8px; border-radius: 8px; border: 1px solid var(--border); font-size: 0.75rem; font-weight: 700; color: var(--text-muted); }
+        .nutri-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+        .nutri-list li { display: flex; gap: 10px; align-items: baseline; padding: 8px 12px; border-radius: 10px; background: var(--surface-2); font-size: 0.9rem; }
+        .nutri-list li.none { background: transparent; border: 1.5px dashed var(--border); color: var(--text-muted); }
+        .nutri-name { flex: 0 0 96px; font-weight: 800; }
+        .nutri-foods { flex: 1; font-weight: 600; }
+        .nutri-tip { margin: 8px 0 0 0; font-size: 0.9rem; font-weight: 700; color: var(--tip-text); background: var(--tip-bg); padding: 10px 12px; border-radius: 10px; line-height: 1.6; }
+        .nutri-tip:empty { display: none; }
+        .nutri-note { margin: 6px 0 0 0; font-size: 0.8rem; color: var(--text-muted); }
+
+        /* 주간 영양 균형 막대 (한 가지 색, 값은 글자로 바로 표시) */
+        .balance { display: flex; flex-direction: column; gap: 8px; }
+        .balance-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+        .balance-row { display: grid; grid-template-columns: 96px 1fr 64px; align-items: center; gap: 10px; font-size: 0.9rem; font-weight: 700; }
+        .balance-track { height: 12px; border-radius: 4px; background: var(--surface-2); overflow: hidden; }
+        .balance-bar { display: block; height: 100%; border-radius: 4px; background: var(--accent); }
+        .balance-value { text-align: right; font-variant-numeric: tabular-nums; }
+        .balance-row.low .balance-value { color: var(--badge-text); }
+
+        #print-area { display: none; }
+
         /* 공유·복사 결과 안내 */
         .toast {
             position: fixed;
@@ -1062,6 +1085,33 @@
                 scroll-behavior: auto !important;
             }
         }
+
+        /* ===== 활동지 인쇄 ===== */
+        @media print {
+            @page { size: A4; margin: 12mm; }
+            html, body { background: #FFFFFF !important; color: #000000 !important; padding: 0 !important; font-size: 10.5pt; }
+            body > *:not(#print-area), dialog { display: none !important; }
+            #print-area { display: block !important; }
+        }
+        .ws { font-family: 'Pretendard', -apple-system, sans-serif; color: #000; line-height: 1.45; }
+        .ws h1 { margin: 0; font-size: 15pt; }
+        .ws h2 { margin: 10px 0 4px 0; font-size: 11.5pt; border-bottom: 1.5px solid #000; padding-bottom: 2px; }
+        .ws-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; border-bottom: 2.5px solid #000; padding-bottom: 6px; }
+        .ws-fields { display: flex; gap: 14px; font-size: 10pt; white-space: nowrap; }
+        .ws-meta { margin: 6px 0 0 0; font-size: 10pt; }
+        .ws-box { margin: 6px 0 0 0; padding: 6px 8px; border: 1px solid #000; border-radius: 4px; font-size: 9.5pt; }
+        .ws-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
+        .ws ul, .ws ol { margin: 0; padding-left: 18px; }
+        .ws li { margin: 2px 0; }
+        .ws .ws-check { list-style: none; padding-left: 0; }
+        .ws .ws-check li::before { content: '☐ '; }
+        .ws table { width: 100%; border-collapse: collapse; font-size: 10pt; }
+        .ws th, .ws td { border: 1px solid #000; padding: 4px 6px; text-align: left; vertical-align: top; }
+        .ws th { width: 26%; background: #EEEEEE; }
+        .ws td.blank { height: 30px; } /* 아이들이 손으로 쓸 수 있게 넉넉히 */
+        .ws .ws-line { border-bottom: 1px solid #000; height: 30px; margin-top: 2px; }
+        .ws .ws-stars { font-size: 14pt; letter-spacing: 4px; }
+        .ws-foot { margin-top: 8px; font-size: 8.5pt; color: #333; text-align: right; }
     </style>
 </head>
 <body>
@@ -1215,6 +1265,12 @@
         </div>
         <div class="sheet-body">
             <ol class="plan-list" id="plan-list"></ol>
+            <section class="balance" aria-labelledby="balance-title">
+                <h3 class="data-subtitle" id="balance-title">🥗 이번 주 영양 균형</h3>
+                <p class="data-hint">식단에 넣은 날 중 각 영양소가 들어 있는 날이 며칠인지 보여줘요.</p>
+                <ul class="balance-list" id="balance-list"></ul>
+                <p class="nutri-tip" id="balance-hint"></p>
+            </section>
             <div class="shopping-actions">
                 <button type="button" class="primary-btn" data-plan="shop"><span aria-hidden="true">🛒</span> 일주일 재료 장보기 목록에 담기</button>
                 <button type="button" class="secondary-btn" data-plan="random"><span aria-hidden="true">🎲</span> 빈 칸 랜덤 채우기</button>
@@ -1308,6 +1364,24 @@
         </div>
     </dialog>
 
+    <!-- 활동지 인쇄 -->
+    <dialog class="sheet" id="print-dialog" aria-labelledby="print-title">
+        <div class="sheet-bar">
+            <h2 class="sheet-title" id="print-title">🖨 활동지 인쇄</h2>
+            <button type="button" class="close-btn" data-close aria-label="활동지 인쇄 창 닫기">✕</button>
+        </div>
+        <div class="sheet-body">
+            <p class="sheet-intro" id="print-recipe-name"></p>
+            <fieldset class="field tools-field print-kind">
+                <legend>어떤 활동지를 뽑을까요?</legend>
+                <label><input type="radio" name="print-kind" value="student" checked> 🧑‍🎓 학생용 (영양소 칸을 직접 채워요)</label>
+                <label><input type="radio" name="print-kind" value="teacher"> 👩‍🏫 교사용 (영양소 정답·준비 사항 포함)</label>
+            </fieldset>
+            <p class="data-hint">재료 양은 지금 고른 <strong id="print-servings"></strong> 기준으로 인쇄돼요. A4 한 장에 맞춰 나와요.</p>
+            <button type="button" class="primary-btn" id="print-go"><span aria-hidden="true">🖨</span> 인쇄하기</button>
+        </div>
+    </dialog>
+
     <!-- 내 기록 백업 · 복원 -->
     <dialog class="sheet" id="data-dialog" aria-labelledby="data-title">
         <div class="sheet-bar">
@@ -1353,6 +1427,9 @@
     </div>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <!-- 인쇄할 때만 보이는 활동지 -->
+    <div id="print-area" aria-hidden="true"></div>
 
     <script>
         const recipes = [
@@ -1754,6 +1831,78 @@
                 </div>`;
         }
 
+        // ---------- 영양소 (초등 실과: 식품군 → 5대 영양소) ----------
+        // 재료를 식품구성자전거의 식품군으로 나누고, 식품군마다 주로 들어 있는 영양소를 붙인다
+        const FOOD_GROUPS = [
+            { name: '곡류', nutrients: ['탄수화물'], words: ['밥', '식빵', '소면', '우동면', '메밀면', '쫄면', '파스타면', '라면', '짜파게티', '너구리', '진짬뽕', '떡', '부침가루', '핫케이크', '크래커', '라이스페이퍼', '감자', '고구마', '옥수수', '만두', '유부초밥'] },
+            { name: '고기·생선·달걀·콩류', nutrients: ['단백질'], words: ['계란', '달걀', '노른자', '참치', '두부', '낫토', '유부', '삼겹', '돼지고기', '소고기', '우삼겹', '차돌', '닭가슴살', '순살치킨', '베이컨', '햄', '스팸', '소시지', '돈까스', '어묵', '게맛살', '크래미', '명란', '멸치', '연어', '새우', '순대', '만두'] },
+            { name: '채소류', nutrients: ['비타민', '무기질'], words: ['김치', '양파', '대파', '마늘', '숙주', '상추', '콩나물', '애호박', /고추(?!장|기름|참치)/, '깻잎', '부추', '토마토', '피망', '버섯', '채소', '청경채', '배추', '오이', '생강', '김가루', '김밥용 김', '미역'] },
+            { name: '과일류', nutrients: ['비타민', '무기질'], words: ['바나나', '사과', '복숭아', '딸기'] },
+            { name: '우유·유제품류', nutrients: ['단백질', '무기질'], words: ['우유', '치즈', '생크림', '요거트'] },
+            { name: '유지·당류', nutrients: ['지방'], words: ['참기름', '들기름', '식용유', '버터', '마요네즈', '고추기름', '올리브', '들깨가루'] }
+        ];
+        const NUTRIENTS = [
+            { name: '탄수화물', icon: '🍚', tip: '밥·빵·면·감자처럼 곡류를 곁들이면 힘이 나요.' },
+            { name: '단백질', icon: '🥚', tip: '계란·두부·참치 같은 단백질 식품을 더해 보세요.' },
+            { name: '지방', icon: '🧈', tip: '참기름·버터 같은 기름이 조금 들어가면 채워져요.' },
+            { name: '비타민', icon: '🥕', tip: '채소나 과일을 곁들이면 비타민·무기질을 채울 수 있어요.' },
+            { name: '무기질', icon: '🥛', tip: '채소·해조류(김·미역)·우유를 곁들여 보세요.' }
+        ];
+
+        // { nutrients: { 탄수화물: ['밥', ...] }, groups: { 곡류: [...] } }
+        function recipeNutrition(recipe) {
+            const nutrients = {};
+            const groups = {};
+            recipe.ingredients.forEach(ing => {
+                const name = ingredientName(ing) || ing;
+                FOOD_GROUPS.forEach(group => {
+                    if (!group.words.some(word => typeof word === 'string' ? ing.includes(word) : word.test(ing))) return;
+                    (groups[group.name] = groups[group.name] || []).push(name);
+                    group.nutrients.forEach(n => {
+                        nutrients[n] = nutrients[n] || [];
+                        if (!nutrients[n].includes(name)) nutrients[n].push(name);
+                    });
+                });
+            });
+            return { nutrients, groups };
+        }
+
+        // 받침이 있으면 '이', 없으면 '가'
+        function hasFinalConsonant(word) {
+            const code = word.charCodeAt(word.length - 1) - 0xAC00;
+            return code >= 0 && code <= 11171 && code % 28 !== 0;
+        }
+
+        // 부족한 영양소를 채우는 방법 (비타민·무기질은 채소 한 문장으로 합친다)
+        function missingTips(names) {
+            const list = names.includes('비타민') ? names.filter(n => n !== '무기질') : names;
+            return list.map(name => NUTRIENTS.find(n => n.name === name).tip).join(' ');
+        }
+
+        function cardNutritionHtml(recipe) {
+            const { nutrients } = recipeNutrition(recipe);
+            const have = NUTRIENTS.filter(n => nutrients[n.name]);
+            if (have.length === 0) return '';
+            return `<p class="card-nutrition"><span class="sr-only">들어 있는 영양소:</span>${have.map(n => `<span class="nutri-tag"><span aria-hidden="true">${n.icon}</span>${n.name}</span>`).join('')}</p>`;
+        }
+
+        function detailNutritionHtml(recipe) {
+            const { nutrients } = recipeNutrition(recipe);
+            const missing = NUTRIENTS.filter(n => !nutrients[n.name]);
+            return `
+                <section aria-labelledby="nutrition-heading">
+                    <h3 class="section-title" id="nutrition-heading">🥗 영양소 탐구 <span class="section-hint">5대 영양소 중 ${5 - missing.length}가지</span></h3>
+                    <ul class="nutri-list">${NUTRIENTS.map(n => `
+                        <li class="${nutrients[n.name] ? 'has' : 'none'}">
+                            <span class="nutri-name"><span aria-hidden="true">${n.icon}</span> ${n.name}</span>
+                            <span class="nutri-foods">${nutrients[n.name] ? escapeHtml(nutrients[n.name].join(', ')) : '없음'}</span>
+                        </li>`).join('')}
+                    </ul>
+                    ${missing.length ? `<p class="nutri-tip"><span aria-hidden="true">💡</span> ${missingTips(missing.map(n => n.name))}</p>` : '<p class="nutri-tip"><span aria-hidden="true">🎉</span> 5대 영양소가 모두 들어 있어요!</p>'}
+                    <p class="nutri-note">재료가 속한 식품군으로 나눈 거예요. 양념(소금·간장·설탕 등)은 빼고 셌어요.</p>
+                </section>`;
+        }
+
         // ---------- 수업 모드 (초등 실과 실습용) ----------
         // 불·칼을 거의 쓰지 않는 레시피와 선생님 준비 사항
         const CLASS_RECIPES = {
@@ -1924,6 +2073,7 @@
                 <h3 class="recipe-title" id="card-title-${index}"><button type="button" class="title-btn" data-action="detail" data-index="${index}">${escapeHtml(recipe.title)}</button></h3>
                 ${metaHtml(recipe)}
                 ${cardAllergyHtml(recipe)}
+                ${cardNutritionHtml(recipe)}
                 <ul class="ingredients-tags" aria-label="재료">${tagsHtml}</ul>
                 <div class="card-actions">
                     <button type="button" class="primary-btn" data-action="detail" data-index="${index}" tabindex="-1">
@@ -2349,6 +2499,8 @@
                         <button type="button" class="secondary-btn cart-btn" data-action="add-shopping"><span aria-hidden="true">🛒</span> 없는 재료 장보기 목록에 담기</button>
                     </section>
 
+                    ${detailNutritionHtml(recipe)}
+
                     <section aria-labelledby="steps-heading">
                         <h3 class="section-title" id="steps-heading">조리 순서</h3>
                         <p class="progress-text" id="step-progress" aria-live="polite">0 / ${recipe.instructions.length} 단계 완료</p>
@@ -2370,6 +2522,7 @@
                         ${playHtml}
                         ${canWakeLock ? `<button type="button" class="secondary-btn" data-action="wake" aria-pressed="${wantWakeLock}"><span aria-hidden="true">💡</span> 화면 켜두기</button>` : ''}
                         <button type="button" class="secondary-btn" data-action="share" data-index="${index}"><span aria-hidden="true">🔗</span> 공유하기</button>
+                        <button type="button" class="secondary-btn" data-action="print"><span aria-hidden="true">🖨</span> 활동지 인쇄</button>
                         ${random ? `<button type="button" class="secondary-btn" data-action="reroll"><span aria-hidden="true">🎲</span> 다시 뽑기</button>` : ''}
                     </div>
                     ${recipe.custom ? `
@@ -2648,6 +2801,7 @@
         }
 
         function renderPlan() {
+            setTimeout(renderBalance); // 목록을 그린 뒤 그래프 갱신
             const today = todayName();
             document.getElementById('plan-list').innerHTML = DAYS.map(day => `
                 <li class="plan-row">
@@ -2655,6 +2809,32 @@
                     <select id="plan-${day}" data-day="${day}">${recipeOptionsHtml(plan[day])}</select>
                     <button type="button" class="text-btn" data-plan-view="${day}"${plan[day] ? '' : ' hidden'}>보기</button>
                 </li>`).join('');
+        }
+
+        // 식단에 넣은 날 중 각 영양소가 들어 있는 날 수
+        function renderBalance() {
+            const days = DAYS.map(day => recipes.find(r => r.title === plan[day])).filter(Boolean);
+            const list = document.getElementById('balance-list');
+            const hint = document.getElementById('balance-hint');
+            if (days.length === 0) {
+                list.innerHTML = '';
+                hint.textContent = '식단에 메뉴를 넣으면 영양 균형을 보여 드려요.';
+                return;
+            }
+            const counts = NUTRIENTS.map(n => ({ ...n, days: days.filter(r => recipeNutrition(r).nutrients[n.name]).length }));
+            list.innerHTML = counts.map(c => {
+                const low = c.days < days.length / 2;
+                return `<li class="balance-row${low ? ' low' : ''}" title="${c.name}: ${days.length}일 중 ${c.days}일">
+                    <span><span aria-hidden="true">${c.icon}</span> ${c.name}</span>
+                    <span class="balance-track" aria-hidden="true"><span class="balance-bar" style="width:${(c.days / days.length) * 100}%"></span></span>
+                    <span class="balance-value">${c.days}/${days.length}일</span>
+                </li>`;
+            }).join('');
+            const lowest = counts.filter(c => c.days < days.length / 2);
+            const names = lowest.map(c => c.name).join('·');
+            hint.textContent = lowest.length
+                ? `💡 ${names}${hasFinalConsonant(names) ? '이' : '가'} 부족해요. ${missingTips(lowest.map(c => c.name))}`
+                : '🎉 영양소가 고르게 들어 있는 식단이에요!';
         }
 
         function planRecipes() {
@@ -2675,6 +2855,7 @@
             }
             savePlan();
             planDialog.querySelector(`[data-plan-view="${day}"]`).hidden = !plan[day];
+            renderBalance();
         });
         planDialog.addEventListener('click', e => {
             const view = e.target.closest('[data-plan-view]');
@@ -2905,6 +3086,7 @@
                     updateStars(0);
                     break;
                 case 'add-plan': addDetailToPlan(); break;
+                case 'print': openPrintDialog(detailRecipe); break;
                 case 'new-custom': openCustomForm(); break;
                 case 'edit-custom': openCustomForm(detailRecipe); break;
                 case 'delete-custom': deleteCustomRecipe(detailRecipe); break;
@@ -3304,6 +3486,83 @@
                 input.select();
                 showToast('링크를 길게 눌러 복사해 주세요');
             }
+        });
+
+        // ---------- 활동지 인쇄 ----------
+        const printDialog = document.getElementById('print-dialog');
+        const printArea = document.getElementById('print-area');
+        let printRecipe = null;
+
+        function openPrintDialog(recipe) {
+            printRecipe = recipe;
+            document.getElementById('print-recipe-name').textContent = `📄 ${recipe.title}`;
+            document.getElementById('print-servings').textContent = `${servings}인분`;
+            openModal(printDialog);
+        }
+
+        function worksheetHtml(recipe, teacher) {
+            const allergy = recipeAllergens(recipe);
+            const { nutrients } = recipeNutrition(recipe);
+            const prep = CLASS_RECIPES[recipe.title];
+            const line = '<div class="ws-line"></div>';
+            return `
+                <div class="ws">
+                    <div class="ws-top">
+                        <h1>🍳 실과 요리 활동지 ${teacher ? '(교사용)' : ''}</h1>
+                        <div class="ws-fields"><span>날짜: ______</span><span>모둠: ______</span><span>이름: __________</span></div>
+                    </div>
+                    <p class="ws-meta"><strong style="font-size:13pt">${escapeHtml(recipe.title)}</strong>
+                        · ⏱ ${recipe.time}분 · 난이도 ${escapeHtml(recipe.level)} · 도구: ${recipe.tools.map(escapeHtml).join(', ') || '-'} · ${servings}인분</p>
+                    <div class="ws-box">⚠️ 알레르기 유발 식품: ${allergy.length ? allergy.map(a => `${CIRCLED[a.no - 1]}${a.name}`).join(' ') : '재료 이름으로는 없음'}
+                        — 가공식품은 포장지의 알레르기 표시를 꼭 확인하세요.</div>
+                    ${teacher && prep ? `<div class="ws-box">👩‍🏫 준비 사항: ${escapeHtml(prep)}</div>` : ''}
+
+                    <div class="ws-cols">
+                        <div>
+                            <h2>1. 재료 준비 (준비되면 ☐에 표시)</h2>
+                            <ul class="ws-check">${recipe.ingredients.map(i => `<li>${escapeHtml(scaleAmount(i, servings))}</li>`).join('')}</ul>
+                        </div>
+                        <div>
+                            <h2>2. 모둠 역할</h2>
+                            <table>
+                                <tr><th>🥕 재료</th><td class="blank"></td></tr>
+                                <tr><th>⏲ 시간</th><td class="blank"></td></tr>
+                                <tr><th>🧼 위생</th><td class="blank"></td></tr>
+                                <tr><th>📝 기록</th><td class="blank"></td></tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <h2>3. 조리 순서</h2>
+                    <ol>${recipe.instructions.map(step => `<li>☐ ${escapeHtml(step)}</li>`).join('')}</ol>
+
+                    <h2>4. 영양소 탐구 ${teacher ? '' : '— 재료를 알맞은 칸에 써 보세요'}</h2>
+                    <table>${NUTRIENTS.map(n => `<tr><th>${n.icon} ${n.name}</th><td class="${teacher ? '' : 'blank'}">${teacher ? escapeHtml((nutrients[n.name] || ['없음']).join(', ')) : ''}</td></tr>`).join('')}</table>
+                    <p style="margin:4px 0 0 0">부족한 영양소를 채우려면 무엇을 곁들이면 좋을까요?</p>
+                    ${teacher ? `<div class="ws-box">예시: ${escapeHtml(missingTips(NUTRIENTS.filter(n => !nutrients[n.name]).map(n => n.name)) || '5대 영양소가 모두 들어 있어요.')}</div>` : line}
+
+                    <div class="ws-cols">
+                        <div>
+                            <h2>5. 실습 전 안전 체크</h2>
+                            <ul class="ws-check">${SAFETY_CHECKS.map(item => `<li>${item.replace(/^\S+\s/, '')}</li>`).join('')}</ul>
+                        </div>
+                        <div>
+                            <h2>6. 돌아보기</h2>
+                            <p style="margin:0">맛 평가: <span class="ws-stars">☆☆☆☆☆</span></p>
+                            <p style="margin:4px 0 0 0">잘한 점</p>${line}
+                            <p style="margin:4px 0 0 0">다음에 바꿔 볼 점</p>${line}
+                        </div>
+                    </div>
+                    <p class="ws-foot">엽쌤의 혼밥 스쿨 · ${escapeHtml(location.origin + location.pathname)}</p>
+                </div>`;
+        }
+
+        document.getElementById('print-go').addEventListener('click', () => {
+            if (!printRecipe) return;
+            const teacher = printDialog.querySelector('[name="print-kind"]:checked').value === 'teacher';
+            // 휴대폰 브라우저는 print()가 인쇄를 기다리지 않으므로 활동지를 지우지 않고 남겨 둔다 (화면에서는 숨김)
+            printArea.innerHTML = worksheetHtml(printRecipe, teacher);
+            window.print();
         });
 
         // 초기 화면 설정
