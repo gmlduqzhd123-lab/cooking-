@@ -1,6 +1,6 @@
 // 엽쌤의 혼밥 스쿨 서비스 워커: 한 번 열어 본 뒤에는 인터넷이 없어도 레시피를 볼 수 있게 한다.
 // index.html이나 아이콘을 바꾸면 CACHE_VERSION을 올려야 예전 캐시가 정리된다.
-const CACHE_VERSION = 'honbap-v7';
+const CACHE_VERSION = 'honbap-v8';
 const APP_SHELL = [
     './',
     './index.html',

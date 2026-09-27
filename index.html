@@ -302,6 +302,7 @@
         }
         .filter-chips::-webkit-scrollbar { display: none; }
         .filter-chip {
+            position: relative; /* 안의 스크린리더용 글자가 페이지 밖으로 삐져나가 가로 스크롤이 생기지 않게 */
             padding: 6px 12px;
             font-size: 0.85rem;
             font-weight: 700;
@@ -331,28 +332,6 @@
             color: var(--text-muted);
         }
         .meta-row .wait { color: var(--tip-text); }
-
-        .random-banner {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: calc(100% - 40px);
-            max-width: 1160px;
-            margin: 4px auto 16px auto;
-            padding: 18px 20px;
-            border: none;
-            border-radius: 20px;
-            text-align: left;
-            color: #FFFFFF;
-            background: var(--brand-gradient);
-            box-shadow: 0 10px 20px rgba(225, 29, 72, 0.2);
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .random-banner:active { transform: scale(0.97); }
-        .random-title { display: block; font-size: 1.1rem; font-weight: 800; }
-        .random-desc { display: block; margin-top: 4px; font-size: 0.85rem; font-weight: 500; }
-        .random-icon { font-size: 2rem; }
 
         .result-status {
             max-width: 1200px;
@@ -741,6 +720,8 @@
         .timer-btn[hidden] { display: none; }
         :root.timer-running .toast { bottom: 100px; }
         :root.timer-running body { padding-bottom: 110px; }
+        /* 타이머 바가 창 아래쪽 버튼을 가리지 않도록 창 안에도 여백 */
+        :root.timer-running .sheet-body, :root.timer-running .detail-content { padding-bottom: 120px; }
 
         /* 장보기 목록 */
         .sheet-title { margin: 0 auto 0 8px; align-self: center; font-size: 1.1rem; font-weight: 800; }
@@ -755,7 +736,7 @@
         /* 도구 모음 (냉장고 추천 · 주간 식단 · 내 레시피) */
         .tool-row {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 8px;
             max-width: 1160px;
             margin: 0 auto 16px auto;
@@ -765,8 +746,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             gap: 4px;
-            padding: 12px 6px;
+            min-height: 72px;
+            padding: 10px 4px;
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 16px;
@@ -774,9 +757,9 @@
             cursor: pointer;
         }
         .tool-card:active { transform: scale(0.97); }
-        .tool-emoji { font-size: 1.6rem; }
-        .tool-card strong { display: block; font-size: 0.9rem; }
-        .tool-card small { display: block; font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
+        .tool-emoji { font-size: 1.6rem; line-height: 1; }
+        .tool-card strong { display: block; font-size: 0.85rem; line-height: 1.3; }
+        .tool-random { color: #FFFFFF; background: var(--brand-gradient); border-color: transparent; box-shadow: 0 6px 14px rgba(225, 29, 72, 0.25); }
 
         .list-toolbar {
             display: flex;
@@ -907,6 +890,83 @@
         .data-preview-title { margin: 0; font-weight: 800; }
         .danger-btn { align-self: center; color: var(--accent); }
 
+        /* 키보드 사용자를 위한 바로가기 (Tab을 누르면 나타남) */
+        .skip-link {
+            position: absolute;
+            left: 12px;
+            top: -100px;
+            z-index: 200;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: var(--inverse-bg);
+            color: var(--inverse-text);
+            font-weight: 800;
+            text-decoration: none;
+        }
+        .skip-link:focus { top: 12px; }
+
+        /* 검색어 지우기 */
+        .search-clear {
+            position: absolute;
+            right: 26px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px; height: 40px;
+            border: none;
+            border-radius: 20px;
+            background: var(--surface-2);
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+        }
+        .search-clear[hidden] { display: none; }
+        #search-input { padding-right: 52px; }
+        #search-input::-webkit-search-cancel-button { display: none; } /* 브라우저 기본 X와 겹치지 않게 */
+
+        /* 카드 제목도 눌러서 레시피 열기 */
+        .title-btn {
+            padding: 0;
+            border: none;
+            background: none;
+            font: inherit;
+            color: inherit;
+            text-align: left;
+            cursor: pointer;
+        }
+        .title-btn:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+        /* 맨 위로 */
+        .to-top {
+            position: fixed;
+            right: 16px;
+            bottom: 20px;
+            z-index: 9;
+            min-height: 48px;
+            padding: 0 16px;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            background: var(--surface);
+            color: var(--text);
+            font-size: 0.9rem;
+            font-weight: 800;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+        .to-top[hidden] { display: none; }
+        :root.timer-running .to-top { bottom: 100px; }
+
+        /* 윈도우 고대비 모드에서도 선택 상태가 보이도록 */
+        @media (forced-colors: active) {
+            .category-btn[aria-pressed="true"], .filter-chip[aria-pressed="true"], .fridge-chip[aria-pressed="true"],
+            .icon-btn[aria-pressed="true"], .secondary-btn[aria-pressed="true"], .fav-btn[aria-pressed="true"] {
+                outline: 3px solid CanvasText;
+                outline-offset: 2px;
+            }
+            .star.on span { color: Highlight; }
+            .progress-fill { background: Highlight; }
+        }
+
         /* 공유·복사 결과 안내 */
         .toast {
             position: fixed;
@@ -955,6 +1015,8 @@
 </head>
 <body>
 
+    <a class="skip-link" href="#list-heading">레시피 목록으로 바로가기</a>
+
     <header>
         <h1>🍳 엽쌤의 혼밥 스쿨</h1>
         <div class="header-actions">
@@ -965,10 +1027,12 @@
         </div>
     </header>
 
+    <main id="main">
     <form class="search-box" id="search-form" role="search">
         <label for="search-input" class="sr-only">메뉴나 재료로 레시피 검색</label>
         <span class="search-icon" aria-hidden="true">🔍</span>
         <input type="search" id="search-input" placeholder="메뉴나 재료로 검색 (예: 계란 참치)" autocomplete="off" enterkeyhint="search">
+        <button type="button" class="search-clear" id="search-clear" aria-label="검색어 지우기" hidden>✕</button>
     </form>
     <div class="quick-tags" aria-label="자주 찾는 재료">
         <span class="quick-label">냉장고에 뭐 있어요?</span>
@@ -996,13 +1060,12 @@
         <button type="button" class="filter-chip" data-filter="nofire" aria-pressed="false"><span aria-hidden="true">🔌 </span>불 없이<span class="sr-only"> (가스레인지 없이 전자레인지·에어프라이어·밥솥만)</span></button>
     </div>
 
-    <button type="button" class="random-banner" id="random-banner">
-        <span class="random-info">
-            <span class="random-title">오늘 뭐 먹을지 고민이라면?</span>
-            <span class="random-desc">버튼을 눌러 메뉴를 추천받아보세요!</span>
-        </span>
-        <span class="random-icon" aria-hidden="true">🎲</span>
-    </button>
+    <div class="tool-row" role="group" aria-label="도구">
+        <button type="button" class="tool-card tool-random" id="random-banner"><span class="tool-emoji" aria-hidden="true">🎲</span><strong>랜덤 추천</strong><span class="sr-only">: 오늘 뭐 먹을지 골라 드려요</span></button>
+        <button type="button" class="tool-card" id="fridge-open"><span class="tool-emoji" aria-hidden="true">🧊</span><strong>냉장고 추천</strong><span class="sr-only">: 가진 재료로 레시피 찾기</span></button>
+        <button type="button" class="tool-card" id="plan-open"><span class="tool-emoji" aria-hidden="true">📅</span><strong>주간 식단</strong><span class="sr-only">: 일주일 메뉴 짜기</span></button>
+        <button type="button" class="tool-card" id="custom-open"><span class="tool-emoji" aria-hidden="true">✍️</span><strong>내 레시피</strong><span class="sr-only">: 직접 추가하기</span></button>
+    </div>
 
     <section class="recent" id="recent" aria-labelledby="recent-title" hidden>
         <div class="recent-head">
@@ -1012,12 +1075,7 @@
         <div class="recent-list" id="recent-list"></div>
     </section>
 
-    <div class="tool-row">
-        <button type="button" class="tool-card" id="fridge-open"><span class="tool-emoji" aria-hidden="true">🧊</span><span><strong>냉장고 추천</strong><small>있는 재료로 찾기</small></span></button>
-        <button type="button" class="tool-card" id="plan-open"><span class="tool-emoji" aria-hidden="true">📅</span><span><strong>주간 식단</strong><small>일주일 메뉴 짜기</small></span></button>
-        <button type="button" class="tool-card" id="custom-open"><span class="tool-emoji" aria-hidden="true">✍️</span><span><strong>내 레시피</strong><small>직접 추가하기</small></span></button>
-    </div>
-
+    <h2 class="sr-only" id="list-heading" tabindex="-1">레시피 목록</h2>
     <div class="list-toolbar">
         <p class="result-status" id="result-status" role="status"></p>
         <label class="sort-label">
@@ -1030,9 +1088,12 @@
         </label>
     </div>
 
-    <main id="recipe-container">
+    <div id="recipe-container">
         <!-- 레시피 카드가 삽입됩니다. -->
+    </div>
     </main>
+
+    <button type="button" class="to-top" id="to-top" hidden><span aria-hidden="true">↑</span> 맨 위로</button>
 
     <footer class="site-footer">
         <button type="button" class="secondary-btn data-open-btn" id="data-open"><span aria-hidden="true">⚙️</span> 내 기록 백업·복원</button>
@@ -1056,9 +1117,7 @@
             <button type="button" class="close-btn" id="video-close" aria-label="영상 닫기">✕</button>
         </div>
         <div class="video-wrapper">
-            <iframe id="yt-player" title="레시피 영상" src=""
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <!-- 영상 iframe은 열 때마다 새로 만든다 (주소를 바꾸면 뒤로 가기 기록이 쌓이기 때문) -->
         </div>
         <div class="video-footer">
             <a id="yt-link" class="yt-link" href="#" target="_blank" rel="noopener">영상이 재생되지 않나요? 유튜브에서 보기 ↗</a>
@@ -1325,7 +1384,7 @@
         const detailDialog = document.getElementById('detail-dialog');
         const detailBody = document.getElementById('detail-body');
         const videoDialog = document.getElementById('video-dialog');
-        const ytPlayer = document.getElementById('yt-player');
+        const videoWrapper = videoDialog.querySelector('.video-wrapper');
         const ytLink = document.getElementById('yt-link');
         const toast = document.getElementById('toast');
         const shoppingDialog = document.getElementById('shopping-dialog');
@@ -1371,18 +1430,57 @@
 
         // 창 위에 창이 겹쳐 열리므로(식단 → 레시피 → 영상) 열린 순서를 기억한다
         const modalStack = [];
+        // 휴대폰 뒤로 가기를 누르면 사이트를 떠나지 않고 맨 위 창만 닫히도록, 창을 열 때 기록을 하나 쌓는다
+        let ignorePops = 0;
+        // history.back()은 비동기라, 되돌리는 중에 요청된 기록 변경은 되돌리기가 끝난 뒤 순서대로 적용한다
+        const pendingHistoryOps = [];
+        function historyOp(fn) {
+            if (ignorePops > 0) {
+                pendingHistoryOps.push(fn);
+            } else {
+                fn();
+            }
+        }
+        // 되돌리기가 끝나면 주소를 지금 화면에 맞춘다 (레시피 창이 열려 있으면 #recipe=이름, 아니면 없음)
+        function syncUrlWithDetail() {
+            const want = detailDialog.open && detailRecipe ? `#recipe=${encodeURIComponent(detailRecipe.title)}` : '';
+            if (location.hash !== want) history.replaceState(history.state, '', location.pathname + location.search + want);
+        }
         function openModal(dialog) {
             if (!dialog.open) {
                 dialog.showModal();
                 modalStack.push(dialog);
+                historyOp(() => history.pushState({ modal: true }, ''));
             }
             hostFloating();
         }
+        window.addEventListener('popstate', () => {
+            if (ignorePops > 0) {
+                ignorePops--;
+                if (ignorePops === 0) {
+                    pendingHistoryOps.splice(0).forEach(fn => fn());
+                    syncUrlWithDetail();
+                }
+                return;
+            }
+            const top = modalStack[modalStack.length - 1];
+            if (!top) return;
+            // close 이벤트는 비동기로 오므로 전역 변수 대신 창에 표시해 둔다
+            top.dataset.closedByHistory = 'true';
+            top.close();
+        });
         document.querySelectorAll('dialog').forEach(dialog => {
             dialog.addEventListener('close', () => {
                 const i = modalStack.indexOf(dialog);
                 if (i !== -1) modalStack.splice(i, 1);
                 hostFloating();
+                // ✕·ESC·바깥 클릭으로 닫았다면 쌓아 둔 기록도 되돌린다
+                const byHistory = dialog.dataset.closedByHistory === 'true';
+                delete dialog.dataset.closedByHistory;
+                if (!byHistory && history.state && history.state.modal) {
+                    ignorePops++;
+                    history.back();
+                }
             });
             // 창 바깥 어두운 영역을 누르면 닫기
             dialog.addEventListener('click', e => {
@@ -1500,14 +1598,21 @@
                 return;
             }
             document.getElementById('video-title').textContent = recipe.title;
-            ytPlayer.title = `${recipe.title} 레시피 영상`;
-            ytPlayer.src = `https://www.youtube-nocookie.com/embed/${recipe.videoId}?autoplay=1&playsinline=1&rel=0&cc_load_policy=1&hl=ko`;
+            // 새 iframe의 첫 로딩은 뒤로 가기 기록을 남기지 않는다
+            const player = document.createElement('iframe');
+            player.id = 'yt-player';
+            player.title = `${recipe.title} 레시피 영상`;
+            player.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+            player.referrerPolicy = 'strict-origin-when-cross-origin';
+            player.allowFullscreen = true;
+            player.src = `https://www.youtube-nocookie.com/embed/${recipe.videoId}?autoplay=1&playsinline=1&rel=0&cc_load_policy=1&hl=ko`;
+            videoWrapper.replaceChildren(player);
             ytLink.href = `https://www.youtube.com/watch?v=${recipe.videoId}`;
             openModal(videoDialog);
         }
 
         document.getElementById('video-close').addEventListener('click', () => videoDialog.close());
-        videoDialog.addEventListener('close', () => { ytPlayer.src = ''; }); // 닫으면 재생도 멈춘다
+        videoDialog.addEventListener('close', () => videoWrapper.replaceChildren()); // iframe을 없애 재생도 멈춘다
 
         // ---------- 조리시간 · 난이도 · 도구 ----------
         const FIRE_TOOLS = ['냄비', '프라이팬']; // 가스레인지·인덕션이 필요한 도구
@@ -1598,6 +1703,7 @@
             const index = recipes.indexOf(recipe);
             const card = document.createElement('article');
             card.className = 'recipe-card';
+            card.setAttribute('aria-labelledby', `card-title-${index}`);
 
             const shown = recipe.ingredients.slice(0, 4);
             const rest = recipe.ingredients.length - shown.length;
@@ -1611,11 +1717,11 @@
                     ${noteBadgeHtml(recipe)}
                     ${favButtonHtml(recipe)}
                 </div>
-                <h2 class="recipe-title">${escapeHtml(recipe.title)}</h2>
+                <h3 class="recipe-title" id="card-title-${index}"><button type="button" class="title-btn" data-action="detail" data-index="${index}">${escapeHtml(recipe.title)}</button></h3>
                 ${metaHtml(recipe)}
                 <ul class="ingredients-tags" aria-label="재료">${tagsHtml}</ul>
                 <div class="card-actions">
-                    <button type="button" class="primary-btn" data-action="detail" data-index="${index}">
+                    <button type="button" class="primary-btn" data-action="detail" data-index="${index}" tabindex="-1">
                         <span aria-hidden="true">📖</span> 레시피 보기<span class="sr-only">: ${escapeHtml(recipe.title)}</span>
                     </button>
                 </div>
@@ -1683,7 +1789,16 @@
             resultStatus.textContent = conditions.length
                 ? `${conditions.join(' · ')} 레시피 ${visible.length}개`
                 : `레시피 ${visible.length}개`;
-            if (!keepScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (!keepScroll) scrollToList();
+        }
+
+        // 조건을 바꾸면 결과 목록이 보이도록만 움직인다 (페이지 맨 위로 튀지 않게)
+        function scrollToList() {
+            const headerHeight = document.querySelector('header').offsetHeight;
+            const top = document.querySelector('.list-toolbar').getBoundingClientRect().top;
+            if (top < headerHeight || top > window.innerHeight * 0.85) {
+                window.scrollTo({ top: window.scrollY + top - headerHeight - 12, behavior: 'smooth' });
+            }
         }
 
         // 카테고리 필터 클릭
@@ -2057,7 +2172,7 @@
             openModal(detailDialog);
             detailDialog.scrollTop = 0;
             // 주소에 레시피를 남겨, 새로고침하거나 링크를 공유해도 이 레시피가 열리게 한다
-            history.replaceState(null, '', `#recipe=${encodeURIComponent(recipe.title)}`);
+            historyOp(() => history.replaceState(history.state, '', `#recipe=${encodeURIComponent(recipe.title)}`));
         }
 
         function updateStepProgress() {
@@ -2080,7 +2195,7 @@
             }
             wantWakeLock = false;
             releaseWakeLock();
-            history.replaceState(null, '', location.pathname + location.search);
+            historyOp(() => { if (location.hash) history.replaceState(history.state, '', location.pathname + location.search); });
         });
         detailBody.addEventListener('change', e => {
             if (e.target.classList.contains('step-check')) updateStepProgress();
@@ -2184,7 +2299,10 @@
                 return;
             }
             const recipe = recipes.find(r => r.title === title);
-            if (recipe) openDetail(recipe);
+            if (!recipe || (detailDialog.open && detailRecipe === recipe)) return;
+            // 원래 페이지 기록에서는 #recipe를 지우고, 레시피 창의 기록에만 남긴다 (뒤로 가기 → 목록)
+            if (!detailDialog.open) history.replaceState(history.state, '', location.pathname + location.search);
+            openDetail(recipe);
         }
         window.addEventListener('hashchange', openRecipeFromHash);
 
@@ -2582,6 +2700,7 @@
                 case 'clear-search':
                     searchInput.value = '';
                     searchQuery = '';
+                    updateSearchClear();
                     activeFilters.clear();
                     updateFilterChips();
                     renderRecipes();
@@ -2618,6 +2737,7 @@
             tag.addEventListener('click', () => {
                 searchInput.value = tag.dataset.query;
                 searchQuery = tag.dataset.query;
+                updateSearchClear();
                 renderRecipes({ keepScroll: true });
             });
         });
@@ -2638,6 +2758,30 @@
             }
             updateFilterChips();
             renderRecipes({ keepScroll: true });
+        });
+
+        // ---------- 검색어 지우기 버튼 ----------
+        const searchClear = document.getElementById('search-clear');
+        function updateSearchClear() {
+            searchClear.hidden = searchInput.value === '';
+        }
+        searchInput.addEventListener('input', updateSearchClear);
+        searchClear.addEventListener('click', () => {
+            searchInput.value = '';
+            searchQuery = '';
+            updateSearchClear();
+            renderRecipes({ keepScroll: true });
+            searchInput.focus();
+        });
+
+        // ---------- 맨 위로 ----------
+        const toTop = document.getElementById('to-top');
+        window.addEventListener('scroll', () => {
+            toTop.hidden = window.scrollY < 1200;
+        }, { passive: true });
+        toTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            searchInput.focus({ preventScroll: true });
         });
 
         // ---------- 홈 화면에 추가 (PWA) ----------
