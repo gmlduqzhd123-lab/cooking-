@@ -618,6 +618,24 @@
         .video-wrapper iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
         .video-footer { display: flex; justify-content: flex-end; padding: 10px 16px; background: #1A1A1A; }
         .yt-link { color: #F1F5F9; font-size: 0.85rem; font-weight: 600; text-underline-offset: 3px; }
+        /* 영상이 지워졌거나 다른 사이트 재생이 막혔을 때 */
+        .video-wrapper:has(.video-fallback) { aspect-ratio: auto; min-height: 200px; }
+        .video-dialog:has(.video-fallback) .video-footer { display: none; }
+        .video-fallback { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 24px 16px; color: #F1F5F9; text-align: center; }
+        .video-fallback p { margin: 0; line-height: 1.5; font-size: 0.95rem; }
+        .video-fallback .vf-emoji { font-size: 2rem; }
+        .video-fallback .vf-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+        .video-fallback a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 14px; border-radius: 12px; font-weight: 800; font-size: 0.9rem; text-decoration: none; color: #0B1120; background: #F1F5F9; }
+        .video-fallback a.vf-search { color: #F1F5F9; background: transparent; border: 1.5px solid #F1F5F9; }
+        .thumb-btn.broken img { opacity: 0.35; }
+        .thumb-broken { position: absolute; left: 8px; bottom: 8px; padding: 3px 8px; border-radius: 8px; background: rgba(0, 0, 0, 0.75); color: #FFFFFF; font-size: 0.75rem; font-weight: 800; }
+        /* 영상 점검 (?check=videos) */
+        .video-check { margin: 16px; padding: 16px; border-radius: 16px; background: var(--surface); border: 1.5px solid var(--input-border); color: var(--text); }
+        .video-check h2 { margin: 0 0 8px; font-size: 1.1rem; }
+        .video-check .vc-stage { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0; }
+        .video-check .vc-stage iframe { width: 160px; height: 90px; border: 0; border-radius: 8px; background: #000000; }
+        .video-check ol { padding-left: 20px; }
+        .video-check textarea { width: 100%; min-height: 120px; font: inherit; font-size: 0.85rem; }
 
         /* 최근 본 레시피 */
         .recent { max-width: 1200px; margin: 0 auto 16px auto; padding: 0 20px; }
@@ -1568,7 +1586,7 @@
             { category: "한식", title: "두부 계란 부침", videoId: "We9R0J8G4Ko", isNew: true, time: 10, level: "쉬움", tools: ["프라이팬"], ingredients: ["두부 1/2모", "계란 1개", "소금 1꼬집", "식용유 약간"], instructions: ["두부를 1cm 두께로 썰어 소금을 살짝 뿌립니다.", "두부를 풀어 둔 계란물에 담급니다.", "기름을 두른 팬에 앞뒤로 노릇하게 부칩니다."], tip: "키친타월로 두부 물기를 먼저 닦으면 덜 튀어요." },
             { category: "한식", title: "스팸 계란 덮밥", videoId: "8shJPajNehg", isNew: true, time: 10, level: "쉬움", tools: ["프라이팬"], ingredients: ["밥 1공기", "스팸 1/3캔", "계란 1개", "마요네즈 1스푼", "간장 1/2스푼", "김가루 약간"], instructions: ["스팸을 깍둑썰어 팬에 노릇하게 굽습니다.", "계란을 스크램블로 익힙니다.", "밥 위에 스팸과 계란을 올리고 간장, 마요네즈, 김가루를 뿌립니다."], tip: "스팸은 뜨거운 물에 한 번 데치면 덜 짜요." },
             { category: "한식", title: "참치 쌈밥", videoId: "9c-qWdUhzG4", isNew: true, time: 10, level: "쉬움", tools: ["불 없이"], ingredients: ["밥 1공기", "참치 1/2캔", "깻잎 6장", "쌈장 1스푼", "마요네즈 1스푼"], instructions: ["기름을 뺀 참치에 쌈장과 마요네즈를 섞습니다.", "깻잎 위에 밥을 한 숟가락씩 올립니다.", "참치 쌈장을 올리고 돌돌 싸서 먹습니다."], tip: "깻잎 대신 상추나 데친 양배추도 좋아요." },
-            { category: "한식", title: "골뱅이 소면", videoId: "qAEMsX98tNE", isNew: true, time: 15, level: "쉬움", tools: ["냄비"], ingredients: ["골뱅이 통조림 1캔", "소면 1인분", "오이 1/2개", "고추장 2스푼", "식초 2스푼", "설탕 1스푼"], instructions: ["소면을 3분 삶아 찬물에 헹궈 물기를 뺍니다.", "골뱅이와 오이를 먹기 좋게 썹니다.", "고추장, 식초, 설탕, 골뱅이 국물 1스푼을 섞어 모두 함께 버무립니다."], tip: "골뱅이 통조림 국물을 양념에 조금 넣으면 감칠맛이 살아요." },
+            { category: "한식", title: "골뱅이 소면", videoId: "mPOH5i-hUc0", isNew: true, time: 15, level: "쉬움", tools: ["냄비"], ingredients: ["골뱅이 통조림 1캔", "소면 1인분", "오이 1/2개", "고추장 2스푼", "식초 2스푼", "설탕 1스푼"], instructions: ["소면을 3분 삶아 찬물에 헹궈 물기를 뺍니다.", "골뱅이와 오이를 먹기 좋게 썹니다.", "고추장, 식초, 설탕, 골뱅이 국물 1스푼을 섞어 모두 함께 버무립니다."], tip: "골뱅이 통조림 국물을 양념에 조금 넣으면 감칠맛이 살아요." },
             { category: "한식", title: "미역 오이 냉국", videoId: "DzyhIlVx-jc", isNew: true, time: 10, level: "쉬움", tools: ["불 없이"], ingredients: ["건미역 1줌", "오이 1/2개", "식초 3스푼", "설탕 1.5스푼", "국간장 1스푼", "생수 2컵"], instructions: ["미역을 물에 10분 불려 헹군 뒤 먹기 좋게 썹니다.", "오이를 채 썹니다.", "생수에 식초, 설탕, 국간장을 녹이고 미역과 오이를 넣은 뒤 얼음을 띄웁니다."], tip: "불을 쓰지 않는 여름 국이에요." },
             { category: "한식", title: "메추리알 장조림", videoId: "ADHgbT-eL2Y", isNew: true, time: 15, level: "쉬움", tools: ["냄비"], ingredients: ["깐 메추리알 1봉(300g)", "간장 4스푼", "설탕 2스푼", "물 1컵", "통마늘 5알"], instructions: ["냄비에 물, 간장, 설탕, 마늘을 넣고 끓입니다.", "끓으면 깐 메추리알을 넣습니다.", "중약불에서 국물이 반으로 줄 때까지 10분 졸입니다."], tip: "깐 메추리알을 사면 손질이 필요 없어요." },
             { category: "한식", title: "닭가슴살 김치볶음밥", videoId: "TQxgcoOvUXs", isNew: true, time: 10, level: "쉬움", tools: ["프라이팬"], ingredients: ["밥 1공기", "닭가슴살 1팩", "신김치 1/2컵", "고추장 1/2스푼", "참기름 1스푼"], instructions: ["닭가슴살과 김치를 잘게 썹니다.", "팬에 김치와 고추장을 볶다가 닭가슴살을 넣습니다.", "밥을 넣고 고루 볶은 뒤 참기름을 두릅니다."], tip: "시판 훈제 닭가슴살을 쓰면 더 간편해요." },
@@ -1893,9 +1911,11 @@
 
         function thumbHtml(recipe) {
             if (!recipe.videoId) return '';
-            return `<button type="button" class="thumb-btn" data-action="play" data-index="${recipes.indexOf(recipe)}" aria-label="${escapeHtml(recipe.title)} 영상 재생">
-                    <img src="https://i.ytimg.com/vi/${recipe.videoId}/mqdefault.jpg" alt="" loading="lazy" width="320" height="180">
+            const broken = brokenVideos.has(recipe.videoId);
+            return `<button type="button" class="thumb-btn${broken ? ' broken' : ''}" data-action="play" data-index="${recipes.indexOf(recipe)}" aria-label="${escapeHtml(recipe.title)} 영상 ${broken ? '찾기' : '재생'}">
+                    <img src="https://i.ytimg.com/vi/${recipe.videoId}/mqdefault.jpg" alt="" loading="lazy" width="320" height="180" data-video="${recipe.videoId}">
                     <span class="thumb-play" aria-hidden="true"></span>
+                    ${broken ? '<span class="thumb-broken" aria-hidden="true">다른 영상 찾기</span>' : ''}
                 </button>`;
         }
 
@@ -1904,6 +1924,79 @@
             return `https://www.youtube.com/results?search_query=${encodeURIComponent(recipe.title + ' 레시피')}`;
         }
 
+        // ---------- 재생할 수 없는 영상 ----------
+        // 영상이 지워졌거나(100) 주인이 다른 사이트 재생을 막아 두면(101·150) 유튜브 플레이어가 알려 준다.
+        // 한 번 알게 된 영상은 기억해 두고, 다음부터는 바로 '유튜브에서 보기 · 다른 영상 찾기'를 보여 준다.
+        const BROKEN_KEY = 'honbap-broken-videos';
+        const brokenStore = readStore(BROKEN_KEY, {});
+        const brokenVideos = new Map(Object.entries(brokenStore && typeof brokenStore === 'object' && !Array.isArray(brokenStore) ? brokenStore : {})); // { 영상 id: 오류 번호 }
+        const YT_ORIGINS = ['https://www.youtube-nocookie.com', 'https://www.youtube.com'];
+        const PLAYER_ERRORS = [100, 101, 150, 153];
+
+        function markBroken(videoId, code) {
+            if (!videoId || brokenVideos.has(videoId)) return;
+            brokenVideos.set(videoId, code);
+            writeStore(BROKEN_KEY, Object.fromEntries(brokenVideos));
+            document.querySelectorAll(`img[data-video="${videoId}"]`).forEach(img => {
+                const btn = img.closest('.thumb-btn');
+                if (!btn || btn.classList.contains('broken')) return;
+                btn.classList.add('broken');
+                btn.insertAdjacentHTML('beforeend', '<span class="thumb-broken" aria-hidden="true">다른 영상 찾기</span>');
+                btn.setAttribute('aria-label', btn.getAttribute('aria-label').replace(/재생$/, '찾기'));
+            });
+        }
+
+        // 지워진 영상의 썸네일은 유튜브가 120×90 회색 그림으로 보내 준다 (인터넷이 끊겨 못 불러온 것과는 구별)
+        document.addEventListener('load', e => {
+            const img = e.target;
+            if (img.tagName === 'IMG' && img.dataset.video && img.naturalWidth === 120) markBroken(img.dataset.video, 100);
+        }, true);
+
+        // 유튜브 플레이어(iframe)가 보내는 소식(준비됨·오류)을 듣는다
+        function listenToPlayer(iframe, onEvent) {
+            let heard = false;
+            const ping = () => {
+                if (heard || !iframe.isConnected) return;
+                iframe.contentWindow?.postMessage(JSON.stringify({ event: 'listening', id: iframe.id, channel: 'widget' }), '*');
+            };
+            const timer = setInterval(ping, 300);
+            iframe.addEventListener('load', ping);
+            const onMessage = e => {
+                if (e.source !== iframe.contentWindow || !YT_ORIGINS.includes(e.origin)) return;
+                let data;
+                try { data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data; } catch { return; }
+                if (!data || typeof data.event !== 'string') return;
+                heard = true;
+                clearInterval(timer);
+                onEvent(data);
+            };
+            window.addEventListener('message', onMessage);
+            return () => { clearInterval(timer); window.removeEventListener('message', onMessage); };
+        }
+
+        function embedUrl(videoId, extra = '') {
+            const origin = /^https?:/.test(location.origin) ? `&origin=${encodeURIComponent(location.origin)}` : '';
+            return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&playsinline=1&rel=0&cc_load_policy=1&hl=ko&enablejsapi=1${origin}${extra}`;
+        }
+
+        function showVideoFallback(recipe, code) {
+            const deleted = code === 100;
+            const box = document.createElement('div');
+            box.className = 'video-fallback';
+            box.setAttribute('role', 'alert');
+            box.innerHTML = `
+                <p class="vf-emoji" aria-hidden="true">😢</p>
+                <p><strong>이 영상은 앱 안에서 재생할 수 없어요.</strong><br>${deleted ? '영상이 지워졌거나 비공개로 바뀌었어요.' : '영상 주인이 다른 사이트에서 재생하지 못하게 막아 두었어요.'}</p>
+                <div class="vf-actions">
+                    ${deleted ? '' : `<a href="https://www.youtube.com/watch?v=${recipe.videoId}" target="_blank" rel="noopener">유튜브에서 이 영상 보기 ↗</a>`}
+                    <a class="${deleted ? '' : 'vf-search'}" href="${youtubeSearchUrl(recipe)}" target="_blank" rel="noopener">비슷한 레시피 영상 찾기 ↗</a>
+                </div>`;
+            videoWrapper.replaceChildren(box);
+            ytLink.href = deleted ? youtubeSearchUrl(recipe) : `https://www.youtube.com/watch?v=${recipe.videoId}`;
+        }
+
+        let stopListening = null;
+
         // 영상이 있으면 앱 안에서 재생, 없으면 유튜브 검색 결과를 새 탭으로 연다
         function playRecipe(recipe) {
             if (!recipe.videoId) {
@@ -1911,6 +2004,13 @@
                 return;
             }
             document.getElementById('video-title').textContent = recipe.title;
+            stopListening?.();
+            stopListening = null;
+            if (brokenVideos.has(recipe.videoId)) {
+                showVideoFallback(recipe, brokenVideos.get(recipe.videoId));
+                openModal(videoDialog);
+                return;
+            }
             // 새 iframe의 첫 로딩은 뒤로 가기 기록을 남기지 않는다
             const player = document.createElement('iframe');
             player.id = 'yt-player';
@@ -1918,14 +2018,98 @@
             player.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
             player.referrerPolicy = 'strict-origin-when-cross-origin';
             player.allowFullscreen = true;
-            player.src = `https://www.youtube-nocookie.com/embed/${recipe.videoId}?autoplay=1&playsinline=1&rel=0&cc_load_policy=1&hl=ko`;
+            player.src = embedUrl(recipe.videoId);
             videoWrapper.replaceChildren(player);
             ytLink.href = `https://www.youtube.com/watch?v=${recipe.videoId}`;
+            stopListening = listenToPlayer(player, data => {
+                if (data.event === 'onError' && PLAYER_ERRORS.includes(Number(data.info))) {
+                    markBroken(recipe.videoId, Number(data.info));
+                    stopListening?.();
+                    stopListening = null;
+                    showVideoFallback(recipe, Number(data.info));
+                }
+            });
             openModal(videoDialog);
         }
 
         document.getElementById('video-close').addEventListener('click', () => videoDialog.close());
-        videoDialog.addEventListener('close', () => videoWrapper.replaceChildren()); // iframe을 없애 재생도 멈춘다
+        videoDialog.addEventListener('close', () => { // iframe을 없애 재생도 멈춘다
+            stopListening?.();
+            stopListening = null;
+            videoWrapper.replaceChildren();
+        });
+
+        // ---------- 영상 점검 (주소 끝에 ?check=videos) ----------
+        // 모든 레시피 영상을 하나씩 불러 보고, 앱 안에서 재생되지 않는 영상을 목록으로 보여 준다
+        function checkOneVideo(stage, recipe) {
+            return new Promise(resolve => {
+                const frame = document.createElement('iframe');
+                frame.id = `vc-${recipe.videoId}`;
+                frame.title = `${recipe.title} 영상 점검`;
+                frame.allow = 'autoplay; encrypted-media';
+                frame.src = embedUrl(recipe.videoId, '&mute=1');
+                let settled = false;
+                let readyTimer = null;
+                const finish = result => {
+                    if (settled) return;
+                    settled = true;
+                    clearTimeout(timeout);
+                    clearTimeout(readyTimer);
+                    stop();
+                    frame.remove();
+                    resolve(result);
+                };
+                const stop = listenToPlayer(frame, data => {
+                    if (data.event === 'onError') finish({ ok: false, code: Number(data.info) });
+                    if (data.event === 'onReady' && !readyTimer) readyTimer = setTimeout(() => finish({ ok: true }), 4000);
+                    const state = data.info && data.info.playerState;
+                    if (data.event === 'infoDelivery' && (state === 1 || state === 3)) finish({ ok: true });
+                });
+                const timeout = setTimeout(() => finish({ ok: false, code: 'timeout' }), 20000);
+                stage.appendChild(frame);
+            });
+        }
+
+        async function runVideoCheck() {
+            const panel = document.createElement('section');
+            panel.className = 'video-check';
+            panel.setAttribute('aria-labelledby', 'vc-title');
+            panel.innerHTML = `<h2 id="vc-title">🎬 영상 점검</h2>
+                <p id="vc-progress" role="status">준비 중…</p>
+                <div class="vc-stage" aria-hidden="true"></div>
+                <ol id="vc-list"></ol>`;
+            document.querySelector('main')?.prepend(panel) ?? document.body.prepend(panel);
+            const stage = panel.querySelector('.vc-stage');
+            const list = panel.querySelector('#vc-list');
+            const progress = panel.querySelector('#vc-progress');
+            const queue = recipes.filter(r => r.videoId && !r.custom);
+            const failed = [];
+            let done = 0;
+            const worker = async () => {
+                while (queue.length) {
+                    const recipe = queue.shift();
+                    const result = await checkOneVideo(stage, recipe);
+                    done++;
+                    if (!result.ok) {
+                        failed.push({ recipe, code: result.code });
+                        if (result.code !== 'timeout') markBroken(recipe.videoId, result.code);
+                        const li = document.createElement('li');
+                        li.textContent = `${recipe.title} (${recipe.videoId}) — ${result.code === 'timeout' ? '응답 없음' : `오류 ${result.code}`}`;
+                        list.appendChild(li);
+                    }
+                    progress.textContent = `${done}개 확인 · 재생 안 됨 ${failed.length}개`;
+                }
+            };
+            await Promise.all([worker(), worker(), worker()]);
+            progress.textContent = `점검 끝! ${done}개 중 ${failed.length}개가 앱 안에서 재생되지 않아요.`;
+            const text = failed.map(f => `${f.recipe.title}|${f.recipe.videoId}|${f.code}`).join('\n');
+            panel.insertAdjacentHTML('beforeend', failed.length
+                ? `<p>아래 결과를 복사해 보내 주시면 영상을 바꿔 드릴게요.</p><textarea readonly aria-label="점검 결과">${escapeHtml(text)}</textarea>`
+                : '<p>모든 영상이 잘 재생돼요. 🎉</p>');
+        }
+        if (new URLSearchParams(location.search).get('check') === 'videos') {
+            window.addEventListener('load', () => runVideoCheck());
+        }
 
         // ---------- 알레르기 유발 식품 (학교 급식표와 같은 19종 · 같은 번호) ----------
         // 재료 이름에 들어 있는 말로 찾는다. 모르면 빠뜨리는 것보다 표시하는 쪽이 안전하므로 넉넉하게 잡는다.
@@ -3552,6 +3736,7 @@
             if (!confirm('즐겨찾기·메모·식단·장보기·내 레시피를 모두 지울까요? 되돌릴 수 없어요.\n(먼저 백업 파일을 저장해 두는 걸 추천해요)')) return;
             try {
                 Object.keys(BACKUP_KEYS).forEach(key => localStorage.removeItem(key));
+                localStorage.removeItem(BROKEN_KEY); // 재생 안 되던 영상 기억도 지운다
             } catch (e) { /* 저장소를 쓸 수 없음 */ }
             location.replace(location.pathname + location.search + '#reset');
             location.reload();
