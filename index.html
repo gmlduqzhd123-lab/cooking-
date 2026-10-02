@@ -38,6 +38,11 @@
             if (savedTheme === 'light' || savedTheme === 'dark') document.documentElement.dataset.theme = savedTheme;
             if (JSON.parse(localStorage.getItem('honbap-large-text'))) document.documentElement.dataset.text = 'large';
         } catch (e) { /* 저장소를 쓸 수 없으면 기본값 */ }
+        // 소개 화면: 레시피·수업 링크로 바로 들어왔거나, 이번에 이미 본 경우에는 건너뛴다
+        try {
+            var directLink = /recipe=|#restored|#reset/.test(location.hash) || /[?&](mode|avoid)=/.test(location.search);
+            if (!directLink && !sessionStorage.getItem('honbap-intro-seen')) document.documentElement.classList.add('show-intro');
+        } catch (e) { document.documentElement.classList.add('show-intro'); }
     </script>
     <style>
         :root {
@@ -1146,6 +1151,169 @@
             outline-offset: 3px;
         }
 
+        /* ---------- 소개 화면 ---------- */
+        .intro { display: none; }
+        :root.show-intro { overflow: hidden; }
+        :root.show-intro .intro {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: max(28px, env(safe-area-inset-top)) 24px max(28px, env(safe-area-inset-bottom));
+            color: #F8FAFC;
+            background:
+                radial-gradient(60% 55% at 78% 30%, rgba(225, 29, 72, 0.42), transparent 70%),
+                radial-gradient(45% 40% at 40% 105%, rgba(194, 65, 12, 0.38), transparent 70%),
+                radial-gradient(35% 35% at 0% 0%, rgba(146, 64, 14, 0.30), transparent 70%),
+                #0B0B0F;
+            transition: opacity 0.35s ease, transform 0.35s ease;
+        }
+        .intro.leaving { opacity: 0; transform: scale(1.015); }
+        .intro-grid {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 32px 32px;
+            -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+            mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+        }
+        .intro-inner {
+            position: relative;
+            width: 100%;
+            max-width: 1080px;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 56px;
+            align-items: center;
+        }
+        .intro-copy > * { animation: intro-rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+        .intro-copy > :nth-child(2) { animation-delay: 0.06s; }
+        .intro-copy > :nth-child(3) { animation-delay: 0.12s; }
+        .intro-copy > :nth-child(4) { animation-delay: 0.18s; }
+        .intro-copy > :nth-child(5) { animation-delay: 0.24s; }
+        @keyframes intro-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+        .intro-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #E2E8F0;
+        }
+        .intro-pill::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #FB7185; box-shadow: 0 0 0 4px rgba(251, 113, 133, 0.22); }
+        .intro-title {
+            margin: 22px 0 0 0;
+            font-size: clamp(3.4rem, 11vw, 6.6rem);
+            font-weight: 800;
+            line-height: 1.02;
+            letter-spacing: -0.045em;
+        }
+        .intro-title span { display: block; }
+        .intro-title .grad { background: linear-gradient(120deg, #FDA4AF 0%, #FB923C 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .intro-sub {
+            margin: 20px 0 0 0;
+            font-size: clamp(1rem, 2.1vw, 1.2rem);
+            line-height: 1.6;
+            color: #CBD5E1;
+            word-break: keep-all;
+        }
+        .intro-stats { display: flex; gap: 0; margin: 30px 0 0 0; padding: 0; list-style: none; }
+        .intro-stats li { padding: 0 22px; border-left: 1px solid rgba(255, 255, 255, 0.14); }
+        .intro-stats li:first-child { padding-left: 0; border-left: none; }
+        .intro-stats strong { display: block; font-size: 1.7rem; font-weight: 800; letter-spacing: -0.02em; }
+        .intro-stats span { font-size: 0.8rem; color: #94A3B8; font-weight: 600; }
+        .intro-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 34px 0 0 0; }
+        .intro-start, .intro-ghost {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 52px;
+            padding: 0 26px;
+            border-radius: 16px;
+            font: inherit;
+            font-size: 1.02rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.15s ease, background 0.2s ease;
+        }
+        .intro-start { color: #0B0B0F; background: #F8FAFC; border: none; box-shadow: 0 10px 30px rgba(225, 29, 72, 0.35); }
+        .intro-start:hover { transform: translateY(-2px); }
+        .intro-ghost { color: #F8FAFC; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.22); }
+        .intro-ghost:hover { background: rgba(255, 255, 255, 0.12); }
+        .intro-link { margin-left: 4px; padding: 8px 4px; font: inherit; font-size: 0.92rem; font-weight: 700; color: #CBD5E1; background: none; border: none; cursor: pointer; text-decoration: underline; text-underline-offset: 4px; text-decoration-color: rgba(203, 213, 225, 0.4); }
+        .intro-link:hover { color: #FFFFFF; }
+        .intro :focus-visible { outline: 3px solid #FDA4AF; outline-offset: 3px; }
+        .intro-visual { position: relative; aspect-ratio: 1; width: 100%; max-width: 400px; justify-self: center; }
+        .intro-tile {
+            position: absolute;
+            inset: 14%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 22%;
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            transform: rotate(-3deg);
+            font-size: clamp(5rem, 15vw, 8.5rem);
+            line-height: 1;
+            animation: intro-float 7s ease-in-out infinite;
+        }
+        .intro-tile small { position: absolute; right: 9%; bottom: 8%; font-size: 0.42em; }
+        .intro-chip {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 19%;
+            aspect-ratio: 1;
+            border-radius: 28%;
+            background: rgba(30, 24, 28, 0.82);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 16px 34px rgba(0, 0, 0, 0.4);
+            font-size: clamp(1.6rem, 4.6vw, 2.5rem);
+            line-height: 1;
+            animation: intro-float 6s ease-in-out infinite;
+        }
+        .intro-chip:nth-of-type(2) { left: 2%; top: 8%; transform: rotate(-9deg); animation-delay: -1s; }
+        .intro-chip:nth-of-type(3) { right: 0; top: 2%; transform: rotate(8deg); animation-delay: -3s; }
+        .intro-chip:nth-of-type(4) { right: -2%; bottom: 14%; transform: rotate(6deg); animation-delay: -2s; }
+        .intro-chip:nth-of-type(5) { left: 4%; bottom: 4%; transform: rotate(-6deg); animation-delay: -4s; }
+        @keyframes intro-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -10px; } }
+        .intro-foot { position: absolute; left: 0; right: 0; bottom: max(18px, env(safe-area-inset-bottom)); text-align: center; font-size: 0.78rem; color: #64748B; letter-spacing: 0.02em; pointer-events: none; }
+        .intro-foot em { font-family: Georgia, serif; font-style: italic; color: #94A3B8; }
+        @media (max-width: 760px) {
+            :root.show-intro .intro { flex-direction: column; justify-content: flex-start; padding-top: max(20px, env(safe-area-inset-top)); padding-bottom: max(20px, env(safe-area-inset-bottom)); }
+            .intro-foot { position: static; margin: 28px 0 0 0; }
+            .intro-inner { grid-template-columns: 1fr; gap: 6px; text-align: center; }
+            .intro-visual { order: -1; max-width: 230px; }
+            .intro-title { margin-top: 16px; }
+            .intro-stats, .intro-actions { justify-content: center; }
+            .intro-stats li { padding: 0 16px; }
+            .intro-actions { flex-direction: column; align-items: stretch; gap: 10px; margin-top: 28px; }
+            .intro-start, .intro-ghost { justify-content: center; }
+            .intro-link { margin: 2px auto 0 auto; }
+        }
+        @media (max-width: 760px) and (max-height: 700px) {
+            .intro-visual { max-width: 150px; }
+            .intro-title { font-size: 3rem; }
+            .intro-sub { margin-top: 14px; }
+            .intro-stats { margin-top: 20px; }
+            .intro-actions { margin-top: 20px; }
+        }
+        /* 제목을 누르면 소개 화면을 다시 볼 수 있다 */
+        .brand-btn { padding: 0; font: inherit; color: inherit; background: none; border: none; cursor: pointer; text-align: left; }
+
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after {
                 transition: none !important;
@@ -1184,10 +1352,40 @@
 </head>
 <body>
 
+    <!-- 소개 화면 (첫 화면) -->
+    <section class="intro" id="intro" aria-labelledby="intro-title">
+        <div class="intro-grid" aria-hidden="true"></div>
+        <div class="intro-inner">
+            <div class="intro-copy">
+                <span class="intro-pill">실과 수업 · 자취 요리</span>
+                <h2 class="intro-title" id="intro-title"><span>요리</span><span class="grad">대백과</span></h2>
+                <p class="intro-sub">실과 교과에 나오는 모든 요리와<br>자취생·혼밥러를 위한 마법의 레시피</p>
+                <ul class="intro-stats">
+                    <li><strong id="intro-count-all">215</strong><span>레시피</span></li>
+                    <li><strong id="intro-count-silgwa">43</strong><span>실과 요리</span></li>
+                    <li><strong>5·6</strong><span>학년별 보기</span></li>
+                </ul>
+                <div class="intro-actions">
+                    <button type="button" class="intro-start" data-intro="start">시작하기 <span aria-hidden="true">→</span></button>
+                    <button type="button" class="intro-ghost" data-intro="silgwa"><span aria-hidden="true">📚</span> 실과 요리 보기</button>
+                    <button type="button" class="intro-link" data-intro="random">오늘 뭐 먹지? <span aria-hidden="true">🎲</span></button>
+                </div>
+            </div>
+            <div class="intro-visual" aria-hidden="true">
+                <div class="intro-tile">📖<small>🍳</small></div>
+                <div class="intro-chip">🍙</div>
+                <div class="intro-chip">🥚</div>
+                <div class="intro-chip">🍜</div>
+                <div class="intro-chip">🥗</div>
+            </div>
+        </div>
+        <p class="intro-foot">엽쌤의 바이브 코딩 교실 · <em>made with vibe.</em></p>
+    </section>
+
     <a class="skip-link" href="#list-heading">레시피 목록으로 바로가기</a>
 
     <header>
-        <h1>📖 요리 대백과</h1>
+        <h1><button type="button" class="brand-btn" id="brand-btn" aria-label="요리 대백과 소개 화면 보기">📖 요리 대백과</button></h1>
         <div class="header-actions">
             <button type="button" class="icon-btn install-btn" id="install-btn" hidden>📲 앱 설치</button>
             <button type="button" class="icon-btn" id="shopping-btn" aria-label="장보기 목록"><span aria-hidden="true">🛒</span><span class="fav-count" id="shopping-count" aria-hidden="true" hidden>0</span></button>
@@ -4127,7 +4325,42 @@
         updateShoppingCount();
         renderClassUI();
         renderRecent();
+        // ---------- 소개 화면 ----------
+        const intro = document.getElementById('intro');
+        const introBackdrop = () => [...document.body.children].filter(el => el !== intro && !['SCRIPT', 'DIALOG'].includes(el.tagName));
+        function openIntro({ focus = false } = {}) {
+            document.getElementById('intro-count-all').textContent = recipes.filter(r => !r.custom).length;
+            document.getElementById('intro-count-silgwa').textContent = SILGWA_TITLES.size;
+            root.classList.add('show-intro');
+            introBackdrop().forEach(el => { el.inert = true; });
+            if (focus) intro.querySelector('.intro-start').focus();
+        }
+        function closeIntro(after) {
+            try { sessionStorage.setItem('honbap-intro-seen', '1'); } catch (e) { /* 저장소를 쓸 수 없음 */ }
+            introBackdrop().forEach(el => { el.inert = false; });
+            const finish = () => {
+                root.classList.remove('show-intro');
+                intro.classList.remove('leaving');
+                after?.();
+            };
+            if (matchMedia('(prefers-reduced-motion: reduce)').matches) return finish();
+            intro.classList.add('leaving');
+            setTimeout(finish, 350);
+        }
+        intro.addEventListener('click', e => {
+            const btn = e.target.closest('[data-intro]');
+            if (!btn) return;
+            if (btn.dataset.intro === 'start') closeIntro(() => searchInput.focus({ preventScroll: true }));
+            if (btn.dataset.intro === 'silgwa') closeIntro(() => filterRecipes('실과 요리'));
+            if (btn.dataset.intro === 'random') closeIntro(() => pickRandomRecipe());
+        });
+        document.getElementById('brand-btn').addEventListener('click', () => {
+            window.scrollTo({ top: 0 });
+            openIntro({ focus: true });
+        });
+
         filterRecipes('전체');
+        if (root.classList.contains('show-intro')) openIntro();
         if (openedFromClassLink) showToast('🏫 선생님이 보낸 수업 모드로 열었어요');
         openRecipeFromHash();
         if (location.hash === '#restored' || location.hash === '#reset') {
