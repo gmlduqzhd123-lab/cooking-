@@ -302,6 +302,30 @@
         }
         .fav-count[hidden] { display: none; }
 
+        .grade-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 0 20px 12px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .grade-row[hidden] { display: none; }
+        .grade-btn {
+            white-space: nowrap;
+            padding: 8px 14px;
+            font: inherit;
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: var(--text);
+            background: var(--surface);
+            border: 1.5px solid var(--input-border);
+            border-radius: 12px;
+            cursor: pointer;
+        }
+        .grade-btn .grade-hint { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); }
+        .grade-btn[aria-pressed="true"] { color: var(--inverse-text); background: var(--inverse-bg); border-color: var(--inverse-bg); }
+        .grade-btn[aria-pressed="true"] .grade-hint { color: inherit; opacity: 0.85; }
         .filter-chips {
             display: flex;
             gap: 8px;
@@ -1202,6 +1226,11 @@
         <button class="category-btn" data-category="기타" aria-pressed="false"><span aria-hidden="true">🍝 </span>양식·기타</button>
         <button class="category-btn" data-category="내 레시피" aria-pressed="false"><span aria-hidden="true">✍️ </span>내 레시피</button>
     </nav>
+    <div class="grade-row" id="grade-row" role="group" aria-label="실과 학년 고르기" hidden>
+        <button type="button" class="grade-btn" data-grade="all" aria-pressed="true">전체 학년</button>
+        <button type="button" class="grade-btn" data-grade="5" aria-pressed="false">5학년 <span class="grade-hint">간식·간단 조리</span></button>
+        <button type="button" class="grade-btn" data-grade="6" aria-pressed="false">6학년 <span class="grade-hint">밥·한 그릇 음식</span></button>
+    </div>
     <div class="filter-chips" id="filter-chips" role="group" aria-label="조리 조건">
         <button type="button" class="setting-chip" id="class-chip" aria-haspopup="dialog"><span aria-hidden="true">🏫 </span>수업 모드<span id="class-chip-state">: 끔</span></button>
         <button type="button" class="setting-chip" id="allergy-chip" aria-haspopup="dialog"><span aria-hidden="true">⚠️ </span>알레르기 제외<span id="allergy-chip-state"></span></button>
@@ -1738,16 +1767,26 @@
             { category: "기타", title: "바나나 셰이크", videoId: "yuE8WLrBwCA", videoAlts: ["X3as8dWaNR4", "HIzcbqxhwHQ"], isNew: true, time: 5, level: "쉬움", tools: ["믹서기"], ingredients: ["바나나 1개", "우유 1컵", "꿀 1스푼", "얼음 5개"], instructions: ["바나나 껍질을 벗겨 큼직하게 자릅니다.", "믹서기에 바나나, 우유, 꿀, 얼음을 넣습니다.", "뚜껑을 꼭 닫고 30초 정도 곱게 갑니다.", "컵에 따라 바로 마십니다."], tip: "얼린 바나나를 쓰면 얼음 없이도 아이스크림처럼 진해져요. 믹서기 칼날은 손으로 만지지 마세요." }
         ];
 
-        // 초등 실과 교과서 조리 실습에 자주 나오는 요리 ('📚 실과 요리' 탭)
-        const SILGWA_TITLES = new Set([
-            '냄비 밥 짓기', '삶은 달걀', '스크램블 에그', '달걀 프라이', '찐 감자', '과일 샐러드', '채소 샐러드', '과일 꼬치',
-            '과일 샌드위치', '달걀 샌드위치', '진달래 화전', '간단 떡국', '채소 부침개', '콩나물 무침', '바나나 셰이크',
-            '참치마요 주먹밥', '김치 주먹밥', '계란 김밥', '마약 꼬마김밥', '전자레인지 콩나물 비빔밥', '굴소스 채소볶음밥',
-            '백종원 스타일 김치볶음밥', '궁중 떡볶이', '에어프라이어 떡꼬치', '마요네즈 참치 카나페', '식빵 피자',
-            '콘치즈 토스트', '바나나 토스트', '프렌치 토스트', '크래미 오이 샌드위치', '타마고 샌드위치', '일본식 감자샐러드',
-            '수박 화채', '떠먹는 고구마 피자', '에어프라이어 고구마 맛탕', '전자레인지 폭탄 계란찜', '전자레인지 계란빵',
-            '달달한 일본식 계란말이', '두부 계란 부침', '믹서기 없는 감자전', '참치미역국', '중식 계란국', '새콤달콤 오이무침'
-        ].filter(title => recipes.some(r => r.title === title)));
+        // 초등 실과 교과서 조리 실습에 자주 나오는 요리 ('📚 실과 요리' 탭)와 주로 배우는 학년
+        // 5학년: 불을 거의 쓰지 않는 간식·간단한 조리 (샐러드·샌드위치·달걀·감자 등)
+        // 6학년: 밥을 중심으로 한 한 그릇 음식과 반찬·전통 음식
+        const SILGWA_GRADES = {
+            5: ['삶은 달걀', '스크램블 에그', '달걀 프라이', '찐 감자', '과일 샐러드', '채소 샐러드', '과일 꼬치',
+                '과일 샌드위치', '달걀 샌드위치', '바나나 셰이크', '마요네즈 참치 카나페', '식빵 피자', '콘치즈 토스트',
+                '바나나 토스트', '프렌치 토스트', '크래미 오이 샌드위치', '타마고 샌드위치', '일본식 감자샐러드', '수박 화채',
+                '떠먹는 고구마 피자', '에어프라이어 고구마 맛탕', '전자레인지 폭탄 계란찜', '전자레인지 계란빵'],
+            6: ['냄비 밥 짓기', '참치마요 주먹밥', '김치 주먹밥', '계란 김밥', '마약 꼬마김밥', '전자레인지 콩나물 비빔밥',
+                '굴소스 채소볶음밥', '백종원 스타일 김치볶음밥', '궁중 떡볶이', '에어프라이어 떡꼬치', '간단 떡국', '진달래 화전',
+                '채소 부침개', '믹서기 없는 감자전', '콩나물 무침', '새콤달콤 오이무침', '달달한 일본식 계란말이', '두부 계란 부침',
+                '참치미역국', '중식 계란국']
+        };
+        const silgwaGrade = new Map(); // 레시피 제목 → 학년
+        Object.entries(SILGWA_GRADES).forEach(([grade, titles]) => titles
+            .filter(title => recipes.some(r => r.title === title))
+            .forEach(title => silgwaGrade.set(title, Number(grade))));
+        const SILGWA_TITLES = new Set(silgwaGrade.keys());
+        const GRADE_KEY = 'honbap-grade';
+        let currentGrade = ['5', '6'].includes(String(readStore(GRADE_KEY, 'all'))) ? String(readStore(GRADE_KEY, 'all')) : 'all';
 
         const root = document.documentElement;
         const container = document.getElementById('recipe-container');
@@ -2557,7 +2596,7 @@
             card.innerHTML = `
                 ${thumbHtml(recipe)}
                 <div class="card-meta">
-                    <span class="category-badge">${recipe.custom ? '✍️ ' : ''}${escapeHtml(recipe.category)}</span>
+                    <span class="category-badge">${recipe.custom ? '✍️ ' : ''}${escapeHtml(recipe.category)}${currentCategory === '실과 요리' && silgwaGrade.has(recipe.title) ? ` · ${silgwaGrade.get(recipe.title)}학년` : ''}</span>
                     ${newBadgeHtml(recipe)}
                     ${noteBadgeHtml(recipe)}
                     ${favButtonHtml(recipe)}
@@ -2596,6 +2635,7 @@
                     if (!r.isNew) return false;
                 } else if (currentCategory === '실과 요리') {
                     if (!SILGWA_TITLES.has(r.title)) return false;
+                    if (currentGrade !== 'all' && silgwaGrade.get(r.title) !== Number(currentGrade)) return false;
                 } else if (currentCategory !== '전체' && r.category !== currentCategory) {
                     return false;
                 }
@@ -2641,6 +2681,7 @@
             if (searchQuery) conditions.unshift(`'${searchQuery}'`);
             if (avoidAllergens.size) conditions.unshift(`알레르기 ${avoidAllergens.size}종 제외`);
             if (classMode) conditions.unshift('수업용');
+            if (currentCategory === '실과 요리' && currentGrade !== 'all') conditions.unshift(`${currentGrade}학년 실과`);
             resultStatus.textContent = conditions.length
                 ? `${conditions.join(' · ')} 레시피 ${visible.length}개`
                 : `레시피 ${visible.length}개`;
@@ -2664,8 +2705,24 @@
                 btn.classList.toggle('active', isActive);
                 btn.setAttribute('aria-pressed', String(isActive));
             });
+            gradeRow.hidden = category !== '실과 요리';
             renderRecipes();
         }
+
+        // ---------- 실과 학년 고르기 ('📚 실과 요리' 탭에서만 보인다) ----------
+        const gradeRow = document.getElementById('grade-row');
+        function syncGradeButtons() {
+            gradeRow.querySelectorAll('[data-grade]').forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.grade === currentGrade)));
+        }
+        syncGradeButtons();
+        gradeRow.addEventListener('click', e => {
+            const btn = e.target.closest('[data-grade]');
+            if (!btn) return;
+            currentGrade = btn.dataset.grade;
+            writeStore(GRADE_KEY, currentGrade);
+            syncGradeButtons();
+            renderRecipes({ keepScroll: true });
+        });
 
         // ---------- 레시피 상세 화면 · 요리 모드 ----------
         // ---------- 인분 조절 ----------
