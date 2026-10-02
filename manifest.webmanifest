@@ -1,7 +1,7 @@
 {
-  "name": "엽쌤의 혼밥 스쿨",
-  "short_name": "혼밥스쿨",
-  "description": "자취생·혼밥러를 위한 초간단 레시피 100선",
+  "name": "요리 대백과",
+  "short_name": "요리 대백과",
+  "description": "실과 교과에 나오는 모든 요리와 자취생·혼밥러를 위한 마법의 레시피",
   "lang": "ko",
   "start_url": "./",
   "scope": "./",
