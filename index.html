@@ -630,12 +630,15 @@
         .thumb-btn.broken img { opacity: 0.35; }
         .thumb-broken { position: absolute; left: 8px; bottom: 8px; padding: 3px 8px; border-radius: 8px; background: rgba(0, 0, 0, 0.75); color: #FFFFFF; font-size: 0.75rem; font-weight: 800; }
         /* 영상 점검 (?check=videos) */
-        .video-check { margin: 16px; padding: 16px; border-radius: 16px; background: var(--surface); border: 1.5px solid var(--input-border); color: var(--text); }
-        .video-check h2 { margin: 0 0 8px; font-size: 1.1rem; }
-        .video-check .vc-stage { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0; }
-        .video-check .vc-stage iframe { width: 160px; height: 90px; border: 0; border-radius: 8px; background: #000000; }
-        .video-check ol { padding-left: 20px; }
-        .video-check textarea { width: 100%; min-height: 120px; font: inherit; font-size: 0.85rem; }
+        .vc-stage { display: flex; gap: 6px; flex-wrap: wrap; }
+        .vc-stage:empty { display: none; }
+        .vc-stage iframe { width: 160px; height: 90px; border: 0; border-radius: 8px; background: #000000; }
+        .vc-progress { margin: 0; font-weight: 800; }
+        .vc-bar { height: 8px; border-radius: 4px; background: var(--surface-2); overflow: hidden; }
+        .vc-bar span { display: block; height: 100%; width: 0; background: var(--brand-gradient); transition: width 0.3s ease; }
+        .vc-list { margin: 0; padding-left: 22px; line-height: 1.6; }
+        .vc-list:empty { display: none; }
+        .vc-result { width: 100%; min-height: 110px; font: inherit; font-size: 0.85rem; color: var(--text); background: var(--surface); border: 1.5px solid var(--input-border); border-radius: 12px; padding: 10px 12px; }
 
         /* 최근 본 레시피 */
         .recent { max-width: 1200px; margin: 0 auto 16px auto; padding: 0 20px; }
@@ -894,7 +897,8 @@
             font-size: 0.85rem;
             line-height: 1.6;
         }
-        .data-open-btn { display: inline-flex; flex: none; margin-bottom: 8px; }
+        .footer-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 8px; }
+        .data-open-btn { display: inline-flex; flex: none; }
         .footer-credit { font-size: 0.75rem; }
         .data-subtitle { margin: 4px 0 0 0; font-size: 1rem; font-weight: 800; }
         .data-summary {
@@ -1230,7 +1234,10 @@
     <button type="button" class="to-top" id="to-top" hidden><span aria-hidden="true">↑</span> 맨 위로</button>
 
     <footer class="site-footer">
-        <button type="button" class="secondary-btn data-open-btn" id="data-open"><span aria-hidden="true">⚙️</span> 내 기록 백업·복원</button>
+        <div class="footer-actions">
+            <button type="button" class="secondary-btn data-open-btn" id="data-open"><span aria-hidden="true">⚙️</span> 내 기록 백업·복원</button>
+            <button type="button" class="secondary-btn data-open-btn" id="check-open"><span aria-hidden="true">🎬</span> 영상 점검</button>
+        </div>
         <p>즐겨찾기·메모·식단·내 레시피는 이 브라우저에만 저장돼요. 휴대폰을 바꾸기 전에 백업해 두세요.</p>
         <p class="footer-credit">레시피 영상의 저작권은 각 유튜브 채널에 있습니다.</p>
         <p class="footer-credit">© 2026 엽쌤. All rights reserved. · <a href="https://gmlduqzhd123-lab.github.io/YScode/" style="color:inherit;text-decoration:underline;text-underline-offset:3px">엽쌤의 다른 앱 보기 →</a></p>
@@ -1441,6 +1448,28 @@
             <p class="form-error" id="data-error" role="alert"></p>
 
             <button type="button" class="text-btn danger-btn" id="data-reset">모든 기록 지우기</button>
+        </div>
+    </dialog>
+
+    <!-- 영상 점검 -->
+    <dialog class="sheet" id="check-dialog" aria-labelledby="check-title">
+        <div class="sheet-bar">
+            <h2 class="sheet-title" id="check-title">🎬 영상 점검</h2>
+            <button type="button" class="close-btn" data-close aria-label="영상 점검 창 닫기">✕</button>
+        </div>
+        <div class="sheet-body">
+            <p class="sheet-intro">모든 레시피 영상을 하나씩 불러 보고, 앱 안에서 재생되지 않는 영상을 찾아 드려요.
+                대표 영상이 막혀 있으면 예비 영상까지 확인해요. 몇 분쯤 걸리니 창을 열어 둔 채 기다려 주세요.</p>
+            <button type="button" class="primary-btn" id="check-start"><span aria-hidden="true">▶</span> 점검 시작</button>
+            <p class="vc-progress" id="vc-progress" role="status"></p>
+            <div class="vc-bar" id="vc-bar" hidden><span></span></div>
+            <div class="vc-stage" id="vc-stage" aria-hidden="true"></div>
+            <ol class="vc-list" id="vc-list"></ol>
+            <div id="vc-done" hidden>
+                <p class="data-hint" id="vc-done-text"></p>
+                <textarea class="vc-result" id="vc-result" readonly aria-label="점검 결과" hidden></textarea>
+                <button type="button" class="secondary-btn" id="vc-copy" hidden><span aria-hidden="true">📋</span> 결과 복사하기</button>
+            </div>
         </div>
     </dialog>
 
@@ -2062,7 +2091,7 @@
             videoWrapper.replaceChildren();
         });
 
-        // ---------- 영상 점검 (주소 끝에 ?check=videos) ----------
+        // ---------- 영상 점검 (바닥글의 '영상 점검' 버튼) ----------
         // 모든 레시피 영상을 하나씩 불러 보고, 앱 안에서 재생되지 않는 영상을 목록으로 보여 준다
         function checkOneVideo(stage, recipe, videoId) {
             return new Promise(resolve => {
@@ -2093,54 +2122,98 @@
             });
         }
 
+        const checkDialog = document.getElementById('check-dialog');
+        const checkStart = document.getElementById('check-start');
+        let checkRun = null; // 진행 중인 점검 (창을 닫으면 멈춘다)
+
+        function resetCheckView() {
+            document.getElementById('vc-progress').textContent = '';
+            document.getElementById('vc-bar').hidden = true;
+            document.getElementById('vc-list').replaceChildren();
+            document.getElementById('vc-done').hidden = true;
+            checkStart.disabled = false;
+            checkStart.innerHTML = '<span aria-hidden="true">▶</span> 점검 시작';
+        }
+
         async function runVideoCheck() {
-            const panel = document.createElement('section');
-            panel.className = 'video-check';
-            panel.setAttribute('aria-labelledby', 'vc-title');
-            panel.innerHTML = `<h2 id="vc-title">🎬 영상 점검</h2>
-                <p id="vc-progress" role="status">준비 중…</p>
-                <div class="vc-stage" aria-hidden="true"></div>
-                <ol id="vc-list"></ol>`;
-            document.querySelector('main')?.prepend(panel) ?? document.body.prepend(panel);
-            const stage = panel.querySelector('.vc-stage');
-            const list = panel.querySelector('#vc-list');
-            const progress = panel.querySelector('#vc-progress');
+            const run = { cancelled: false };
+            checkRun = run;
+            resetCheckView();
+            checkStart.disabled = true;
+            checkStart.innerHTML = '<span aria-hidden="true">⏳</span> 점검 중…';
+            const stage = document.getElementById('vc-stage');
+            const list = document.getElementById('vc-list');
+            const progress = document.getElementById('vc-progress');
+            const bar = document.getElementById('vc-bar');
+            bar.hidden = false;
+            // 예전에 막혔던 영상도 다시 확인한다 (그사이 풀렸을 수 있다)
             const queue = recipes.filter(r => videoCandidates(r).length && !r.custom);
+            queue.forEach(r => videoCandidates(r).forEach(id => brokenVideos.delete(id)));
+            writeStore(BROKEN_KEY, Object.fromEntries(brokenVideos));
+            const total = queue.length;
             const failed = [];
             let done = 0;
+            progress.textContent = `0 / ${total}개 확인 중…`;
             const worker = async () => {
-                while (queue.length) {
+                while (queue.length && !run.cancelled) {
                     const recipe = queue.shift();
                     // 대표 영상이 막혔으면 예비 영상을 차례로 확인한다. 하나라도 되면 통과.
                     let result = { ok: false, code: 'timeout' };
                     let videoId = '';
-                    for (videoId of videoCandidates(recipe).filter(id => !brokenVideos.has(id))) {
+                    for (videoId of videoCandidates(recipe)) {
                         result = await checkOneVideo(stage, recipe, videoId);
+                        if (run.cancelled) return;
                         if (result.ok) break;
                         if (result.code !== 'timeout') markBroken(videoId, result.code);
                     }
-                    if (!videoId) result = { ok: false, code: brokenVideos.get(currentVideoId(recipe)) };
                     done++;
                     if (!result.ok) {
-                        videoId = videoId || currentVideoId(recipe);
                         failed.push({ recipe, videoId, code: result.code });
                         const li = document.createElement('li');
-                        li.textContent = `${recipe.title} (${videoId}) — ${result.code === 'timeout' ? '응답 없음' : `오류 ${result.code}`}`;
+                        li.textContent = `${recipe.title} — ${result.code === 'timeout' ? '응답 없음' : `오류 ${result.code}`}`;
                         list.appendChild(li);
                     }
-                    progress.textContent = `${done}개 확인 · 재생 안 됨 ${failed.length}개`;
+                    progress.textContent = `${done} / ${total}개 확인 · 재생 안 됨 ${failed.length}개`;
+                    bar.firstElementChild.style.width = `${(done / total) * 100}%`;
                 }
             };
             await Promise.all([worker(), worker(), worker()]);
-            progress.textContent = `점검 끝! ${done}개 중 ${failed.length}개가 앱 안에서 재생되지 않아요.`;
-            const text = failed.map(f => `${f.recipe.title}|${f.videoId}|${f.code}`).join('\n');
-            panel.insertAdjacentHTML('beforeend', failed.length
-                ? `<p>아래 결과를 복사해 보내 주시면 영상을 바꿔 드릴게요.</p><textarea readonly aria-label="점검 결과">${escapeHtml(text)}</textarea>`
-                : '<p>모든 영상이 잘 재생돼요. 🎉</p>');
+            if (run.cancelled) return;
+            checkRun = null;
+            checkStart.disabled = false;
+            checkStart.innerHTML = '<span aria-hidden="true">🔄</span> 다시 점검하기';
+            progress.textContent = `점검 끝! ${total}개 중 ${failed.length}개가 앱 안에서 재생되지 않아요.`;
+            const resultBox = document.getElementById('vc-result');
+            resultBox.value = failed.map(f => `${f.recipe.title}|${f.videoId}|${f.code}`).join('\n');
+            resultBox.hidden = failed.length === 0;
+            document.getElementById('vc-copy').hidden = failed.length === 0;
+            document.getElementById('vc-done-text').textContent = failed.length
+                ? '아래 결과를 복사해 보내 주시면 영상을 바꿔 드릴게요. 그동안 막힌 영상은 "다른 영상 찾기" 안내로 바로 연결돼요.'
+                : '모든 영상이 잘 재생돼요. 🎉';
+            document.getElementById('vc-done').hidden = false;
+            renderRecipes({ keepScroll: true }); // 썸네일의 '다른 영상 찾기' 표시를 새로 고친다
         }
-        if (new URLSearchParams(location.search).get('check') === 'videos') {
-            window.addEventListener('load', () => runVideoCheck());
-        }
+
+        document.getElementById('check-open').addEventListener('click', () => openModal(checkDialog));
+        checkStart.addEventListener('click', () => runVideoCheck());
+        document.getElementById('vc-copy').addEventListener('click', async () => {
+            const text = document.getElementById('vc-result').value;
+            try {
+                await navigator.clipboard.writeText(text);
+                showToast('📋 점검 결과를 복사했어요');
+            } catch (e) {
+                document.getElementById('vc-result').select();
+                showToast('결과 칸을 길게 눌러 복사해 주세요');
+            }
+        });
+        checkDialog.addEventListener('close', () => { // 창을 닫으면 점검을 멈춘다
+            if (!checkRun) return;
+            checkRun.cancelled = true;
+            checkRun = null;
+            document.getElementById('vc-stage').replaceChildren();
+            resetCheckView();
+            document.getElementById('vc-progress').textContent = '점검을 멈췄어요. 다시 시작할 수 있어요.';
+        });
 
         // ---------- 알레르기 유발 식품 (학교 급식표와 같은 19종 · 같은 번호) ----------
         // 재료 이름에 들어 있는 말로 찾는다. 모르면 빠뜨리는 것보다 표시하는 쪽이 안전하므로 넉넉하게 잡는다.
