@@ -1,6 +1,8 @@
 // 요리 대백과 서비스 워커: 한 번 열어 본 뒤에는 인터넷이 없어도 레시피를 볼 수 있게 한다.
 // index.html이나 아이콘을 바꾸면 CACHE_VERSION을 올려야 예전 캐시가 정리된다.
 const CACHE_VERSION = 'honbap-v23';
+// 같은 주소(gmlduqzhd123-lab.github.io)의 다른 앱들과 저장소를 함께 쓰므로, 이 앱의 이전 캐시만 지운다.
+const CACHE_PREFIX = 'honbap-v';
 const APP_SHELL = [
     './',
     './index.html',
@@ -19,7 +21,7 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys()
-            .then(keys => Promise.all(keys.filter(key => key !== CACHE_VERSION).map(key => caches.delete(key))))
+            .then(keys => Promise.all(keys.filter(key => key.startsWith(CACHE_PREFIX) && key !== CACHE_VERSION).map(key => caches.delete(key))))
             .then(() => self.clients.claim())
     );
 });
