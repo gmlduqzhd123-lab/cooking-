@@ -25,6 +25,7 @@
 
     <!-- 홈 화면에 추가 (PWA) -->
     <link rel="manifest" href="manifest.webmanifest">
+    <script src="ys-install.js"></script>
     <link rel="icon" href="icons/icon-192.png" type="image/png">
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
     <meta name="apple-mobile-web-app-title" content="요리 대백과">
@@ -1370,6 +1371,7 @@
                     <button type="button" class="intro-ghost" data-intro="silgwa"><span aria-hidden="true">📚</span> 실과 요리 보기</button>
                     <button type="button" class="intro-link" data-intro="random">오늘 뭐 먹지? <span aria-hidden="true">🎲</span></button>
                     <button type="button" class="intro-link" data-qr>QR로 접속 <span aria-hidden="true">📱</span></button>
+                    <button type="button" class="intro-link" data-ys-install>앱으로 설치 <span aria-hidden="true">📲</span></button>
                 </div>
             </div>
             <div class="intro-visual" aria-hidden="true">
@@ -1388,7 +1390,7 @@
     <header>
         <h1><button type="button" class="brand-btn" id="brand-btn" aria-label="요리 대백과 소개 화면 보기">📖 요리 대백과</button></h1>
         <div class="header-actions">
-            <button type="button" class="icon-btn install-btn" id="install-btn" hidden>📲 앱 설치</button>
+            <button type="button" class="icon-btn install-btn" data-ys-install>📲 앱 설치</button>
             <button type="button" class="icon-btn" id="shopping-btn" aria-label="장보기 목록"><span aria-hidden="true">🛒</span><span class="fav-count" id="shopping-count" aria-hidden="true" hidden>0</span></button>
             <button type="button" class="icon-btn" id="text-size-btn" aria-pressed="false" aria-label="큰 글씨">가<span aria-hidden="true">+</span></button>
             <button type="button" class="icon-btn" id="theme-btn" aria-pressed="false" aria-label="다크 모드"><span aria-hidden="true" id="theme-icon">🌙</span></button>
@@ -3937,22 +3939,7 @@
         });
 
         // ---------- 홈 화면에 추가 (PWA) ----------
-        const installBtn = document.getElementById('install-btn');
-        let installPrompt = null;
-        window.addEventListener('beforeinstallprompt', e => {
-            e.preventDefault(); // 브라우저 기본 안내 대신 헤더의 "앱 설치" 버튼을 보여준다
-            installPrompt = e;
-            installBtn.hidden = false;
-        });
-        installBtn.addEventListener('click', async () => {
-            if (!installPrompt) return;
-            installPrompt.prompt();
-            await installPrompt.userChoice;
-            installPrompt = null;
-            installBtn.hidden = true;
-        });
-        window.addEventListener('appinstalled', () => { installBtn.hidden = true; });
-
+        // 📲 앱 설치 버튼은 ys-install.js가 맡는다 (바로 설치 또는 기기별 설치 방법 안내)
         if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').catch(() => { /* 오프라인 기능만 빠지고 앱은 그대로 동작 */ });
