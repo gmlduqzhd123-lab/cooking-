@@ -140,7 +140,7 @@
 
         body {
             margin: 0;
-            padding: 0 0 40px 0;
+            padding: 0 0 calc(80px + env(safe-area-inset-bottom)) 0;
             font-family: 'Pretendard', -apple-system, sans-serif;
             background-color: var(--bg);
             color: var(--text);
@@ -200,20 +200,21 @@
         /* 검색창 */
         .app-intro {
             max-width: 1200px;
-            margin: 16px auto 0 auto;
+            margin: 8px auto 2px auto;
             padding: 0 20px;
             text-align: center;
             color: var(--text-muted);
-            font-size: 0.95rem;
-            font-weight: 600;
-            line-height: 1.5;
+            font-size: 0.86rem;
+            font-weight: 500;
+            line-height: 1.4;
+            letter-spacing: -0.2px;
             word-break: keep-all;
         }
         .app-intro span { display: inline-block; }
         .search-box {
             position: relative;
             max-width: 1200px;
-            margin: 16px auto 0 auto;
+            margin: 8px auto 4px auto;
             padding: 0 20px;
         }
         .search-icon {
@@ -221,24 +222,27 @@
             left: 36px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 1rem;
+            font-size: 0.95rem;
             pointer-events: none;
+            opacity: 0.55;
         }
         #search-input {
             width: 100%;
-            padding: 14px 16px 14px 46px;
+            padding: 12px 16px 12px 44px;
             font: inherit;
-            font-size: 1rem; /* 16px 이상이어야 iOS가 입력할 때 화면을 확대하지 않는다 */
+            font-size: 0.95rem;
             color: var(--text);
             background: var(--surface);
-            border: 2px solid var(--input-border);
-            border-radius: 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 14px;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+            transition: all 0.2s ease;
         }
-        #search-input::placeholder { color: var(--text-muted); }
+        #search-input::placeholder { color: var(--text-muted); opacity: 0.8; }
         #search-input:focus {
             outline: none;
             border-color: var(--accent);
-            box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.2);
+            box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.15);
         }
 
         .quick-tags {
@@ -247,31 +251,33 @@
             gap: 6px;
             overflow-x: auto;
             white-space: nowrap;
-            padding: 10px 20px 0 20px;
+            padding: 2px 20px 6px 20px;
             scrollbar-width: none;
             max-width: 1200px;
             margin: 0 auto;
         }
         .quick-tags::-webkit-scrollbar { display: none; }
-        .quick-label { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-right: 2px; }
+        .quick-label { font-size: 0.76rem; font-weight: 600; color: var(--text-muted); margin-right: 2px; opacity: 0.85; }
         .quick-tag {
-            padding: 6px 12px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text);
-            background: var(--quick-bg);
-            border: 1px solid var(--quick-border);
-            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-2);
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
             cursor: pointer;
+            transition: all 0.15s ease;
         }
+        .quick-tag:hover { background: var(--surface); border-color: var(--text-muted); }
         .quick-tag:active { transform: scale(0.95); }
 
         .category-nav {
             display: flex;
             overflow-x: auto;
             white-space: nowrap;
-            padding: 12px 20px;
-            gap: 8px;
+            padding: 6px 20px 4px 20px;
+            gap: 6px;
             scrollbar-width: none;
             -webkit-overflow-scrolling: touch;
             max-width: 1200px;
@@ -279,85 +285,90 @@
         }
         .category-nav::-webkit-scrollbar { display: none; }
         .category-btn {
-            padding: 8px 18px;
+            padding: 6px 14px;
             background: var(--surface);
             border: 1px solid var(--border);
-            color: var(--text-muted);
-            border-radius: 30px;
-            font-size: 0.95rem;
+            color: var(--text-2);
+            border-radius: 9999px;
+            font-size: 0.88rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        .category-btn:hover { border-color: var(--text-muted); }
         .category-btn.active {
             background: var(--inverse-bg);
             border-color: var(--inverse-bg);
             color: var(--inverse-text);
+            font-weight: 700;
         }
         .fav-count {
             display: inline-block;
-            min-width: 20px;
-            margin-left: 2px;
-            padding: 0 6px;
-            font-size: 0.75rem;
-            line-height: 20px;
+            min-width: 18px;
+            margin-left: 3px;
+            padding: 0 5px;
+            font-size: 0.72rem;
+            line-height: 18px;
             text-align: center;
             color: #FFFFFF;
             background: var(--fill);
-            border-radius: 10px;
+            border-radius: 9px;
         }
         .fav-count[hidden] { display: none; }
 
         .grade-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            padding: 0 20px 12px 20px;
+            gap: 6px;
+            padding: 0 20px 8px 20px;
             max-width: 1200px;
             margin: 0 auto;
         }
         .grade-row[hidden] { display: none; }
         .grade-btn {
             white-space: nowrap;
-            padding: 8px 14px;
+            padding: 6px 12px;
             font: inherit;
-            font-size: 0.9rem;
-            font-weight: 800;
+            font-size: 0.85rem;
+            font-weight: 700;
             color: var(--text);
             background: var(--surface);
-            border: 1.5px solid var(--input-border);
-            border-radius: 12px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
             cursor: pointer;
         }
-        .grade-btn .grade-hint { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); }
+        .grade-btn .grade-hint { font-size: 0.75rem; font-weight: 500; color: var(--text-muted); }
         .grade-btn[aria-pressed="true"] { color: var(--inverse-text); background: var(--inverse-bg); border-color: var(--inverse-bg); }
         .grade-btn[aria-pressed="true"] .grade-hint { color: inherit; opacity: 0.85; }
         .filter-chips {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             overflow-x: auto;
             white-space: nowrap;
-            padding: 0 20px 12px 20px;
+            padding: 2px 20px 8px 20px;
             scrollbar-width: none;
             max-width: 1200px;
             margin: 0 auto;
         }
         .filter-chips::-webkit-scrollbar { display: none; }
         .filter-chip {
-            position: relative; /* 안의 스크린리더용 글자가 페이지 밖으로 삐져나가 가로 스크롤이 생기지 않게 */
-            padding: 6px 12px;
-            font-size: 0.85rem;
-            font-weight: 700;
+            position: relative;
+            padding: 5px 12px;
+            font-size: 0.82rem;
+            font-weight: 600;
             color: var(--text-muted);
-            background: transparent;
-            border: 1.5px dashed var(--input-border);
-            border-radius: 10px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 9999px;
             cursor: pointer;
+            transition: all 0.15s ease;
         }
+        .filter-chip:hover { border-color: var(--text-muted); }
         .filter-chip[aria-pressed="true"] {
             color: var(--inverse-text);
             background: var(--inverse-bg);
-            border: 1.5px solid var(--inverse-bg);
+            border-color: var(--inverse-bg);
+            font-weight: 700;
         }
         .filter-chip[aria-pressed="true"]::after { content: ' ✓'; }
 
@@ -384,52 +395,67 @@
             color: var(--text-muted);
         }
 
-        /* 레시피 목록 카드 */
+        /* 레시피 목록 카드 (매거진/미니멀 스타일) */
         #recipe-container {
             padding: 0 20px;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
+            gap: 16px;
             max-width: 1200px;
             margin: 0 auto;
         }
         .recipe-card {
             background: var(--surface);
-            border-radius: 24px;
-            padding: 20px;
+            border-radius: 20px;
+            padding: 16px;
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.2s;
+        }
+        .recipe-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+        }
+        .recipe-card:active {
+            transform: scale(0.985);
+        }
+        .recipe-card:focus-visible {
+            outline: 2.5px solid var(--accent);
+            outline-offset: 2px;
         }
         .card-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 6px;
         }
         .new-badge {
             background: var(--surface-2);
             color: var(--text);
-            border: 1.5px solid var(--input-border);
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 800;
+            border: 1px solid var(--border);
+            padding: 2px 7px;
+            border-radius: 10px;
+            font-size: 0.72rem;
+            font-weight: 700;
             white-space: nowrap;
         }
         .category-badge {
             background: var(--badge-bg);
             color: var(--badge-text);
-            padding: 4px 10px;
-            border-radius: 12px;
+            padding: 3px 8px;
+            border-radius: 10px;
             font-size: 0.75rem;
-            font-weight: 800;
+            font-weight: 700;
         }
         .recipe-title {
             margin: 0;
-            font-size: 1.25rem;
-            font-weight: 800;
+            font-size: 1.18rem;
+            font-weight: 700;
             line-height: 1.35;
         }
         .ingredients-tags {
@@ -438,39 +464,41 @@
             padding: 0;
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 4px;
         }
         .tag {
             background: var(--surface-2);
             color: var(--text-muted);
-            padding: 5px 10px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 500;
         }
-        .tag::before { content: '#'; opacity: 0.6; margin-right: 2px; }
+        .tag::before { content: '#'; opacity: 0.5; margin-right: 2px; }
         .tag.more::before { content: none; }
 
         .fav-btn {
-            width: 44px; height: 44px; /* 손가락으로 누르기 충분한 크기 */
-            margin: -8px -8px -8px 0;
+            width: 40px; height: 40px;
+            margin: -6px -6px -6px 0;
             border: none;
             background: none;
-            border-radius: 22px;
+            border-radius: 20px;
             cursor: pointer;
             display: flex; align-items: center; justify-content: center;
+            transition: transform 0.15s;
         }
-        .fav-icon { font-size: 1.5rem; line-height: 1; color: var(--text-muted); }
+        .fav-icon { font-size: 1.4rem; line-height: 1; color: var(--text-muted); transition: color 0.15s; }
         .fav-btn[aria-pressed="true"] .fav-icon { color: var(--accent); }
+        .fav-btn:hover { background: var(--surface-2); }
         .fav-btn:active { transform: scale(0.85); }
 
-        .card-actions { margin-top: auto; display: flex; }
+        .card-actions { display: none; }
         .primary-btn, .secondary-btn {
             flex: 1;
-            min-height: 48px;
-            padding: 12px 16px;
-            border-radius: 14px;
-            font-size: 1rem;
+            min-height: 44px;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 0.95rem;
             font-weight: 700;
             display: flex; align-items: center; justify-content: center; gap: 8px;
             cursor: pointer;
@@ -478,7 +506,7 @@
             transition: transform 0.2s;
         }
         .primary-btn { background: var(--inverse-bg); color: var(--inverse-text); border: none; }
-        .secondary-btn { background: var(--surface); color: var(--text); border: 2px solid var(--border); }
+        .secondary-btn { background: var(--surface); color: var(--text); border: 1.5px solid var(--border); }
         .primary-btn:active, .secondary-btn:active { transform: scale(0.97); }
         .secondary-btn[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
 
@@ -486,11 +514,11 @@
         .thumb-btn {
             position: relative;
             display: block;
-            width: calc(100% + 40px);
-            margin: -20px -20px 0 -20px;
+            width: calc(100% + 32px);
+            margin: -16px -16px 0 -16px;
             padding: 0;
             border: none;
-            border-radius: 24px 24px 0 0;
+            border-radius: 19px 19px 0 0;
             overflow: hidden;
             aspect-ratio: 16 / 9;
             background: var(--thumb-bg);
@@ -758,8 +786,8 @@
         .timer-bar {
             position: fixed;
             left: 50%;
-            bottom: 16px;
-            z-index: 11;
+            bottom: calc(72px + env(safe-area-inset-bottom));
+            z-index: 96;
             transform: translateX(-50%);
             width: calc(100% - 32px);
             max-width: 480px;
@@ -791,10 +819,10 @@
             cursor: pointer;
         }
         .timer-btn[hidden] { display: none; }
-        :root.timer-running .toast { bottom: 100px; }
-        :root.timer-running body { padding-bottom: 110px; }
+        :root.timer-running .toast { bottom: calc(140px + env(safe-area-inset-bottom)); }
+        :root.timer-running body { padding-bottom: calc(140px + env(safe-area-inset-bottom)); }
         /* 타이머 바가 창 아래쪽 버튼을 가리지 않도록 창 안에도 여백 */
-        :root.timer-running .sheet-body, :root.timer-running .detail-content { padding-bottom: 120px; }
+        :root.timer-running .sheet-body, :root.timer-running .detail-content { padding-bottom: calc(140px + env(safe-area-inset-bottom)); }
 
         /* 장보기 목록 */
         .sheet-title { margin: 0 auto 0 8px; align-self: center; font-size: 1.1rem; font-weight: 800; }
@@ -806,33 +834,65 @@
         .shopping-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .shopping-actions .primary-btn { grid-column: 1 / -1; }
 
-        /* 도구 모음 (냉장고 추천 · 주간 식단 · 내 레시피) */
-        .tool-row {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            max-width: 1160px;
-            margin: 0 auto 16px auto;
-            padding: 0 20px;
+        /* 도구 모음 (하단 고정 바로 대체하여 본문 상단 낭비 공간 제거) */
+        .tool-row { display: none; }
+
+        /* 하단 고정 내비게이션 바 (모바일 앱 스타일) */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 95;
+            background: var(--header-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 58px;
+            padding: 0 8px env(safe-area-inset-bottom) 8px;
+            box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.04);
         }
-        .tool-card {
+        @media (min-width: 768px) {
+            .bottom-nav {
+                left: 50%;
+                transform: translateX(-50%);
+                width: 440px;
+                bottom: 16px;
+                border-radius: 30px;
+                border: 1px solid var(--border);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+                padding: 0 16px;
+            }
+        }
+        .bottom-nav-item {
+            flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 4px;
-            min-height: 72px;
-            padding: 10px 4px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            text-align: center;
+            gap: 2px;
+            height: 100%;
+            background: none;
+            border: none;
+            color: var(--text-muted);
             cursor: pointer;
+            padding: 4px 0;
+            transition: color 0.15s, transform 0.15s;
         }
-        .tool-card:active { transform: scale(0.97); }
-        .tool-emoji { font-size: 1.6rem; line-height: 1; }
-        .tool-card strong { display: block; font-size: 0.85rem; line-height: 1.3; }
-        .tool-random { color: #FFFFFF; background: var(--brand-gradient); border-color: transparent; box-shadow: 0 6px 14px rgba(225, 29, 72, 0.25); }
+        .bottom-nav-item:active { transform: scale(0.92); }
+        .bnav-icon { font-size: 1.25rem; line-height: 1; }
+        .bnav-label { font-size: 0.72rem; font-weight: 700; letter-spacing: -0.3px; }
+        .bottom-nav-item.active { color: var(--accent); }
+        .bottom-nav-item.bnav-highlight .bnav-icon {
+            transform: scale(1.15);
+        }
+        .bottom-nav-item.bnav-highlight .bnav-label {
+            color: var(--accent);
+            font-weight: 800;
+        }
 
         .list-toolbar {
             display: flex;
@@ -1014,21 +1074,22 @@
         .to-top {
             position: fixed;
             right: 16px;
-            bottom: 20px;
-            z-index: 9;
-            min-height: 48px;
+            bottom: calc(72px + env(safe-area-inset-bottom));
+            z-index: 90;
+            min-height: 44px;
             padding: 0 16px;
             border: 1px solid var(--border);
-            border-radius: 24px;
+            border-radius: 22px;
             background: var(--surface);
             color: var(--text);
-            font-size: 0.9rem;
-            font-weight: 800;
+            font-size: 0.88rem;
+            font-weight: 700;
             box-shadow: var(--shadow);
             cursor: pointer;
+            transition: all 0.2s ease;
         }
         .to-top[hidden] { display: none; }
-        :root.timer-running .to-top { bottom: 100px; }
+        :root.timer-running .to-top { bottom: calc(146px + env(safe-area-inset-bottom)); }
 
         /* 윈도우 고대비 모드에서도 선택 상태가 보이도록 */
         @media (forced-colors: active) {
@@ -1045,16 +1106,17 @@
         .setting-chip {
             position: relative;
             flex-shrink: 0;
-            padding: 6px 12px;
-            font-size: 0.85rem;
-            font-weight: 800;
+            padding: 5px 12px;
+            font-size: 0.82rem;
+            font-weight: 600;
             color: var(--text);
             background: var(--surface);
-            border: 1.5px solid var(--input-border);
-            border-radius: 10px;
+            border: 1px solid var(--border);
+            border-radius: 9999px;
             cursor: pointer;
+            transition: all 0.15s ease;
         }
-        .setting-chip.on { background: var(--tip-bg); color: var(--tip-text); border-color: var(--tip-text); }
+        .setting-chip.on { background: var(--tip-bg); color: var(--tip-text); border-color: var(--tip-text); font-weight: 700; }
         .class-banner {
             max-width: 1160px;
             margin: 0 auto 12px auto;
@@ -1406,26 +1468,26 @@
         <button type="button" class="search-clear" id="search-clear" aria-label="검색어 지우기" hidden>✕</button>
     </form>
     <div class="quick-tags" aria-label="자주 찾는 재료">
-        <span class="quick-label">냉장고에 뭐 있어요?</span>
-        <button type="button" class="quick-tag" data-query="계란">🥚 계란</button>
-        <button type="button" class="quick-tag" data-query="참치">🐟 참치</button>
-        <button type="button" class="quick-tag" data-query="김치">🥬 김치</button>
-        <button type="button" class="quick-tag" data-query="두부">🧈 두부</button>
-        <button type="button" class="quick-tag" data-query="치즈">🧀 치즈</button>
-        <button type="button" class="quick-tag" data-query="식빵">🍞 식빵</button>
+        <span class="quick-label">💡 추천 재료:</span>
+        <button type="button" class="quick-tag" data-query="계란">계란</button>
+        <button type="button" class="quick-tag" data-query="참치">참치</button>
+        <button type="button" class="quick-tag" data-query="김치">김치</button>
+        <button type="button" class="quick-tag" data-query="두부">두부</button>
+        <button type="button" class="quick-tag" data-query="치즈">치즈</button>
+        <button type="button" class="quick-tag" data-query="식빵">식빵</button>
     </div>
 
     <nav class="category-nav" id="category-nav" aria-label="요리 종류">
-        <button class="category-btn active" data-category="전체" aria-pressed="true">전체보기</button>
-        <button class="category-btn" data-category="새 레시피" aria-pressed="false"><span aria-hidden="true">🆕 </span>새 레시피</button>
-        <button class="category-btn" data-category="실과 요리" aria-pressed="false"><span aria-hidden="true">📚 </span>실과 요리</button>
-        <button class="category-btn" data-category="즐겨찾기" aria-pressed="false"><span aria-hidden="true">♥ </span>즐겨찾기 <span class="fav-count" id="fav-count">0</span></button>
-        <button class="category-btn" data-category="한식" aria-pressed="false"><span aria-hidden="true">🍚 </span>한식</button>
-        <button class="category-btn" data-category="중식" aria-pressed="false"><span aria-hidden="true">🥟 </span>중식</button>
-        <button class="category-btn" data-category="일식" aria-pressed="false"><span aria-hidden="true">🍣 </span>일식</button>
-        <button class="category-btn" data-category="분식" aria-pressed="false"><span aria-hidden="true">🥘 </span>분식</button>
-        <button class="category-btn" data-category="기타" aria-pressed="false"><span aria-hidden="true">🍝 </span>양식·기타</button>
-        <button class="category-btn" data-category="내 레시피" aria-pressed="false"><span aria-hidden="true">✍️ </span>내 레시피</button>
+        <button class="category-btn active" data-category="전체" aria-pressed="true">전체</button>
+        <button class="category-btn" data-category="새 레시피" aria-pressed="false">새 레시피</button>
+        <button class="category-btn" data-category="실과 요리" aria-pressed="false">실과 요리</button>
+        <button class="category-btn" data-category="즐겨찾기" aria-pressed="false">♥ 즐겨찾기 <span class="fav-count" id="fav-count">0</span></button>
+        <button class="category-btn" data-category="한식" aria-pressed="false">한식</button>
+        <button class="category-btn" data-category="중식" aria-pressed="false">중식</button>
+        <button class="category-btn" data-category="일식" aria-pressed="false">일식</button>
+        <button class="category-btn" data-category="분식" aria-pressed="false">분식</button>
+        <button class="category-btn" data-category="기타" aria-pressed="false">양식·기타</button>
+        <button class="category-btn" data-category="내 레시피" aria-pressed="false">내 레시피</button>
     </nav>
     <div class="grade-row" id="grade-row" role="group" aria-label="실과 학년 고르기" hidden>
         <button type="button" class="grade-btn" data-grade="all" aria-pressed="true">전체 학년</button>
@@ -1433,11 +1495,11 @@
         <button type="button" class="grade-btn" data-grade="6" aria-pressed="false">6학년 <span class="grade-hint">밥·한 그릇 음식</span></button>
     </div>
     <div class="filter-chips" id="filter-chips" role="group" aria-label="조리 조건">
-        <button type="button" class="setting-chip" id="class-chip" aria-haspopup="dialog"><span aria-hidden="true">🏫 </span>수업 모드<span id="class-chip-state">: 끔</span></button>
-        <button type="button" class="setting-chip" id="allergy-chip" aria-haspopup="dialog"><span aria-hidden="true">⚠️ </span>알레르기 제외<span id="allergy-chip-state"></span></button>
-        <button type="button" class="filter-chip" data-filter="quick" aria-pressed="false"><span aria-hidden="true">⏱ </span>10분 이내</button>
-        <button type="button" class="filter-chip" data-filter="easy" aria-pressed="false"><span aria-hidden="true">🌱 </span>난이도 쉬움</button>
-        <button type="button" class="filter-chip" data-filter="nofire" aria-pressed="false"><span aria-hidden="true">🔌 </span>불 없이<span class="sr-only"> (가스레인지 없이 전자레인지·에어프라이어·밥솥만)</span></button>
+        <button type="button" class="setting-chip" id="class-chip" aria-haspopup="dialog">🏫 수업 모드<span id="class-chip-state">: 끔</span></button>
+        <button type="button" class="setting-chip" id="allergy-chip" aria-haspopup="dialog">⚠️ 알레르기<span id="allergy-chip-state"></span></button>
+        <button type="button" class="filter-chip" data-filter="quick" aria-pressed="false">⏱ 10분 이내</button>
+        <button type="button" class="filter-chip" data-filter="easy" aria-pressed="false">🌱 쉬움</button>
+        <button type="button" class="filter-chip" data-filter="nofire" aria-pressed="false">🔌 불 없이<span class="sr-only"> (전자레인지·에어프라이어)</span></button>
     </div>
 
     <div class="class-banner" id="class-banner" hidden></div>
@@ -1474,6 +1536,30 @@
         <!-- 레시피 카드가 삽입됩니다. -->
     </div>
     </main>
+
+    <!-- 모바일/데스크탑 통합 하단 고정 내비게이션 바 -->
+    <nav class="bottom-nav" id="bottom-nav" aria-label="빠른 메뉴">
+        <button type="button" class="bottom-nav-item active" id="bnav-home" aria-label="홈으로 가기">
+            <span class="bnav-icon" aria-hidden="true">🍳</span>
+            <span class="bnav-label">홈</span>
+        </button>
+        <button type="button" class="bottom-nav-item" id="bnav-fridge" aria-label="냉장고 재료로 추천받기">
+            <span class="bnav-icon" aria-hidden="true">🧊</span>
+            <span class="bnav-label">냉장고</span>
+        </button>
+        <button type="button" class="bottom-nav-item bnav-highlight" id="bnav-random" aria-label="오늘 뭐 먹지? 랜덤 추천">
+            <span class="bnav-icon" aria-hidden="true">🎲</span>
+            <span class="bnav-label">랜덤</span>
+        </button>
+        <button type="button" class="bottom-nav-item" id="bnav-plan" aria-label="주간 식단 보기">
+            <span class="bnav-icon" aria-hidden="true">📅</span>
+            <span class="bnav-label">식단</span>
+        </button>
+        <button type="button" class="bottom-nav-item" id="bnav-custom" aria-label="나만의 레시피 추가하기">
+            <span class="bnav-icon" aria-hidden="true">✍️</span>
+            <span class="bnav-label">내 요리</span>
+        </button>
+    </nav>
 
     <button type="button" class="to-top" id="to-top" hidden><span aria-hidden="true">↑</span> 맨 위로</button>
 
@@ -2788,19 +2874,24 @@
             const index = recipes.indexOf(recipe);
             const card = document.createElement('article');
             card.className = 'recipe-card';
+            card.dataset.index = String(index);
             card.setAttribute('aria-labelledby', `card-title-${index}`);
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('role', 'button');
 
-            const shown = recipe.ingredients.slice(0, 4);
+            const shown = recipe.ingredients.slice(0, 3);
             const rest = recipe.ingredients.length - shown.length;
             const tagsHtml = shown.map(ing => `<li class="tag">${escapeHtml(ing)}</li>`).join('')
-                + (rest > 0 ? `<li class="tag more">외 ${rest}개</li>` : '');
+                + (rest > 0 ? `<li class="tag more">+${rest}</li>` : '');
 
             card.innerHTML = `
                 ${thumbHtml(recipe)}
                 <div class="card-meta">
                     <span class="category-badge">${recipe.custom ? '✍️ ' : ''}${escapeHtml(recipe.category)}${currentCategory === '실과 요리' && silgwaGrade.has(recipe.title) ? ` · ${silgwaGrade.get(recipe.title)}학년` : ''}</span>
-                    ${newBadgeHtml(recipe)}
-                    ${noteBadgeHtml(recipe)}
+                    <div style="display:flex;align-items:center;gap:4px">
+                        ${newBadgeHtml(recipe)}
+                        ${noteBadgeHtml(recipe)}
+                    </div>
                     ${favButtonHtml(recipe)}
                 </div>
                 <h3 class="recipe-title" id="card-title-${index}"><button type="button" class="title-btn" data-action="detail" data-index="${index}">${escapeHtml(recipe.title)}</button></h3>
@@ -2808,11 +2899,6 @@
                 ${cardAllergyHtml(recipe)}
                 ${cardNutritionHtml(recipe)}
                 <ul class="ingredients-tags" aria-label="재료">${tagsHtml}</ul>
-                <div class="card-actions">
-                    <button type="button" class="primary-btn" data-action="detail" data-index="${index}" tabindex="-1">
-                        <span aria-hidden="true">📖</span> 레시피 보기<span class="sr-only">: ${escapeHtml(recipe.title)}</span>
-                    </button>
-                </div>
             `;
             return card;
         }
@@ -3821,50 +3907,96 @@
         // 목록과 상세 화면의 버튼을 data-action 하나로 처리
         function handleAction(e) {
             const btn = e.target.closest('[data-action]');
-            if (!btn) return;
-            const recipe = recipes[Number(btn.dataset.index)];
-            switch (btn.dataset.action) {
-                case 'play': playRecipe(recipe); break;
-                case 'detail': openDetail(recipe); break;
-                case 'fav': toggleFavorite(recipe); break;
-                case 'share': shareRecipe(recipe); break;
-                case 'wake': toggleWakeLock(btn); break;
-                case 'reroll': pickRandomRecipe(); break;
-                case 'servings-minus': changeServings(-1); break;
-                case 'servings-plus': changeServings(1); break;
-                case 'add-shopping': addMissingToShopping(); break;
-                case 'timer':
-                    startTimer(Number(btn.dataset.seconds), `${detailRecipe.title} ${btn.dataset.step}단계`);
-                    break;
-                case 'clear-rating':
-                    setNote(detailRecipe, { rating: 0 });
-                    detailBody.querySelectorAll('input[name="rating"]').forEach(r => { r.checked = false; });
-                    updateStars(0);
-                    break;
-                case 'add-plan': addDetailToPlan(); break;
-                case 'print': openPrintDialog(detailRecipe); break;
-                case 'new-custom': openCustomForm(); break;
-                case 'edit-custom': openCustomForm(detailRecipe); break;
-                case 'delete-custom': deleteCustomRecipe(detailRecipe); break;
-                case 'clear-recent':
-                    recentTitles = [];
-                    writeStore(RECENT_KEY, recentTitles);
-                    renderRecent();
-                    break;
-                case 'clear-search':
-                    searchInput.value = '';
-                    searchQuery = '';
-                    updateSearchClear();
-                    activeFilters.clear();
-                    updateFilterChips();
-                    renderRecipes();
-                    searchInput.focus();
-                    break;
+            if (btn) {
+                const recipe = recipes[Number(btn.dataset.index)];
+                switch (btn.dataset.action) {
+                    case 'play': playRecipe(recipe); break;
+                    case 'detail': openDetail(recipe); break;
+                    case 'fav': toggleFavorite(recipe); break;
+                    case 'share': shareRecipe(recipe); break;
+                    case 'wake': toggleWakeLock(btn); break;
+                    case 'reroll': pickRandomRecipe(); break;
+                    case 'servings-minus': changeServings(-1); break;
+                    case 'servings-plus': changeServings(1); break;
+                    case 'add-shopping': addMissingToShopping(); break;
+                    case 'timer':
+                        startTimer(Number(btn.dataset.seconds), `${detailRecipe.title} ${btn.dataset.step}단계`);
+                        break;
+                    case 'clear-rating':
+                        setNote(detailRecipe, { rating: 0 });
+                        detailBody.querySelectorAll('input[name="rating"]').forEach(r => { r.checked = false; });
+                        updateStars(0);
+                        break;
+                    case 'add-plan': addDetailToPlan(); break;
+                    case 'print': openPrintDialog(detailRecipe); break;
+                    case 'new-custom': openCustomForm(); break;
+                    case 'edit-custom': openCustomForm(detailRecipe); break;
+                    case 'delete-custom': deleteCustomRecipe(detailRecipe); break;
+                    case 'clear-recent':
+                        recentTitles = [];
+                        writeStore(RECENT_KEY, recentTitles);
+                        renderRecent();
+                        break;
+                    case 'clear-search':
+                        searchInput.value = '';
+                        searchQuery = '';
+                        updateSearchClear();
+                        activeFilters.clear();
+                        updateFilterChips();
+                        renderRecipes();
+                        searchInput.focus();
+                        break;
+                }
+                return;
+            }
+            // 카드 어디를 눌러도 상세 화면 열기
+            const card = e.target.closest('.recipe-card');
+            if (card && card.dataset.index !== undefined) {
+                const recipe = recipes[Number(card.dataset.index)];
+                if (recipe) openDetail(recipe);
             }
         }
         container.addEventListener('click', handleAction);
+        container.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                const card = e.target.closest('.recipe-card');
+                if (card && e.target === card && card.dataset.index !== undefined) {
+                    e.preventDefault();
+                    const recipe = recipes[Number(card.dataset.index)];
+                    if (recipe) openDetail(recipe);
+                }
+            }
+        });
         detailBody.addEventListener('click', handleAction);
         document.getElementById('recent').addEventListener('click', handleAction);
+
+        // ---------- 하단 고정 내비게이션 바 ----------
+        const bnavHome = document.getElementById('bnav-home');
+        const bnavFridge = document.getElementById('bnav-fridge');
+        const bnavRandom = document.getElementById('bnav-random');
+        const bnavPlan = document.getElementById('bnav-plan');
+        const bnavCustom = document.getElementById('bnav-custom');
+
+        if (bnavHome) {
+            bnavHome.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                filterRecipes('전체');
+                document.querySelectorAll('.bottom-nav-item').forEach(b => b.classList.remove('active'));
+                bnavHome.classList.add('active');
+            });
+            bnavFridge.addEventListener('click', () => {
+                document.getElementById('fridge-open').click();
+            });
+            bnavRandom.addEventListener('click', () => {
+                pickRandomRecipe();
+            });
+            bnavPlan.addEventListener('click', () => {
+                document.getElementById('plan-open').click();
+            });
+            bnavCustom.addEventListener('click', () => {
+                document.getElementById('custom-open').click();
+            });
+        }
 
         // 썸네일을 못 불러오면 깨진 이미지 아이콘 대신 회색 배경만 보여준다
         document.addEventListener('error', e => {
