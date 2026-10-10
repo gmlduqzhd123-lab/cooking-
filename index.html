@@ -1313,6 +1313,10 @@
         .intro-ghost:hover { background: rgba(255, 255, 255, 0.12); }
         .intro-link { margin-left: 4px; padding: 8px 4px; font: inherit; font-size: 0.92rem; font-weight: 700; color: #CBD5E1; background: none; border: none; cursor: pointer; text-decoration: underline; text-underline-offset: 4px; text-decoration-color: rgba(203, 213, 225, 0.4); }
         .intro-link:hover { color: #FFFFFF; }
+        /* 📲 앱 설치 · 📱 QR (소개 화면 오른쪽 위) */
+        .intro-topbar { position: absolute; top: max(14px, env(safe-area-inset-top)); right: 16px; z-index: 2; display: flex; gap: 8px; }
+        .intro-topchip { font: inherit; font-size: 0.85rem; font-weight: 700; color: #F8FAFC; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 999px; padding: 7px 13px; cursor: pointer; white-space: nowrap; backdrop-filter: blur(6px); }
+        .intro-topchip:hover { background: rgba(255, 255, 255, 0.16); }
         .intro :focus-visible { outline: 3px solid #FDA4AF; outline-offset: 3px; }
         .intro-visual { position: relative; aspect-ratio: 1; width: 100%; max-width: 400px; justify-self: center; }
         .intro-tile {
@@ -1418,6 +1422,7 @@
     <!-- 소개 화면 (첫 화면) -->
     <section class="intro" id="intro" aria-labelledby="intro-title">
         <div class="intro-grid" aria-hidden="true"></div>
+        <div class="intro-topbar"><button type="button" class="intro-topchip" data-ys-install>📲 앱 설치</button><button type="button" class="intro-topchip" data-qr aria-label="QR 코드로 접속">📱 QR</button></div>
         <div class="intro-inner">
             <div class="intro-copy">
                 <span class="intro-pill">실과 수업 · 자취 요리</span>
@@ -1432,8 +1437,6 @@
                     <button type="button" class="intro-start" data-intro="start">시작하기 <span aria-hidden="true">→</span></button>
                     <button type="button" class="intro-ghost" data-intro="silgwa"><span aria-hidden="true">📚</span> 실과 요리 보기</button>
                     <button type="button" class="intro-link" data-intro="random">오늘 뭐 먹지? <span aria-hidden="true">🎲</span></button>
-                    <button type="button" class="intro-link" data-qr>QR로 접속 <span aria-hidden="true">📱</span></button>
-                    <button type="button" class="intro-link" data-ys-install>앱으로 설치 <span aria-hidden="true">📲</span></button>
                 </div>
             </div>
             <div class="intro-visual" aria-hidden="true">
@@ -1453,6 +1456,7 @@
         <h1><button type="button" class="brand-btn" id="brand-btn" aria-label="요리 대백과 소개 화면 보기">📖 요리 대백과</button></h1>
         <div class="header-actions">
             <button type="button" class="icon-btn install-btn" data-ys-install>📲 앱 설치</button>
+            <button type="button" class="icon-btn install-btn" data-qr aria-label="QR 코드로 접속">📱 QR</button>
             <button type="button" class="icon-btn" id="shopping-btn" aria-label="장보기 목록"><span aria-hidden="true">🛒</span><span class="fav-count" id="shopping-count" aria-hidden="true" hidden>0</span></button>
             <button type="button" class="icon-btn" id="text-size-btn" aria-pressed="false" aria-label="큰 글씨">가<span aria-hidden="true">+</span></button>
             <button type="button" class="icon-btn" id="theme-btn" aria-pressed="false" aria-label="다크 모드"><span aria-hidden="true" id="theme-icon">🌙</span></button>
