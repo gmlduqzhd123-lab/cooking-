@@ -427,10 +427,11 @@
         .recipe-card:active {
             transform: scale(0.985);
         }
-        .recipe-card:focus-visible {
+        .recipe-card:has(.title-btn:focus-visible) {
             outline: 2.5px solid var(--accent);
             outline-offset: 2px;
         }
+        .recipe-card .title-btn:focus-visible { outline: none; text-decoration: underline; text-underline-offset: 4px; }
         .card-meta {
             display: flex;
             justify-content: space-between;
@@ -3166,8 +3167,8 @@
             card.className = 'recipe-card';
             card.dataset.index = String(index);
             card.setAttribute('aria-labelledby', `card-title-${index}`);
-            card.setAttribute('tabindex', '0');
-            card.setAttribute('role', 'button');
+            // 카드 전체를 버튼으로 만들면 안의 하트·영상 버튼과 겹친다(중첩 버튼).
+            // 마우스·터치는 카드 어디를 눌러도 열리고, 키보드·스크린리더는 제목 버튼으로 연다.
 
             const shown = recipe.ingredients.slice(0, 3);
             const rest = recipe.ingredients.length - shown.length;
@@ -4292,16 +4293,6 @@
             }
         }
         container.addEventListener('click', handleAction);
-        container.addEventListener('keydown', e => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                const card = e.target.closest('.recipe-card');
-                if (card && e.target === card && card.dataset.index !== undefined) {
-                    e.preventDefault();
-                    const recipe = recipes[Number(card.dataset.index)];
-                    if (recipe) openDetail(recipe);
-                }
-            }
-        });
         detailBody.addEventListener('click', handleAction);
         document.getElementById('recent').addEventListener('click', handleAction);
 
